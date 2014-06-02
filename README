@@ -1,0 +1,9 @@
+3d-i-free
+=========
+
+glx_tst dependencies:
+	1) libglu1-mesa-dev
+	2) libglw1-mesa-dev
+	3) libxt-dev (???)
+	4) libx11-dev
+
