@@ -1,0 +1,4 @@
+1) libx11-dev
+2) mesa-common-dev
+3) libglu1-mesa-dev
+4) libglw1-mesa-dev
