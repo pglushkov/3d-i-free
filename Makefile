@@ -7,6 +7,8 @@ GL_LDLIBS = -lGL -lGLw -lGLU
 
 I_FREE_3D_DIR = /home/peter/DEVEL/3d-i-free/
 
+CFLAGS = -g -Wall -std=c++0x
+
 all:
 	echo SPECIFY EXACT TARGET TO MAKE !!!
 
@@ -19,6 +21,6 @@ clean:
 	rm -f *.o $(TESTS)
 
 vector_tst: tst/vectors_tst.cpp
-	g++ -I$(I_FREE_3D_DIR) $< -o $@
+	g++ $(CFLAGS) -I$(I_FREE_3D_DIR) $< -o $@
 
 
