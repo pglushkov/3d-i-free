@@ -1,0 +1,22 @@
+
+
+        16 May 2014
+
+HW      textrure a cube with russian flag
+*********************************************
+
+1) [x, y, z, w] ===> [x/w, y/w, z/w] - projection kernel!
+
+
+2) Matrixes /////
+
+        Matrix*Vector = vector*Matrix', ' - transposition
+
+        Any affine transform can be a superposition of [Translate Rotate Scale] (перенос, поворот, изменение размера)
+
+        Transformation = Translation * Rotation * Scale
+
+        P_new = P_old*Rotation*Scale + Translation
+
+
+

@@ -136,4 +136,8 @@ void shaderAttachFromFile(GLuint program, GLenum type, const char *filePath)
 		 * to has been destroyed */
 		glDeleteShader(shader);
 	}
+        else
+        {
+                printf("Could not attach shader to program ...\n");
+        }
 }

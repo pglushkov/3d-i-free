@@ -81,9 +81,32 @@ int main(int argc, char *argv[]) {
         printf(" gl version = %s ...\n", glGetString(GL_VERSION));
         printf(" glsl version = %s ...\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
+        GLint result;
         GLuint g_program = glCreateProgram();
-        shaderAttachFromFile(g_program, GL_VERTEX_SHADER, "./utils/simplest.shader");
-        shaderAttachFromFile(g_program, GL_FRAGMENT_SHADER, "./utils/simplest.shader");
+
+        shaderAttachFromFile(g_program, GL_VERTEX_SHADER, "./utils/simplest_shader.vs");
+        shaderAttachFromFile(g_program, GL_FRAGMENT_SHADER, "./utils/simplest_shader.fs");
+	glLinkProgram(g_program);
+	glGetProgramiv(g_program, GL_LINK_STATUS, &result);
+	if(result == GL_FALSE) {
+		GLint length;
+		char *log;
+
+		/* get the program info log */
+		glGetProgramiv(g_program, GL_INFO_LOG_LENGTH, &length);
+		log = (char*)malloc(length);
+		glGetProgramInfoLog(g_program, length, &result, log);
+
+		/* print an error message and the info log */
+		fprintf(stderr, "sceneInit(): Program linking failed: %s\n", log);
+		free(log);
+
+		/* delete the program */
+		glDeleteProgram(g_program);
+		g_program = 0;
+	}
+
+	glUseProgram(g_program);
 
 	while(1) {
 		XNextEvent(dpy, &xev);
