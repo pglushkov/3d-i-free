@@ -1,12 +1,15 @@
- /*-- Written in C -- //*/
+ /*-- Written in C -- */
 
+/* common includes */
 #include<stdio.h>
 #include<stdlib.h>
+
+/* x-server related includes */
 #include<X11/X.h>
 #include<X11/Xlib.h>
-#include<GL/gl.h>
-#include<GL/glx.h>
-#include<GL/glu.h>
+
+#include "../utils/opengl.h"
+#include "../utils/shader.h"
 
 Display                 *dpy;
 Window                  root;
@@ -19,38 +22,38 @@ GLXContext              glc;
 XWindowAttributes       gwa;
 XEvent                  xev;
 
-void DrawAQuad() {
-	glClearColor(1.0, 1.0, 1.0, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+void DrawTriangle() {
+        glClearColor(1.0, 1.0, 1.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(-1., 1., -1., 1., 1., 20.);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(-1., 1., -1., 1., 1., 20.);
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(0., 0., 10., 0., 0., 0., 0., 1., 0.);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        gluLookAt(0., 0., 10., 0., 0., 0., 0., 1., 0.);
 
-	glBegin(GL_QUADS);
-	glColor3f(1., 0., 0.); glVertex3f(-.75, -.75, 0.);
-	glColor3f(0., 1., 0.); glVertex3f( .75, -.75, 0.);
-	glColor3f(0., 0., 1.); glVertex3f( .75,  .75, 0.);
-	glColor3f(1., 1., 0.); glVertex3f(-.75,  .75, 0.);
-	glEnd();
+        glBegin(GL_TRIANGLES);
+        glColor3f(0., 0., 0.); glVertex3f(-.75, -.75, 0.);
+        glColor3f(0., 0., 0.); glVertex3f( .75, -.75, 0.);
+        glColor3f(0., 0., 0.); glVertex3f( .75,  .75, 0.);
+        // glColor3f(1., 1., 0.); glVertex3f(-.75,  .75, 0.);
+        glEnd();
 }
 
 int main(int argc, char *argv[]) {
 
-	dpy = XOpenDisplay(NULL);
+        dpy = XOpenDisplay(NULL);
 
-	if(dpy == NULL) {
-		printf("\n\tcannot connect to X server\n\n");
-		exit(0);
-	}
+        if(dpy == NULL) {
+                printf("\n\tcannot connect to X server\n\n");
+                exit(0);
+        }
 
-	 root = DefaultRootWindow(dpy);
+        root = DefaultRootWindow(dpy);
 
-	 vi = glXChooseVisual(dpy, 0, att);
+        vi = glXChooseVisual(dpy, 0, att);
 
 	if(vi == NULL) {
 		printf("\n\tno appropriate visual found\n\n");
@@ -75,12 +78,19 @@ int main(int argc, char *argv[]) {
 
 	glEnable(GL_DEPTH_TEST);
 
+        printf(" gl version = %s ...\n", glGetString(GL_VERSION));
+        printf(" glsl version = %s ...\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+
+        GLuint g_program = glCreateProgram();
+        shaderAttachFromFile(g_program, GL_VERTEX_SHADER, "./utils/simplest.shader");
+        shaderAttachFromFile(g_program, GL_FRAGMENT_SHADER, "./utils/simplest.shader");
+
 	while(1) {
 		XNextEvent(dpy, &xev);
 		if(xev.type == Expose) {
 			XGetWindowAttributes(dpy, win, &gwa);
 			glViewport(0, 0, gwa.width, gwa.height);
-			DrawAQuad(); 
+			DrawTriangle();
 			glXSwapBuffers(dpy, win);
 		} else if(xev.type == KeyPress) {
 			/* DBG ... */
