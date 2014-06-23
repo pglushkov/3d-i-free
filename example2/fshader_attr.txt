@@ -1,0 +1,7 @@
+
+uniform float time;
+varying vec3 figureColor;
+void main()
+{
+	gl_FragColor = vec4(figureColor, 1.0);
+}
