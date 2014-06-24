@@ -10,7 +10,6 @@
 #include <GL/gl.h>
 #include <GL/glext.h>
 #include <GL/glx.h>
-#include <GL/glu.h>
 
 #endif /* of MY_OPENGL_INCLUDES */
 

@@ -9,7 +9,7 @@ OBJECTS = $(SOURCES:%.cpp=%.o)
 TARGET = example2
 
 COMP_FLAGS = -c -g -Wall -std=c++11
-GL_LDLIBS = -lGL -lGLw -lGLU
+GL_LDLIBS = -lGL -lGLw
 LD_FLAGS = -g
 CFLAGS = -I$(I_FREE_3D_DIR)
 

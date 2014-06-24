@@ -1,9 +1,9 @@
 
-attribute vec3 position_My;
+attribute vec3 in_position;
 uniform float time;
 varying vec3 figureColor;
 void main()
 {
-	gl_Position = vec4(position_My, 1.0);
-	figureColor = position_My;
+	gl_Position = vec4(in_position, 1.0);
+	figureColor = in_position;
 }
