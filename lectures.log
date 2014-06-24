@@ -1,6 +1,6 @@
 
 
-        16 May 2014
+        16 June 2014
 
 HW      textrure a cube with russian flag
 *********************************************
@@ -18,5 +18,11 @@ HW      textrure a cube with russian flag
 
         P_new = P_old*Rotation*Scale + Translation
 
+        23 June 2014
 
-
+HW      1) rotate a cube/plane, implement sliced-plane, 
+        2) rotate a plane relatively to specified pivot-center, visualize
+        3) interpolation of all vertex attributes
+        4) draw a star, or a smile or any onther complex picture without using textures
+        5) draw some colored circle without using IFs
+**********************************************

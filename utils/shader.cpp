@@ -123,7 +123,7 @@ GLuint shaderCompileFromFile(GLenum type, const char *filePath)
  * Compiles and attaches a shader of the
  * given type to the given program object.
  */
-void shaderAttachFromFile(GLuint program, GLenum type, const char *filePath)
+int shaderAttachFromFile(GLuint program, GLenum type, const char *filePath)
 {
 	/* compile the shader */
 	GLuint shader = shaderCompileFromFile(type, filePath);
@@ -135,9 +135,11 @@ void shaderAttachFromFile(GLuint program, GLenum type, const char *filePath)
 		 * destroyed until the program that it's attached
 		 * to has been destroyed */
 		glDeleteShader(shader);
+                return 0;
 	}
         else
         {
                 printf("Could not attach shader to program ...\n");
+                return 1;
         }
 }

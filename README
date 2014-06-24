@@ -2,7 +2,7 @@
 =========
 
 glx_tst dependencies:
-NOTE: seems like the only possible way to work with glx in virtualbox is MESA, native NVIDIA packages do no good ...
+NOTE: seems like the only easy way to work with glx in virtualbox is MESA, native NVIDIA packages do no good ...
 	1) libx11-dev
 	2) mesa-common-dev
 	3) libglu1-mesa-dev

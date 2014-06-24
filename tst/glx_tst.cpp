@@ -22,6 +22,9 @@ GLXContext              glc;
 XWindowAttributes       gwa;
 XEvent                  xev;
 
+static const char* vertex_shader_file = "./utils/simplest_shader.vs";
+static const char* fragment_shader_file = "./utils/simplest_shader.fs";
+
 void DrawTriangle() {
         glClearColor(1.0, 1.0, 1.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -40,6 +43,35 @@ void DrawTriangle() {
         glColor3f(0., 0., 0.); glVertex3f( .75,  .75, 0.);
         // glColor3f(1., 1., 0.); glVertex3f(-.75,  .75, 0.);
         glEnd();
+}
+
+void DrawSquare(GLuint shader_program)
+{
+        float vertices[8] = {
+                -0.5f, 0.5f,
+                0.5f, 0.5f,
+                0.5f, -0.5f,
+                -0.5f, -0.5f,
+        };
+
+        GLuint vao;
+        glGenVertexArrays(1, &vao);
+        glBindVertexArray(vao);
+
+        GLuint vbo;
+        glGenBuffers(1, &vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+        /*
+         * GLint posAttrib = glGetAttribLocation(shader_program, "position");
+         * glEnableVertexAttribArray(posAttrib);
+         * glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+         */
+
+        glClearColor(1.0, 1.0, 1.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
 int main(int argc, char *argv[]) {
@@ -84,36 +116,34 @@ int main(int argc, char *argv[]) {
         GLint result;
         GLuint g_program = glCreateProgram();
 
-        shaderAttachFromFile(g_program, GL_VERTEX_SHADER, "./utils/simplest_shader.vs");
-        shaderAttachFromFile(g_program, GL_FRAGMENT_SHADER, "./utils/simplest_shader.fs");
-	glLinkProgram(g_program);
-	glGetProgramiv(g_program, GL_LINK_STATUS, &result);
-	if(result == GL_FALSE) {
-		GLint length;
-		char *log;
+        /* compiling vertex shader */
+        if (shaderAttachFromFile(g_program, GL_VERTEX_SHADER, vertex_shader_file) )
+                printf("Could not attach shader : %s ...\n", vertex_shader_file);
+        else
+                printf("Successfully compiled and attached vertex shader: %s ...\n", vertex_shader_file);
+        /* comliling fragment shader */
+        if (shaderAttachFromFile(g_program, GL_FRAGMENT_SHADER, fragment_shader_file) )
+                printf("Could not attach shader : %s ...\n", fragment_shader_file);
+        else
+                printf("Successfully compiled and attached fragment shader: %s ...\n", fragment_shader_file);
 
-		/* get the program info log */
-		glGetProgramiv(g_program, GL_INFO_LOG_LENGTH, &length);
-		log = (char*)malloc(length);
-		glGetProgramInfoLog(g_program, length, &result, log);
+        /* linking program with shaders attached to it */
+        result = linkCompiledProgram(g_program);
+        if (result == GL_TRUE) {
+                glUseProgram(g_program);
+                printf("Program linkage was successfull, using it in final rendering ...\n");
+        } else {
+                printf("Could not link compiled program ...\n");
+        }
 
-		/* print an error message and the info log */
-		fprintf(stderr, "sceneInit(): Program linking failed: %s\n", log);
-		free(log);
-
-		/* delete the program */
-		glDeleteProgram(g_program);
-		g_program = 0;
-	}
-
-	glUseProgram(g_program);
 
 	while(1) {
 		XNextEvent(dpy, &xev);
 		if(xev.type == Expose) {
 			XGetWindowAttributes(dpy, win, &gwa);
 			glViewport(0, 0, gwa.width, gwa.height);
-			DrawTriangle();
+			//DrawTriangle();
+                        DrawSquare(g_program);
 			glXSwapBuffers(dpy, win);
 		} else if(xev.type == KeyPress) {
 			/* DBG ... */

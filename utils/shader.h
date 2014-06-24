@@ -3,7 +3,8 @@
 
 #include "opengl.h"
 
-void shaderAttachFromFile(GLuint program, GLenum type, const char *filePath);
+int shaderAttachFromFile(GLuint program, GLenum type, const char *filePath);
+GLint linkCompiledProgram(GLuint& program_id);
 char* shaderLoadSource(const char *filePath);
 GLuint shaderCompileFromFile(GLenum type, const char *filePath);
 
