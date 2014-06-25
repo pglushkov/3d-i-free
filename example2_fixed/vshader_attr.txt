@@ -1,0 +1,14 @@
+
+attribute vec3 in_position;
+attribute vec2 tcoordinate;
+
+varying vec3 figureColor;
+varying vec2 texcoord;
+
+void main()
+{
+	figureColor = in_position;
+	texcoord = tcoordinate;
+	gl_Position = vec4(in_position, 1.0);
+	
+}

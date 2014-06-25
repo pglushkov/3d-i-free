@@ -1,0 +1,14 @@
+env = Environment()
+
+env.Append(CPPFLAGS  = [
+	'-Wall', 
+	'-Wextra',
+	'-std=c++11',
+	'-I/opt/X11/include'
+])
+
+env.Append(LINKFLAGS = ['-L/opt/X11/lib'])
+env.Append(LIBS =['X11', 'GL'])
+
+
+env.Program('test',['example2.cpp','../utils/shader.cpp'])
