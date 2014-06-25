@@ -26,10 +26,10 @@ XEvent                  xev;
 GLfloat square_vertices[] =
 {
         -0.5f, 0.5f, 0.0f,
-        0.5f, 0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
         -0.5f, -0.5f, 0.0f,
-        -0.5f, 0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        //0.5f, 0.5f, 0.0f,
+        //-0.5f, 0.5f, 0.0f,
 };
 
 void printGlError(const char* where)
@@ -67,7 +67,7 @@ void bindAttributesWithShaders(GLuint gl_program)
         printGlError("after getting in_position location");
 
         printf("Position attribute handle: %d ...\n", positionAttr);
-        glVertexAttribPointer(positionAttr, 3, GL_FLOAT, GL_FALSE, 0 /*stride!*/, 0 /*offset*/);
+        glVertexAttribPointer(positionAttr, 3, GL_FLOAT, GL_FALSE, sizeof(float)*3 /*stride!*/, 0 /*offset*/);
 
         printGlError("after glVertexAttribPointer");
 
@@ -103,11 +103,11 @@ void prepareArrayForSquareDraw(GLuint &vao, GLuint& vbo)
 
 void drawArray(GLuint vao, GLuint vbo, unsigned int num_vertices)
 {
-        glBindVertexArray(vao);
 
         printGlError("after glBindVertexArray in drawArray()");
 
-        //glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBindVertexArray(vao);
         glDrawArrays(GL_TRIANGLES, 0, num_vertices);
 
         printGlError("after glDrawArrays");
@@ -184,7 +184,6 @@ int main(int argc, char *argv[]) {
                 g_program = 0;
         }
 
-        glUseProgram(g_program);
         bindAttributesWithShaders(g_program);
         GLint timeUniformHandle = glGetUniformLocation(g_program, "time");
 
@@ -200,9 +199,12 @@ int main(int argc, char *argv[]) {
                         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
                         glClear(GL_COLOR_BUFFER_BIT);
 
+
+        		glUseProgram(g_program);
+			bindAttributesWithShaders(g_program);
                         drawArray(squareVao, squareVbo, 3);
 
-                        DrawTriangle();
+                        //DrawTriangle();
                         glXSwapBuffers(dpy, win);
                 } else if(xev.type == KeyPress) {
                         /* DBG ... */
