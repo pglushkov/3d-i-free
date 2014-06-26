@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <ctime>
+#include <cmath>
 
 /* x-server related includes */
 #include<X11/X.h>
@@ -25,12 +27,28 @@ XEvent                  xev;
 
 GLfloat square_vertices[] =
 {
-        -0.5f, 0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        //0.5f, 0.5f, 0.0f,
-        //-0.5f, 0.5f, 0.0f,
+        /*x    y      z       color                     plane-coordinate     */
+        -0.5f, 0.5f, 0.0f,    0.0f, 1.0f, 0.0f,         0.0f, 0.0f,
+        -0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,         0.0f, 1.0f,
+        0.5f, -0.5f, 0.0f,    1.0f, 0.0f, 0.0f,         1.0f, 1.0f,
+        0.5f, 0.5f, 0.0f,     1.0f, 0.0f, 0.0f,         1.0f, 0.0f,
+        -0.5f, 0.5f, 0.0f,    0.0f, 1.0f, 0.0f,         0.0f, 0.0f,
 };
+
+uint16_t vert_indices[] =
+{
+        0, 1, 2,
+        2, 0, 3,
+};
+
+float getTimePassed()
+{
+        static float last_time;
+
+        float time = (GLfloat)clock() / (GLfloat)CLOCKS_PER_SEC;
+
+        return time - last_time;
+}
 
 void printGlError(const char* where)
 {
@@ -62,55 +80,53 @@ void DrawTriangle() {
 void bindAttributesWithShaders(GLuint gl_program)
 {
         /* specifying where actial attributes are located in buffered data, so that shaders could use it */
+
+        /* basic positions in 'absolute' space */
         GLint positionAttr = glGetAttribLocation(gl_program, "in_position");
-
-        printGlError("after getting in_position location");
-
-        printf("Position attribute handle: %d ...\n", positionAttr);
-        glVertexAttribPointer(positionAttr, 3, GL_FLOAT, GL_FALSE, sizeof(float)*3 /*stride!*/, 0 /*offset*/);
-
-        printGlError("after glVertexAttribPointer");
-
+        glVertexAttribPointer(positionAttr, 3, GL_FLOAT, GL_FALSE, sizeof(float)*8 /*stride!*/, 0 /*offset*/);
         glEnableVertexAttribArray(positionAttr);
 
-        printGlError("after glEnableVertexAtrribArray");
+        /* default colors of vertices */
+        GLint colorAttr = glGetAttribLocation(gl_program, "in_color");
+        glVertexAttribPointer(colorAttr, 3, GL_FLOAT, GL_FALSE, sizeof(float)*8, (const void *)(3*sizeof(float)));
+        glEnableVertexAttribArray(colorAttr);
+
+        /* 'plane' coordenates of vertices */
+        GLint pcoordAttr = glGetAttribLocation(gl_program, "in_plane_coord");
+        glVertexAttribPointer(pcoordAttr, 3, GL_FLOAT, GL_FALSE, sizeof(float)*8, (const void *)(6*sizeof(float)));
+        glEnableVertexAttribArray(pcoordAttr);
+
+        /* passing time increment as a uniform ... */
+        GLfloat time = getTimePassed();
+        printf("DBG : time_passed = %f ...\n", time);
+        GLint timeUniformHandle = glGetUniformLocation(gl_program, "time");
+        glUniform1f(timeUniformHandle, time);
 }
 
 void prepareArrayForSquareDraw(GLuint &vao, GLuint& vbo)
 {
         /* initializing vertex-array-object and making it 'current' */
-        //GLuint vao;
         glGenVertexArrays(1, &vao);
         /* DBG */
         printf("Created vertex-array-object : %u ...\n", vao);
         glBindVertexArray(vao);
 
-        printGlError("after vao creation");
-
         /* buffering actual data into gl-buffer-object*/
-        //GLuint vbo;
         glGenBuffers(1, &vbo);
         printf("Created vertex-buffer-object : %u ...\n", vbo);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glBufferData(GL_ARRAY_BUFFER, sizeof(square_vertices), square_vertices, GL_STATIC_DRAW);
 
-        printGlError("after glBufferData");
-
-        printf("Size of square_vertices[] in bytes : %u ...\n", sizeof(square_vertices));
-
         glBindVertexArray(0);
 }
 
-void drawArray(GLuint vao, GLuint vbo, unsigned int num_vertices)
+void drawFigure(GLuint vao, GLuint vbo, unsigned int num_vertices)
 {
 
-        printGlError("after glBindVertexArray in drawArray()");
 
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLES, 0, num_vertices);
-
-        printGlError("after glDrawArrays");
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, num_vertices);
 }
 
 int main(int argc, char *argv[]) {
@@ -185,27 +201,14 @@ int main(int argc, char *argv[]) {
         }
 
         bindAttributesWithShaders(g_program);
-        GLint timeUniformHandle = glGetUniformLocation(g_program, "time");
 
-        while(1) {
+        while(true) {
                 XNextEvent(dpy, &xev);
                 if(xev.type == Expose) {
                         XGetWindowAttributes(dpy, win, &gwa);
-                        glViewport(0, 0, gwa.width, gwa.height);
 
-                        GLfloat time = (GLfloat)clock() / (GLfloat)CLOCKS_PER_SEC;
-                        glUniform1f(timeUniformHandle, time);
+                        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-                        glClear(GL_COLOR_BUFFER_BIT);
-
-
-        		glUseProgram(g_program);
-			bindAttributesWithShaders(g_program);
-                        drawArray(squareVao, squareVbo, 3);
-
-                        //DrawTriangle();
-                        glXSwapBuffers(dpy, win);
                 } else if(xev.type == KeyPress) {
                         /* DBG ... */
                         printf("KeyPress: keycode %u state %u\n", xev.xkey.keycode, xev.xkey.state);
@@ -219,8 +222,15 @@ int main(int argc, char *argv[]) {
                         }
                 }
 
-                drawArray(squareVao, squareVbo, 3);
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+                glUseProgram(g_program);
+                bindAttributesWithShaders(g_program);
+                drawFigure(squareVao, squareVbo, 5);
+
+                //DrawTriangle();
                 glXSwapBuffers(dpy, win);
+
         } /* this closes while(1) { */
 } /* this is the } which closes int main(int argc, char *argv[]) { */
 

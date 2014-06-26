@@ -20,9 +20,9 @@ HW      textrure a cube with russian flag
 
         23 June 2014
 
-HW      1) rotate a cube/plane, implement sliced-plane, 
+HW      1) rotate a cube/plane, implement sliced-plane (rotation of a plane implemented, sliced plane - yet not)
         2) rotate a plane relatively to specified pivot-center, visualize
-        3) interpolation of all vertex attributes
-        4) draw a star, or a smile or any onther complex picture without using textures
-        5) draw some colored circle without using IFs
+        3) interpolation of all vertex attributes is good way of 'debug' ... (done)
+        4) draw a star, or a smile or any onther complex picture without using textures (yet only a circle ... )
+        5) draw some colored circle without using IFs (yet only with an 'if' ...)
 **********************************************
