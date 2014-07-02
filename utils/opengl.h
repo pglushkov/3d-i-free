@@ -11,5 +11,7 @@
 #include <GL/glext.h>
 #include <GL/glx.h>
 
+void print_opengl_error(const char* where);
+
 #endif /* of MY_OPENGL_INCLUDES */
 

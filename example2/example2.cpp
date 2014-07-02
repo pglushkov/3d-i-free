@@ -12,7 +12,11 @@
 #include<X11/Xlib.h>
 
 #include <utils/opengl.h>
-#include <utils/shader.h>
+
+//#include <utils/my_material.h>
+//#include <utils/my_geometry.h>
+#include <utils/my_mesh.h>
+#include <utils/simple_vectors.h>
 
 Display                 *dpy;
 Window                  root;
@@ -98,7 +102,6 @@ void bindAttributesWithShaders(GLuint gl_program)
 
         /* passing time increment as a uniform ... */
         GLfloat time = getTimePassed();
-        printf("DBG : time_passed = %f ...\n", time);
         GLint timeUniformHandle = glGetUniformLocation(gl_program, "time");
         glUniform1f(timeUniformHandle, time);
 }
@@ -164,69 +167,58 @@ int main(int argc, char *argv[]) {
         glXMakeCurrent(dpy, win, glc);
 
         glEnable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
 
         printf(" gl version = %s ...\n", glGetString(GL_VERSION));
         printf(" glsl version = %s ...\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+        //printf(" max shader attributes = %s ...\n", glGetString(GL_MAX_VERTEX_ATTRIBS));
 
-        GLuint squareVao, squareVbo;
-        prepareArrayForSquareDraw(squareVao, squareVbo);
+        //GLuint squareVao, squareVbo;
+        //prepareArrayForSquareDraw(squareVao, squareVbo);
         /* DBG */
-        printf("Resulting vao=%u, vbo = %u ...\n", squareVao, squareVbo);
+        //printf("Resulting vao=%u, vbo = %u ...\n", squareVao, squareVbo);
 
+        //MyMaterial mat1("vshader_attr.txt", "fshader_attr.txt");
 
-        GLint result;
-        GLuint g_program = glCreateProgram();
+        //GLuint g_program = mat1.GetProgramHandle();
 
-        shaderAttachFromFile(g_program, GL_VERTEX_SHADER, "vshader_attr.txt");
-        shaderAttachFromFile(g_program, GL_FRAGMENT_SHADER, "fshader_attr.txt");
+        //bindAttributesWithShaders(g_program);
 
-        glLinkProgram(g_program);
-        glGetProgramiv(g_program, GL_LINK_STATUS, &result);
-        if(result == GL_FALSE) {
-                GLint length;
-                char *log;
+        MyMesh square(geometry_gen::generate_rectangle(1.0f, 0.8f), "vshader_attr.txt", "fshader_attr.txt");
 
-                /* get the program info log */
-                glGetProgramiv(g_program, GL_INFO_LOG_LENGTH, &length);
-                log = (char*)malloc(length);
-                glGetProgramInfoLog(g_program, length, &result, log);
-
-                /* print an error message and the info log */
-                fprintf(stderr, "sceneInit(): Program linking failed: %s\n", log);
-                free(log);
-
-                /* delete the program */
-                glDeleteProgram(g_program);
-                g_program = 0;
-        }
-
-        bindAttributesWithShaders(g_program);
+        square.TRACE_GEOM();
 
         while(true) {
-                XNextEvent(dpy, &xev);
-                if(xev.type == Expose) {
-                        XGetWindowAttributes(dpy, win, &gwa);
-
-                        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-                } else if(xev.type == KeyPress) {
-                        /* DBG ... */
-                        printf("KeyPress: keycode %u state %u\n", xev.xkey.keycode, xev.xkey.state);
-
-                        if (xev.xkey.keycode == 9 ) {
+                for (int i = 0; i < XPending(dpy); i++) 
+                {
+                    XNextEvent(dpy, &xev);
+                    switch(xev.type)
+                    {
+                        case KeyPress :
+                        {
+                            printf("KeyPress: keycode %u state %u\n", xev.xkey.keycode, xev.xkey.state);
+                            if(xev.xkey.keycode == 9 || xev.xkey.keycode == 61 ) 
+                            {
                                 glXMakeCurrent(dpy, None, NULL);
                                 glXDestroyContext(dpy, glc);
                                 XDestroyWindow(dpy, win);
                                 XCloseDisplay(dpy);
                                 exit(0);
+                            }
                         }
+                        default:
+                            break;
+                    }
                 }
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                glUseProgram(g_program);
-                bindAttributesWithShaders(g_program);
-                drawFigure(squareVao, squareVbo, 5);
+                //glUseProgram(g_program);
+                //mat1.UseMaterial(true);
+                //bindAttributesWithShaders(g_program);
+                //drawFigure(squareVao, squareVbo, 5);
+
+                square.draw();
 
                 //DrawTriangle();
                 glXSwapBuffers(dpy, win);

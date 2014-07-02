@@ -125,14 +125,14 @@ public:
 	T X() const { return coords[0]; }
 	T Y() const { if (__size < 2) return T(0); else return coords[1]; }
 	T Z() const { if (__size < 3) return T(0); else return coords[2]; }
-	T U() const { if (__size < 4) return T(0); else return coords[3]; }
+	T W() const { if (__size < 4) return T(0); else return coords[3]; }
 	T length() const { return len; };
 	const std::array<T,__size>& data() const { return coords; }
 #ifdef DBG_SIMPLE_VECTORS
 	void TRACE() const
 	{
 		std::cout << "TRACING VECTOR " << this << ", size=" << __size << ": X=" << this->X() << ", Y="
-			<< this->Y() << ", Z=" << this->Z() << ", U=" << this->U() << ", LEN=" << len << std::endl;
+			<< this->Y() << ", Z=" << this->Z() << ", U=" << this->W() << ", LEN=" << len << std::endl;
 	}
 #endif
 	
@@ -162,7 +162,7 @@ available for MyVector<size=3>");
 		coords[2] = z;
 		len = vector_length<T, __size>(coords);
 	}
-	MyVector(T x, T y, T z, T u)
+	MyVector(T x, T y, T z, T w)
 	{
 		if (__size != 4)
 			throw new std::runtime_error("ERROR in MyVector : MyVector(x,y,z,u) constructor is only \
@@ -170,7 +170,7 @@ available for MyVector<size=4>");
 		coords[0] = x;
 		coords[1] = y;
 		coords[2] = z;
-		coords[3] = u;
+		coords[3] = w;
 		len = vector_length<T, __size>(coords);
 	}
 	MyVector(const std::array<T, __size>& data) : coords(data)

@@ -1,22 +1,25 @@
-
 uniform float time;
-varying vec3 figureColor;
+varying vec4 figureColor;
 varying vec2 plane_coord;
 void main()
 {
-	//gl_FragColor = vec4((figureColor + 1.0)/2.0, 1.0);
+        //gl_FragColor = vec4((figureColor + 1.0)/2.0, 1.0);
         vec2 center; center.x = 0.5; center.y = 0.5;
         vec2 dist_v = center - plane_coord;
         float dist = sqrt(dist_v.x*dist_v.x + dist_v.y*dist_v.y);
         float R = 0.2;
+
+        float intensity = 0.0;
+
         if (dist > R)
                 //gl_FragColor = vec4(0.5, R, R, 1.0); //gradient from circle center to edges
                 gl_FragColor = vec4(plane_coord, 1.0, 1.0); //just a way to show each 'fraxel' with color
         else
-                gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+                gl_FragColor = vec4(1.0, 0.0, 0.0, 0.5);
 
         //float r_chan = R - 
         //float g_chan = 0.0;
         //float b_chan = 0.0;
         //gl_FragColor = (r_chan, g_chan, b_chan, 1.0);
 }
+
