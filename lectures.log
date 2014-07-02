@@ -31,7 +31,7 @@ HW      1) rotate a cube/plane, implement sliced-plane (rotation of a plane impl
 
         26 June 2014
 
-        Mandatory (by Kirill) attributes of vertex:
+        Mandatory (by Kirill) attributes of vertex: (done)
         1) Position (vec3)
         2) 'Texture' coordinates (vec2)
         3) Normal (vec3)
@@ -39,7 +39,7 @@ HW      1) rotate a cube/plane, implement sliced-plane (rotation of a plane impl
 
 HW      1) Put texture on a plane
         2) Create class CAMERA
-        3) Create vertex class
+        3) Create vertex class (done)
 
 ****************************************************
 
