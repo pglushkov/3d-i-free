@@ -18,6 +18,8 @@
 #include <utils/my_mesh.h>
 #include <utils/simple_vectors.h>
 
+#include <FreeImage.h>
+
 Display                 *dpy;
 Window                  root;
 GLint                   att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None };
@@ -29,110 +31,37 @@ GLXContext              glc;
 XWindowAttributes       gwa;
 XEvent                  xev;
 
-GLfloat square_vertices[] =
+void test_free_image()
 {
-        /*x    y      z       color                     plane-coordinate     */
-        -0.5f, 0.5f, 0.0f,    0.0f, 1.0f, 0.0f,         0.0f, 0.0f,
-        -0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,         0.0f, 1.0f,
-        0.5f, -0.5f, 0.0f,    1.0f, 0.0f, 0.0f,         1.0f, 1.0f,
-        0.5f, 0.5f, 0.0f,     1.0f, 0.0f, 0.0f,         1.0f, 0.0f,
-        -0.5f, 0.5f, 0.0f,    0.0f, 1.0f, 0.0f,         0.0f, 0.0f,
-};
+        FIBITMAP* bmap = FreeImage_Load(FIF_JPEG, "../data/green_red.jpg", JPEG_DEFAULT);
 
-uint16_t vert_indices[] =
-{
-        0, 1, 2,
-        2, 0, 3,
-};
+        /* print something about it ... */
+        std::cout << "FIBITMAP = " << bmap << ", BPP = " << FreeImage_GetBPP(bmap)
+                  << ", Width = " << FreeImage_GetWidth(bmap) << ", Height = " << FreeImage_GetHeight(bmap)
+                  << ", ColorType = " << FreeImage_GetColorType(bmap) << ", DataBits = "
+                  << (void*)FreeImage_GetBits(bmap) << std::endl;
 
-float getTimePassed()
-{
-        static float last_time;
+        unsigned int bytespp = FreeImage_GetLine(bmap); /* getting number of bytes-per-pixel */
+        for (size_t h = 0; h < FreeImage_GetHeight(bmap); ++h) {
+                /* getting address of first pixel in current line */
+                BYTE* bits = FreeImage_GetScanLine(bmap, h);
+                for (unsigned int w = 0; w < FreeImage_GetWidth(bmap); ++w) {
 
-        float time = (GLfloat)clock() / (GLfloat)CLOCKS_PER_SEC;
+                        /* do smth with current pixel */
+                        std::cout << " RGB (" << h + 1 << ":" << w + 1 << "): "
+                                << (int)bits[0] << "," << (int)bits[1] << "," << (int)bits[2];
+                        /* jump to next pixel in current line*/
+                        bits += bytespp;
+                }
+                std::cout << std::endl;
+        }
 
-        return time - last_time;
-}
-
-void printGlError(const char* where)
-{
-        GLenum err;
-        err = glGetError();
-        printf("Current GL error: %d ... (at \"%s\") \n", err, where);
-}
-
-void DrawTriangle() {
-        glClearColor(1.0, 1.0, 1.0, 1.0);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(-1., 1., -1., 1., 1., 20.);
-
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        //gluLookAt(0., 0., 10., 0., 0., 0., 0., 1., 0.);
-
-        glBegin(GL_TRIANGLE_STRIP);
-        glColor3f(0., 0., 0.); glVertex3f(-.75, -.75, 0.);
-        glColor3f(0., 0., 0.); glVertex3f( .75, -.75, 0.);
-        glColor3f(0., 0., 0.); glVertex3f( .75,  .75, 0.);
-        glColor3f(1., 1., 0.); glVertex3f(-.75,  .75, 0.);
-        glEnd();
-}
-
-void bindAttributesWithShaders(GLuint gl_program)
-{
-        /* specifying where actial attributes are located in buffered data, so that shaders could use it */
-
-        /* basic positions in 'absolute' space */
-        GLint positionAttr = glGetAttribLocation(gl_program, "in_position");
-        glVertexAttribPointer(positionAttr, 3, GL_FLOAT, GL_FALSE, sizeof(float)*8 /*stride!*/, 0 /*offset*/);
-        glEnableVertexAttribArray(positionAttr);
-
-        /* default colors of vertices */
-        GLint colorAttr = glGetAttribLocation(gl_program, "in_color");
-        glVertexAttribPointer(colorAttr, 3, GL_FLOAT, GL_FALSE, sizeof(float)*8, (const void *)(3*sizeof(float)));
-        glEnableVertexAttribArray(colorAttr);
-
-        /* 'plane' coordenates of vertices */
-        GLint pcoordAttr = glGetAttribLocation(gl_program, "in_plane_coord");
-        glVertexAttribPointer(pcoordAttr, 3, GL_FLOAT, GL_FALSE, sizeof(float)*8, (const void *)(6*sizeof(float)));
-        glEnableVertexAttribArray(pcoordAttr);
-
-        /* passing time increment as a uniform ... */
-        GLfloat time = getTimePassed();
-        GLint timeUniformHandle = glGetUniformLocation(gl_program, "time");
-        glUniform1f(timeUniformHandle, time);
-}
-
-void prepareArrayForSquareDraw(GLuint &vao, GLuint& vbo)
-{
-        /* initializing vertex-array-object and making it 'current' */
-        glGenVertexArrays(1, &vao);
-        /* DBG */
-        printf("Created vertex-array-object : %u ...\n", vao);
-        glBindVertexArray(vao);
-
-        /* buffering actual data into gl-buffer-object*/
-        glGenBuffers(1, &vbo);
-        printf("Created vertex-buffer-object : %u ...\n", vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(square_vertices), square_vertices, GL_STATIC_DRAW);
-
-        glBindVertexArray(0);
-}
-
-void drawFigure(GLuint vao, GLuint vbo, unsigned int num_vertices)
-{
-
-
-        glBindVertexArray(vao);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, num_vertices);
+        FreeImage_Unload(bmap);
 }
 
 int main(int argc, char *argv[]) {
+
+        test_free_image();
 
         dpy = XOpenDisplay(NULL);
 
@@ -171,20 +100,8 @@ int main(int argc, char *argv[]) {
 
         printf(" gl version = %s ...\n", glGetString(GL_VERSION));
         printf(" glsl version = %s ...\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
-        //printf(" max shader attributes = %s ...\n", glGetString(GL_MAX_VERTEX_ATTRIBS));
 
-        //GLuint squareVao, squareVbo;
-        //prepareArrayForSquareDraw(squareVao, squareVbo);
-        /* DBG */
-        //printf("Resulting vao=%u, vbo = %u ...\n", squareVao, squareVbo);
-
-        //MyMaterial mat1("vshader_attr.txt", "fshader_attr.txt");
-
-        //GLuint g_program = mat1.GetProgramHandle();
-
-        //bindAttributesWithShaders(g_program);
-
-        MyMesh square(geometry_gen::generate_rectangle(1.0f, 0.8f), "vshader_attr.txt", "fshader_attr.txt");
+        MyMesh square(geometry_gen::generate_rectangle(1.0f, 0.5f), "vshader_attr.txt", "fshader_attr.txt");
 
         square.TRACE_GEOM();
 
@@ -213,17 +130,11 @@ int main(int argc, char *argv[]) {
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                //glUseProgram(g_program);
-                //mat1.UseMaterial(true);
-                //bindAttributesWithShaders(g_program);
-                //drawFigure(squareVao, squareVbo, 5);
-
                 square.draw();
 
-                //DrawTriangle();
                 glXSwapBuffers(dpy, win);
 
-        } /* this closes while(1) { */
+        } /* this closes while(true) { */
 } /* this is the } which closes int main(int argc, char *argv[]) { */
 
 

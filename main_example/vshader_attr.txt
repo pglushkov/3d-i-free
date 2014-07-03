@@ -11,7 +11,7 @@ varying vec2 plane_coord;
 void main()
 {
         float pi = 3.141592653;
-        float spin_freq = 1.0;
+        float spin_freq = 0.5;
         float new_z = in_position.z * sin(2.0*pi*(time/3.0)*spin_freq);
         float new_x = in_position.x * cos(2.0*pi*(time/3.0)*spin_freq);
         gl_Position = vec4(new_x, in_position.y, new_z, 1.0); // this one rotates our figure around Y-axis

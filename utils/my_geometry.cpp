@@ -55,7 +55,7 @@ void MyGeometry::TRACE() const
 namespace geometry_gen
 {
 
-        MyGeometry generate_rectangle(float height, float width)
+        MyGeometry generate_rectangle(float width, float height)
         {
                 std::vector<MyVertex> vert(4);
                 std::vector<unsigned short> ord( { 0, 1, 2, 2, 3, 0} );

@@ -16,8 +16,8 @@ void MyMesh::LoadGeometryToGpu()
         glBindBuffer(GL_ARRAY_BUFFER,vert_buffer_id);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ord_buffer_id);
 
-        glBufferData(GL_ARRAY_BUFFER, vsz, geom.VerticesData(), GL_STATIC_DRAW);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, osz, geom.OrderData(), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vsz, geom.VerticesData(), GL_DYNAMIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, osz, geom.OrderData(), GL_DYNAMIC_DRAW);
 
         //printf("geometry: vert : %lu bytes; ndx: %lu bytes\n", vsz, osz);
 }
@@ -39,8 +39,8 @@ void MyMesh::BindShadersAttributes()
         GLint col_attr = glGetAttribLocation(gl_program, "in_def_color");
 
         /* DBG */
-        printf(" Binding attributes: pos_attr = %d, pc_attr = %d, norm_attr = %d, col_attr = %d ...\n",
-                        pos_attr, pc_attr, norm_attr, col_attr);
+        /*printf(" Binding attributes: pos_attr = %d, pc_attr = %d, norm_attr = %d, col_attr = %d ...\n",
+                        pos_attr, pc_attr, norm_attr, col_attr);*/
 
         if(pos_attr != -1)
         {

@@ -10,12 +10,13 @@ SOURCES += ../utils/my_geometry.cpp
 SOURCES += ../utils/my_mesh.cpp
 SOURCES += ../utils/opengl.cpp
 OBJECTS = $(SOURCES:%.cpp=%.o)
-TARGET = example2
+TARGET = main_example
 
 COMP_FLAGS = -c -g -Wall -std=c++11
 GL_LDLIBS = -lGL -lGLw
 LD_FLAGS = -g
 CFLAGS = -I$(I_FREE_3D_DIR)
+LD_LIBS = $(GL_LDLIBS) -lfreeimage
 
 CC = g++-4.8
 LD = g++-4.8
@@ -23,7 +24,7 @@ LD = g++-4.8
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
-	$(LD) $(LD_FLAGS) $^ -o $@ $(GL_LDLIBS)
+	$(LD) $(LD_FLAGS) $^ -o $@ $(LD_LIBS)
 
 
 clean:
