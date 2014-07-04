@@ -1,3 +1,4 @@
+#version 130
 
 attribute vec4 in_position;
 attribute vec2 in_plane_coord;
@@ -14,8 +15,8 @@ void main()
         float spin_freq = 0.5;
         float new_z = in_position.z * sin(2.0*pi*(time/3.0)*spin_freq);
         float new_x = in_position.x * cos(2.0*pi*(time/3.0)*spin_freq);
-        gl_Position = vec4(new_x, in_position.y, new_z, 1.0); // this one rotates our figure around Y-axis
-        //gl_Position = vec4(in_position, 1.0); // this one just draws the thing
+        //gl_Position = vec4(new_x, in_position.y, new_z, 1.0); // this one rotates our figure around Y-axis
+        gl_Position = vec4(in_position); // this one just draws the thing
         figureColor = in_def_color;
         plane_coord = in_plane_coord;
 }

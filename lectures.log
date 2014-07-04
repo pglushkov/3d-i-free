@@ -50,4 +50,11 @@ HW
         3) phong lightening using some texture as a normals map
 
 
+        3 June 2014
+
+HW
+        1) add tangent and binormal to Vertex!
+        2) add TBN (tangent-binormal-normal)  calculation to geometry
+
+
 

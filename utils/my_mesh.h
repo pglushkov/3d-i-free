@@ -37,6 +37,8 @@ public:
         MyMesh(const float* vert_data, size_t vert_num, const unsigned short *ord_data, size_t ord_num,
                         const char* vshader_file, const char* fshader_file);
 
+        void AddTexture(const char* file_name) { mater.AddTexture(file_name); }
+
         virtual ~MyMesh();
         virtual void draw();
 

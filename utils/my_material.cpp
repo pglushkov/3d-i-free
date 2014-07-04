@@ -1,39 +1,27 @@
 
 #include "my_material.h"
+#include <memory.h>
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <FreeImage.h>
 
-static std::string ReadTextFromFile(const char* file)
-{
-        std::ifstream read;
-        read.open(file, std::ifstream::in);
-        std::vector<char> data;
+#include <utils/misc_utils.h>
 
-        if( read.good() ) {
-                read.seekg(0, std::ios::end);
-                size_t file_sz = read.tellg();
-                read.seekg(0);
-                data.resize(file_sz + 1);
-                read.read(&data[0], file_sz);
-                data[file_sz] = '\0';
-
-        } else {
-                throw std::runtime_error("Could not open specified file!");
-        }
-
-        read.close();
-        return std::string(&data[0]);
-}
+int MyMaterial::_max_textures = 0;
 
 MyMaterial::MyMaterial(const char* vshader_file, const char* fshader_file)
 {
         GLuint vert_shader, frag_shader;
         GLint length, result;
 
-        std::string vshader(ReadTextFromFile(vshader_file));
-        std::string fshader(ReadTextFromFile(fshader_file));
+        if (_max_textures == 0)
+                glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &_max_textures);
+        textures.resize(0);
+
+        std::string vshader(my_utils::ReadTextFromFile(vshader_file));
+        std::string fshader(my_utils::ReadTextFromFile(fshader_file));
 
         /* create shader object, set the source, and compile */
         vert_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -120,16 +108,69 @@ MyMaterial::MyMaterial(const char* vshader_file, const char* fshader_file)
 MyMaterial::~MyMaterial()
 {
         glDeleteProgram(gl_program);
+        if (textures.size() > 0)
+                glDeleteTextures(textures.size(), &textures[0]);
 }
 
 void MyMaterial::UseMaterial(bool use)
 {
-
+        char tex_name[20];
         if (use) {
                 glUseProgram(gl_program);
-                print_opengl_error(" use mater 1");
+                for (unsigned int k = 0; k < textures.size(); ++k) {
+                        snprintf(tex_name, 20, "texture%d", k + 1);
+
+                        glActiveTexture(GL_TEXTURE0);
+                        glBindTexture(GL_TEXTURE_2D, textures[k]);
+                        GLint uniform = glGetUniformLocation(gl_program, tex_name);
+                        if (uniform != -1) {
+                                glUniform1i(uniform, textures[k]);
+                        }
+
+                        /* DBG */
+                        // printf("Texture:%s , found id = %u , texture_for_id = %u ...\n", tex_name, uniform, textures[k]);
+                }
         } else {
                 /* glDontUseProgram :))) */;
         }
+}
+
+void MyMaterial::AddTexture(const char* texture_file_name)
+{
+        if ( (int)textures.size() >= _max_textures)
+                throw std::runtime_error("Error! Maximum allowed number of textures reached!");
+
+        std::vector<BYTE> tex_data;
+
+        unsigned int width, height;
+        GLuint gl_flag;
+
+        my_utils::ReadImageData(texture_file_name, tex_data, width, height, gl_flag);
+
+        /* DBG */
+        printf("In AddTexture: width=%u height = %u, gl_flag=%u ...\n", width, height, gl_flag);
+
+        GLuint tmp;
+        glGenTextures(1, &tmp);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, tmp);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, gl_flag, width, height, 0, gl_flag, GL_UNSIGNED_BYTE, &tex_data[0]);
+
+        /* DBG */
+        print_opengl_error(" after loading texture ");
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        textures.push_back(tmp);
+
+        /* DBG */
+        printf(" current list of textures: ");
+        for (size_t k = 0; k < textures.size(); ++k)
+                printf(" %u ", textures[k]);
+        printf("\n");
 }
 

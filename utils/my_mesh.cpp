@@ -118,22 +118,25 @@ MyMesh::MyMesh(const float* vert_data, size_t vert_num, const unsigned short *or
 
 MyMesh::~MyMesh()
 {
-
+        glDeleteBuffers(1, &vert_buffer_id);
+        glDeleteBuffers(1, &ord_buffer_id);
 }
 
 void MyMesh::draw()
 {
 
-        mater.UseMaterial(true);                        // setting current shader program
+        mater.UseMaterial(true);                                // setting current shader program
         glBindBuffer(GL_ARRAY_BUFFER, vert_buffer_id);          // binding current vertex buffer
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ord_buffer_id);   // binding current vertex-order buffer
 
-        BindShadersAttributes(); // размечаем аттрибуты
+        BindShadersAttributes(); // passing attributes markup to the shader
 
         // setting necessary uniforms
         GLint timeUniformHandle = glGetUniformLocation(mater.GetProgramHandle(), "time");
-        GLfloat time = (GLfloat)clock() / (GLfloat)CLOCKS_PER_SEC  * 10.0;
-        glUniform1f(timeUniformHandle, time);
+        if (timeUniformHandle != -1) {
+                GLfloat time = (GLfloat)clock() / (GLfloat)CLOCKS_PER_SEC  * 10.0;
+                glUniform1f(timeUniformHandle, time);
+        }
 
         // actual drawing
         glDrawElements(GL_TRIANGLES, geom.GetOrderNum(), GL_UNSIGNED_SHORT, (const void *)(0));

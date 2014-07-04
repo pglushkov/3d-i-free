@@ -9,6 +9,7 @@ SOURCES += ../utils/my_material.cpp
 SOURCES += ../utils/my_geometry.cpp
 SOURCES += ../utils/my_mesh.cpp
 SOURCES += ../utils/opengl.cpp
+SOURCES += ../utils/misc_utils.cpp
 OBJECTS = $(SOURCES:%.cpp=%.o)
 TARGET = main_example
 

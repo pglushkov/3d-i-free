@@ -34,6 +34,7 @@ XEvent                  xev;
 void test_free_image()
 {
         FIBITMAP* bmap = FreeImage_Load(FIF_JPEG, "../data/green_red.jpg", JPEG_DEFAULT);
+        //FIBITMAP* bmap = FreeImage_Load(FIF_BMP, "../data/green_red.bmp", BMP_DEFAULT);
 
         /* print something about it ... */
         std::cout << "FIBITMAP = " << bmap << ", BPP = " << FreeImage_GetBPP(bmap)
@@ -41,19 +42,22 @@ void test_free_image()
                   << ", ColorType = " << FreeImage_GetColorType(bmap) << ", DataBits = "
                   << (void*)FreeImage_GetBits(bmap) << std::endl;
 
-        unsigned int bytespp = FreeImage_GetLine(bmap); /* getting number of bytes-per-pixel */
+        unsigned int bytespl = FreeImage_GetLine(bmap); /* getting number of bytes-per-line */
+        unsigned int bytespp = bytespl / FreeImage_GetWidth(bmap);
+        std::cout << "Bytes-Per-Line: " << bytespl << ", Bytes-Per-Pixel: " << bytespp << std::endl;
         for (size_t h = 0; h < FreeImage_GetHeight(bmap); ++h) {
                 /* getting address of first pixel in current line */
                 BYTE* bits = FreeImage_GetScanLine(bmap, h);
                 for (unsigned int w = 0; w < FreeImage_GetWidth(bmap); ++w) {
 
                         /* do smth with current pixel */
-                        std::cout << " RGB (" << h + 1 << ":" << w + 1 << "): "
-                                << (int)bits[0] << "," << (int)bits[1] << "," << (int)bits[2];
+                        // std::cout << " RGB (" << h + 1 << ":" << w + 1 << "): "
+                               // << (int)bits[FI_RGBA_RED] << "," << (int)bits[FI_RGBA_GREEN]
+                               // << "," << (int)bits[FI_RGBA_BLUE];
                         /* jump to next pixel in current line*/
                         bits += bytespp;
                 }
-                std::cout << std::endl;
+                // std::cout << std::endl;
         }
 
         FreeImage_Unload(bmap);
@@ -61,7 +65,7 @@ void test_free_image()
 
 int main(int argc, char *argv[]) {
 
-        test_free_image();
+        //test_free_image();
 
         dpy = XOpenDisplay(NULL);
 
@@ -100,8 +104,12 @@ int main(int argc, char *argv[]) {
 
         printf(" gl version = %s ...\n", glGetString(GL_VERSION));
         printf(" glsl version = %s ...\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+        int max_tex_num;
+        glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &max_tex_num);
+        printf(" max number of textures = %d ...\n", max_tex_num);
 
-        MyMesh square(geometry_gen::generate_rectangle(1.0f, 0.5f), "vshader_attr.txt", "fshader_attr.txt");
+        MyMesh square(geometry_gen::generate_rectangle(1.8f, 1.6f), "vshader_attr.txt", "fshader_attr.txt");
+        square.AddTexture("../data/green.bmp");
 
         square.TRACE_GEOM();
 
