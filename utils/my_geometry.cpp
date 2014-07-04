@@ -90,14 +90,19 @@ namespace geometry_gen
                 vert[3].plane_coord[1] = 1.0f;
 
                 for (size_t k = 0; k < 4; ++k) {
-                        vert[k].position[2] = 0.0f; // by default 'z' is zero in each vertex
-                        vert[k].position[3] = 1.0f; // by default 'w' is zero in each vertex
+                        /* putting square straight on XY plane by default */
+                        vert[k].position[2] = 0.0f;
+                        vert[k].position[3] = 1.0f;
+                        
+                        /* white color by default */
                         vert[k].def_color[0] = 1.0f;
                         vert[k].def_color[1] = 1.0f;
                         vert[k].def_color[2] = 1.0f;
                         vert[k].def_color[3] = 1.0f;
-                        vert[k].normal[0] = vert[k].position[0];
-                        vert[k].normal[1] = vert[k].position[1];
+                        
+                        /* normal is along z-direction by default */
+                        vert[k].normal[0] = 0.0f;
+                        vert[k].normal[1] = 0.0f;
                         vert[k].normal[2] = 1.0f;
                 }
 
