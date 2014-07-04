@@ -120,7 +120,7 @@ void MyMaterial::UseMaterial(bool use)
                 for (unsigned int k = 0; k < textures.size(); ++k) {
                         snprintf(tex_name, 20, "texture%d", k + 1);
 
-                        glActiveTexture(GL_TEXTURE0);
+                        glActiveTexture(GL_TEXTURE0 + k);
                         glBindTexture(GL_TEXTURE_2D, textures[k]);
                         GLint uniform = glGetUniformLocation(gl_program, tex_name);
                         if (uniform != -1) {
@@ -152,7 +152,7 @@ void MyMaterial::AddTexture(const char* texture_file_name)
 
         GLuint tmp;
         glGenTextures(1, &tmp);
-        glActiveTexture(GL_TEXTURE0);
+        glActiveTexture(GL_TEXTURE0 + textures.size());
         glBindTexture(GL_TEXTURE_2D, tmp);
 
         glTexImage2D(GL_TEXTURE_2D, 0, gl_flag, width, height, 0, gl_flag, GL_UNSIGNED_BYTE, &tex_data[0]);
