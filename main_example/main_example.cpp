@@ -162,7 +162,7 @@ int main(int argc, char *argv[]) {
         glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &max_tex_num);
         printf(" max number of textures = %d ...\n", max_tex_num);
 
-        MyMesh square(geometry_gen::generate_rectangle(1.8f, 1.6f),
+        MyMesh square(geometry_gen::generate_rectangle(1.0f, 1.0f),
                       "../shaders/vshader_attr.txt", "../shaders/fshader_attr.txt");
         //square.AddTexture("../data/green.bmp");
         std::vector<unsigned char> tex = my_utils::GenerateRgbTexture(256, 256, 0, 0, 255);
@@ -171,11 +171,9 @@ int main(int argc, char *argv[]) {
         square.TRACE_GEOM();
 
         MyPositionMatrix<float> mat1;
-        mat1.Scale(0.5);
-        //mat1.rotateZ(45.0f);
-        //mat1.Translate(std::array<float, 3> ({0.5f, 0.5f, 0.0f}));
+        float phase = 0.0f;
 
-        printf(" some dbg :: %lu ...\n", sizeof(mat1.get_data()));
+        mat1.Translate(std::array<float, 3> ({0.2f, 0.2f, 0.0f}));
 
         while(true) {
                 for (int i = 0; i < XPending(dpy); i++) 
@@ -203,7 +201,14 @@ int main(int argc, char *argv[]) {
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 // just as an example, passing position matrix to shader ...
-                mat1.Rotate_Z(1.0f);
+                phase += 0.1;
+                float new_scale = 1 + 0.001*cos(phase/100);
+                float new_pos = 0.2*cos(phase);
+                mat1.Rotate_Z(1.0f); // rotate our position by 1 deg
+                mat1.Scale(new_scale);
+                //mat1.Translate(std::array<float, 3> ({new_pos, new_pos, 0.0f}));
+                mat1.SetPosition(std::array<float, 3> ({new_pos, new_pos, 0.0f}));
+                printf("phase = %f , new scale = %f , new_pos = %f ...\n", phase, new_scale, new_pos);
                 GLint rot = glGetUniformLocation(square.GetShaderProgramHandle(), "rotation");
                 if (rot != -1) {
                         glUniformMatrix4fv(rot, 1, false, &mat1.get_data()[0][0]);

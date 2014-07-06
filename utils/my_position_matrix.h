@@ -146,6 +146,13 @@ public:
                         this->data[k][this->size - 1] += tr[k];
         }
 
+        void SetPosition(const translation_vector& pos)
+        {
+                data[0][3] = pos[0];
+                data[1][3] = pos[1];
+                data[2][3] = pos[2];
+        }
+
         void Scale(const scale_vector& sc)
         {
                 for (size_t k = 0; k < this->size - 1; ++k)

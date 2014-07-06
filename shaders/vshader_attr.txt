@@ -22,7 +22,7 @@ void main()
         figureColor = in_def_color;
         plane_coord = in_plane_coord;
 
-        vec4 new_pos = rotation * in_position;
+        vec4 new_pos = in_position * rotation;
         gl_Position = new_pos;
 }
 
