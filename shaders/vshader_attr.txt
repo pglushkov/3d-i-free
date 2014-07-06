@@ -4,7 +4,9 @@ attribute vec4 in_position;
 attribute vec2 in_plane_coord;
 attribute vec3 in_norm;
 attribute vec4 in_def_color;
+uniform mat4 rotation;
 uniform float time;
+
 
 varying vec4 figureColor;
 varying vec2 plane_coord;
@@ -19,5 +21,8 @@ void main()
         gl_Position = vec4(in_position); // this one just draws the thing
         figureColor = in_def_color;
         plane_coord = in_plane_coord;
+
+        vec4 new_pos = rotation * in_position;
+        gl_Position = new_pos;
 }
 

@@ -147,6 +147,14 @@ void MyMaterial::AddTexture(const char* texture_file_name)
 
         my_utils::ReadImageData(texture_file_name, tex_data, width, height, gl_flag);
 
+        AddTexture(tex_data, width, height, gl_flag);
+}
+
+
+void MyMaterial::AddTexture(std::vector<unsigned char>& data, unsigned int width, unsigned int height, GLuint gl_flag)
+{
+        if ( (int)textures.size() >= _max_textures)
+                throw std::runtime_error("Error! Maximum allowed number of textures reached!");
         /* DBG */
         printf("In AddTexture: width=%u height = %u, gl_flag=%u ...\n", width, height, gl_flag);
 
@@ -155,7 +163,7 @@ void MyMaterial::AddTexture(const char* texture_file_name)
         glActiveTexture(GL_TEXTURE0 + textures.size());
         glBindTexture(GL_TEXTURE_2D, tmp);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, gl_flag, width, height, 0, gl_flag, GL_UNSIGNED_BYTE, &tex_data[0]);
+        glTexImage2D(GL_TEXTURE_2D, 0, gl_flag, width, height, 0, gl_flag, GL_UNSIGNED_BYTE, &data[0]);
 
         /* DBG */
         print_opengl_error(" after loading texture ");
@@ -173,4 +181,5 @@ void MyMaterial::AddTexture(const char* texture_file_name)
                 printf(" %u ", textures[k]);
         printf("\n");
 }
+
 

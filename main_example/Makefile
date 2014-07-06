@@ -4,7 +4,6 @@
 I_FREE_3D_DIR = /home/peter/DEVEL/opengl/3d-i-free/
 
 SOURCES = $(wildcard *.cpp)
-SOURCES += ../utils/shader.cpp
 SOURCES += ../utils/my_material.cpp
 SOURCES += ../utils/my_geometry.cpp
 SOURCES += ../utils/my_mesh.cpp

@@ -13,10 +13,10 @@
 
 #include <utils/opengl.h>
 
-//#include <utils/my_material.h>
-//#include <utils/my_geometry.h>
 #include <utils/my_mesh.h>
 #include <utils/simple_vectors.h>
+#include <utils/misc_utils.h>
+#include <utils/my_position_matrix.h>
 
 #include <FreeImage.h>
 
@@ -30,6 +30,58 @@ Window                  win;
 GLXContext              glc;
 XWindowAttributes       gwa;
 XEvent                  xev;
+
+void test_pos_mat()
+{
+        // MySquareMatrix<float, 4> a;
+        // MySquareMatrix<float, 4> a1;
+
+        // a.TRACE();
+
+        // std::cout << a[1][2] << std::endl;
+        // //std::cout << a[4][0] << std::endl; //this line will cause an exception!
+
+        // for (size_t k = 0; k < a.size; ++k)
+                // for (size_t m = 0; m < a.size; ++m) {
+                        // a[k][m] = float(k*m);
+                        // a1[k][m] = 3.0f;
+                // }
+
+        // a.TRACE();
+        // a1.TRACE();
+        // a1 *= a;
+        // a1.TRACE();
+
+        // auto b = CreateOXRotation<float> (30.0f);
+        // b.TRACE();
+
+        // a = b;
+        // a.TRACE();
+
+
+        MyPositionMatrix<float> c;
+        c.TRACE();
+        c.Rotate_Z(30);
+        c.TRACE();
+
+
+        MySquareMatrix<float, 4> :: data_row v;
+        v[0] = 1.01; v[1] = 1.0f; v[2] = 1.0f; v[3] = 1.0f;
+
+        Vec4<float> v1(c * v);
+        v1.TRACE();
+
+        MyPositionMatrix<float> c1;
+        c1.TRACE();
+        float dbg[16];
+        memcpy(dbg, &c1.get_data()[0][0], sizeof(float) * 16);
+        printf("Results of memcpy from MyPositionMatrix.get_data() : ");
+        for (unsigned int k = 0; k < 16; ++k)
+                printf(" %f ", dbg[k]);
+        printf("\n ************* \n");
+        printf(" size of data_row: %lu \n",sizeof(MyPositionMatrix<float>::data_row));
+        printf(" size of full_data: %lu \n",sizeof(MySquareMatrix<float, 4>::full_data));
+}
 
 void test_free_image()
 {
@@ -66,6 +118,8 @@ void test_free_image()
 int main(int argc, char *argv[]) {
 
         //test_free_image();
+        //test_pos_mat();
+        //return 0;
 
         dpy = XOpenDisplay(NULL);
 
@@ -108,10 +162,20 @@ int main(int argc, char *argv[]) {
         glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &max_tex_num);
         printf(" max number of textures = %d ...\n", max_tex_num);
 
-        MyMesh square(geometry_gen::generate_rectangle(1.8f, 1.6f), "vshader_attr.txt", "fshader_attr.txt");
-        square.AddTexture("../data/green.bmp");
+        MyMesh square(geometry_gen::generate_rectangle(1.8f, 1.6f),
+                      "../shaders/vshader_attr.txt", "../shaders/fshader_attr.txt");
+        //square.AddTexture("../data/green.bmp");
+        std::vector<unsigned char> tex = my_utils::GenerateRgbTexture(256, 256, 0, 0, 255);
+        square.AddTexture(tex, 256, 256, GL_RGB);
 
         square.TRACE_GEOM();
+
+        MyPositionMatrix<float> mat1;
+        mat1.Scale(0.5);
+        //mat1.rotateZ(45.0f);
+        //mat1.Translate(std::array<float, 3> ({0.5f, 0.5f, 0.0f}));
+
+        printf(" some dbg :: %lu ...\n", sizeof(mat1.get_data()));
 
         while(true) {
                 for (int i = 0; i < XPending(dpy); i++) 
@@ -137,6 +201,13 @@ int main(int argc, char *argv[]) {
                 }
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+                // just as an example, passing position matrix to shader ...
+                mat1.Rotate_Z(1.0f);
+                GLint rot = glGetUniformLocation(square.GetShaderProgramHandle(), "rotation");
+                if (rot != -1) {
+                        glUniformMatrix4fv(rot, 1, false, &mat1.get_data()[0][0]);
+                }
 
                 square.draw();
 

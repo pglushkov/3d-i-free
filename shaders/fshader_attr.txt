@@ -22,8 +22,8 @@ void main()
         //        gl_FragColor = vec4(1.0, 0.0, 0.0, 0.5);
 
         // texturing ...
-        gl_FragColor = texture2D(texture1, plane_coord);
-        //gl_FragColor = vec4(plane_coord, 0.0, 1.0);
+        //gl_FragColor = texture2D(texture1, plane_coord);
+        gl_FragColor = vec4(plane_coord, 0.0, 1.0);
 
         //float r_chan = R - 
         //float g_chan = 0.0;

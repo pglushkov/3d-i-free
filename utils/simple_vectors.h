@@ -128,13 +128,11 @@ public:
 	T W() const { if (__size < 4) return T(0); else return coords[3]; }
 	T length() const { return len; };
 	const std::array<T,__size>& data() const { return coords; }
-#ifdef DBG_SIMPLE_VECTORS
 	void TRACE() const
 	{
 		std::cout << "TRACING VECTOR " << this << ", size=" << __size << ": X=" << this->X() << ", Y="
 			<< this->Y() << ", Z=" << this->Z() << ", U=" << this->W() << ", LEN=" << len << std::endl;
 	}
-#endif
 	
 	/* constructors ... */
 	MyVector()

@@ -38,11 +38,17 @@ public:
                         const char* vshader_file, const char* fshader_file);
 
         void AddTexture(const char* file_name) { mater.AddTexture(file_name); }
+        void AddTexture(std::vector<unsigned char>& data, unsigned int width, unsigned int height, GLuint gl_flag)
+        {
+                mater.AddTexture(data, width, height, gl_flag);
+        }
 
         virtual ~MyMesh();
         virtual void draw();
 
         void TRACE_GEOM() const { geom.TRACE(); }
+
+        GLuint GetShaderProgramHandle() { return mater.GetProgramHandle(); }
 };
 
 #endif

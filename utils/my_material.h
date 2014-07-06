@@ -19,6 +19,7 @@ public:
         void UseMaterial(bool use);
         const GLuint GetProgramHandle() const { return gl_program; }
         void AddTexture(const char* texture_file_name);
+        void AddTexture(std::vector<unsigned char>& data, unsigned int width, unsigned int height, GLuint gl_flag);
         ~MyMaterial();
 };
 
