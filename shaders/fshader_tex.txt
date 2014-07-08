@@ -3,6 +3,7 @@
 uniform float time;
 varying vec4 figureColor;
 varying vec2 plane_coord;
+uniform sampler2D texture0;
 uniform sampler2D texture1;
 
 void main()
@@ -12,15 +13,14 @@ void main()
         vec2 dist_v = center - plane_coord;
         float dist = sqrt(dist_v.x*dist_v.x + dist_v.y*dist_v.y);
         float R = 0.2;
-        float alpha = 0.0;
 
         float intensity = 0.0;
 
-        if (dist > R)
-                //gl_FragColor = vec4(0.5, R, R, alpha); //gradient from circle center to edges
-                gl_FragColor = vec4(plane_coord, 0.0, 0.5); //just a way to show each 'fraxel' with color
-        else
-                gl_FragColor = vec4(0.0, 0.0, 1.0, alpha);
+        // texturing ...
+        vec4 tcolor = texture2D(texture0, plane_coord);
+        vec4 tcolor1 = texture2D(texture1, plane_coord) * 0.01;
+        gl_FragColor = tcolor + tcolor1;
+        //gl_FragColor = vec4(plane_coord, 0.0, 1.0);
 
         //float r_chan = R - 
         //float g_chan = 0.0;

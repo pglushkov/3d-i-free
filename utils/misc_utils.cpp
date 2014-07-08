@@ -116,12 +116,16 @@ void ReadImageData(const char* file, std::vector<unsigned char>& buffer,
 std::vector<unsigned char> GenerateRgbTexture(size_t w, size_t h, unsigned char R, unsigned char G, unsigned
                 char B)
 {
-        std::vector<unsigned char> result(w * h * 3);
+        unsigned int bytes_per_pixel = 3;
+        unsigned int vec_idx = 0;
+        unsigned int vec_sz = w * h * bytes_per_pixel;
+        std::vector<unsigned char> result(vec_sz);
         for (unsigned int k = 0; k < h; ++k) {
                 for (unsigned int m = 0; m < w; ++m) {
-                        result[k * w + m * 3 + 0] = R;
-                        result[k * w + m * 3 + 1] = G;
-                        result[k * w + m * 3 + 2] = B;
+                        vec_idx = k * w * bytes_per_pixel + m * bytes_per_pixel;
+                        result[vec_idx + 0] = R;
+                        result[vec_idx + 1] = G;
+                        result[vec_idx + 2] = B;
                 }
         }
         return result;
@@ -130,13 +134,17 @@ std::vector<unsigned char> GenerateRgbTexture(size_t w, size_t h, unsigned char 
 std::vector<unsigned char> GenerateRgbaTexture(size_t w, size_t h, unsigned char R, unsigned char G, unsigned
                 char B, unsigned char A)
 {
-        std::vector<unsigned char> result(w * h * 4);
+        unsigned int bytes_per_pixel = 4;
+        unsigned int vec_idx = 0;
+        unsigned int vec_sz = w * h * bytes_per_pixel;
+        std::vector<unsigned char> result(vec_sz);
         for (unsigned int k = 0; k < h; ++k) {
                 for (unsigned int m = 0; m < w; ++m) {
-                        result[k * w + m * 4 + 0] = R;
-                        result[k * w + m * 4 + 1] = G;
-                        result[k * w + m * 4 + 2] = B;
-                        result[k * w + m * 4 + 3] = A;
+                        vec_idx = k * w * bytes_per_pixel + m * bytes_per_pixel;
+                        result[vec_idx + 0] = R;
+                        result[vec_idx + 1] = G;
+                        result[vec_idx + 2] = B;
+                        result[vec_idx + 3] = A;
                 }
         }
         return result;

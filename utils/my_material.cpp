@@ -118,9 +118,11 @@ void MyMaterial::UseMaterial(bool use)
         if (use) {
                 glUseProgram(gl_program);
                 for (unsigned int k = 0; k < textures.size(); ++k) {
-                        snprintf(tex_name, 20, "texture%d", k + 1);
+                        snprintf(tex_name, 20, "texture%d", k);
 
-                        glActiveTexture(GL_TEXTURE0 + k);
+                        /* !!!! HAVE NO IDEA WHY, BUT GL_TEXTURE0 DOES NOT SEEM TO FUNCTION AT ALL,
+                           SO WE START FROM GL_TEXTURE0+1 !!!! */
+                        glActiveTexture((GL_TEXTURE0 + 1) + k);
                         glBindTexture(GL_TEXTURE_2D, textures[k]);
                         GLint uniform = glGetUniformLocation(gl_program, tex_name);
                         if (uniform != -1) {
@@ -128,7 +130,7 @@ void MyMaterial::UseMaterial(bool use)
                         }
 
                         /* DBG */
-                        // printf("Texture:%s , found id = %u , texture_for_id = %u ...\n", tex_name, uniform, textures[k]);
+                        // printf("Texture:%s , found id = %d , texture_for_id = %u ...\n", tex_name, uniform, textures[k]);
                 }
         } else {
                 /* glDontUseProgram :))) */;
@@ -159,14 +161,14 @@ void MyMaterial::AddTexture(std::vector<unsigned char>& data, unsigned int width
         printf("In AddTexture: width=%u height = %u, gl_flag=%u ...\n", width, height, gl_flag);
 
         GLuint tmp;
+
+        /* !!!! HAVE NO IDEA WHY, BUT GL_TEXTURE0 DOES NOT SEEM TO FUNCTION AT ALL, SO WE START FROM GL_TEXTURE0+1 !!!! */
+        glActiveTexture((GL_TEXTURE0 + 1) + textures.size()); 
         glGenTextures(1, &tmp);
-        glActiveTexture(GL_TEXTURE0 + textures.size());
+
         glBindTexture(GL_TEXTURE_2D, tmp);
 
         glTexImage2D(GL_TEXTURE_2D, 0, gl_flag, width, height, 0, gl_flag, GL_UNSIGNED_BYTE, &data[0]);
-
-        /* DBG */
-        print_opengl_error(" after loading texture ");
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -175,11 +177,6 @@ void MyMaterial::AddTexture(std::vector<unsigned char>& data, unsigned int width
 
         textures.push_back(tmp);
 
-        /* DBG */
-        printf(" current list of textures: ");
-        for (size_t k = 0; k < textures.size(); ++k)
-                printf(" %u ", textures[k]);
-        printf("\n");
 }
 
 
