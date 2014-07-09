@@ -20,10 +20,7 @@ private:
 public:
         MySquareMatrix()
         {
-                for (size_t k = 0; k < dim; ++k) {
-                        memset(&_data[k][0], 0, sizeof(T) * dim);
-                        _data[k][k] = T(1);
-                }
+                Reset();
         }
         data_row* data() { return &_data[0]; }
         data_row& operator[] (const size_t idx)
@@ -83,6 +80,15 @@ public:
                         std::cout << std::endl;
                 }
                 std::cout << std::endl;
+        }
+
+        void Reset()
+        {
+                // reset matrix to unity
+                for (size_t k = 0; k < dim; ++k) {
+                        memset(&_data[k][0], 0, sizeof(T) * dim);
+                        _data[k][k] = T(1);
+                }
         }
 };
 
@@ -205,6 +211,11 @@ public:
         {
                 data_row res = data * inp;
                 return res;
+        }
+
+        void Reset()
+        {
+                data.Reset();
         }
 };
 

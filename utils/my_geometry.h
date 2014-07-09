@@ -46,6 +46,9 @@ public:
 namespace geometry_gen
 {
         MyGeometry generate_rectangle(float width, float height);
+        MyGeometry generate_rectangle_two_sides(float width, float height);
+        MyGeometry generate_cube(float sz);
+
         MyGeometry generate_triangle(float edge1, float edge2, float edge3);
 }
 

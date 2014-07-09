@@ -1,4 +1,3 @@
- /*-- Written in C -- */
 
 /* common includes */
 #include <stdio.h>
@@ -79,8 +78,10 @@ int main(int argc, char *argv[]) {
 
         // MyMesh square(geometry_gen::generate_rectangle(1.0f, 1.0f),
                       // "../shaders/vshader_attr.txt", "../shaders/fshader_attr.txt");
+        // MyMesh square(geometry_gen::generate_rectangle(1.0f, 1.0f),
+                      // "../shaders/vshader_attr.txt", "../shaders/fshader_tex.txt");
         MyMesh square(geometry_gen::generate_rectangle(1.0f, 1.0f),
-                      "../shaders/vshader_attr.txt", "../shaders/fshader_tex.txt");
+                      "../shaders/vshader_attr.txt", "../shaders/fshader_lambert.txt");
         square.AddTexture("../data/penguin.bmp");
         // std::vector<unsigned char> tex = my_utils::GenerateRgbTexture(256, 256, 255, 0, 255);
         // square.AddTexture(tex, 256, 256, GL_RGB);
@@ -101,15 +102,14 @@ int main(int argc, char *argv[]) {
                         case KeyPress :
                         {
                             printf("KeyPress: keycode %u state %u\n", xev.xkey.keycode, xev.xkey.state);
-                            if(xev.xkey.keycode == 9 || xev.xkey.keycode == 61 ) 
+                            if(xev.xkey.keycode == 9 || xev.xkey.keycode == 61 )
                             {
                                 glXMakeCurrent(dpy, None, NULL);
                                 glXDestroyContext(dpy, glc);
                                 XDestroyWindow(dpy, win);
                                 XCloseDisplay(dpy);
                                 exit(0);
-                            }
-                        }
+                            }                         }
                         default:
                             break;
                     }
@@ -122,14 +122,17 @@ int main(int argc, char *argv[]) {
                 phase += 0.1;
                 float new_scale = 1 + 0.001*cos(phase/100);
                 float new_pos = 0.2*cos(phase);
-                mat1.Rotate_Z(1.0f); // rotate our position by 1 deg
+                mat1.Rotate_Y(1.0f); // rotate our position by 1 deg
                 mat1.Scale(new_scale);
-                //mat1.Translate(std::array<float, 3> ({new_pos, new_pos, 0.0f}));
                 mat1.SetPosition(std::array<float, 3> ({new_pos, new_pos, 0.0f}));
-                //printf("phase = %f , new scale = %f , new_pos = %f ...\n", phase, new_scale, new_pos);
-                GLint rot = glGetUniformLocation(square.GetShaderProgramHandle(), "rotation");
+                GLint rot = glGetUniformLocation(square.GetShaderProgramHandle(), "world_view_position");
                 if (rot != -1) {
                         glUniformMatrix4fv(rot, 1, false, &mat1.get_data()[0][0]);
+                }
+
+                GLint light = glGetUniformLocation(square.GetShaderProgramHandle(), "light_dir");
+                if (light != -1) {
+                        glUniform3f(light, -1.0f, 0.0f, -1.0f);
                 }
 
                 square.draw();

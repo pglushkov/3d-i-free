@@ -10,7 +10,7 @@ SOURCES += ../utils/my_mesh.cpp
 SOURCES += ../utils/opengl.cpp
 SOURCES += ../utils/misc_utils.cpp
 OBJECTS = $(SOURCES:%.cpp=%.o)
-TARGET = main_example
+TARGET = keyboard_rotate
 
 COMP_FLAGS = -c -g -Wall -std=c++11
 GL_LDLIBS = -lGL -lGLw
