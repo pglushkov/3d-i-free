@@ -1,0 +1,3 @@
+http://open.gl/
+http://www.scratchapixel.com/lessons/3d-advanced-lessons/perspective-and-orthographic-projection-matrix/perspective-projection-matrix/
+http://en.wikipedia.org/wiki/Rotation_matrix
