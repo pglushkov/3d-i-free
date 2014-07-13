@@ -1,3 +1,7 @@
 http://open.gl/
 http://www.scratchapixel.com/lessons/3d-advanced-lessons/perspective-and-orthographic-projection-matrix/perspective-projection-matrix/
 http://en.wikipedia.org/wiki/Rotation_matrix
+
+from Kirill:
+https://gist.github.com/donkaban/c7fed0f3eb922cab3736
+https://github.com/donkaban/3d-i-free
