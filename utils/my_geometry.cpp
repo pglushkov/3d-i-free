@@ -78,16 +78,16 @@ namespace geometry_gen
                 vert[3].position[1] = lty - height;
 
                 vert[0].plane_coord[0] = 0.0f;
-                vert[0].plane_coord[1] = 0.0f;
+                vert[0].plane_coord[1] = 1.0f;
 
                 vert[1].plane_coord[0] = 1.0f;
-                vert[1].plane_coord[1] = 0.0f;
+                vert[1].plane_coord[1] = 1.0f;
 
                 vert[2].plane_coord[0] = 1.0f;
-                vert[2].plane_coord[1] = 1.0f;
+                vert[2].plane_coord[1] = 0.0f;
 
                 vert[3].plane_coord[0] = 0.0f;
-                vert[3].plane_coord[1] = 1.0f;
+                vert[3].plane_coord[1] = 0.0f;
 
                 for (size_t k = 0; k < 4; ++k) {
                         /* putting square straight on XY plane by default */

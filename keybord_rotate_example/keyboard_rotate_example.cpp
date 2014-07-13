@@ -79,14 +79,15 @@ int main(int argc, char *argv[]) {
         printf(" max number of textures = %d ...\n", max_tex_num);
 
         /* GENERATING GEOMETRY */
-        MyGeometry geom(geometry_gen::generate_cube(1.0f));
-        //MyGeometry geom(geometry_gen::generate_rectangle(1.0f, 1.0f));
+        //MyGeometry geom(geometry_gen::generate_cube(1.0f));
+        MyGeometry geom(geometry_gen::generate_rectangle(1.0f, 1.0f));
         //MyGeometry geom(geometry_gen::generate_rectangle_two_sides(1.0f, 1.0f));
 
         /* SELECTING SHADERS TO DRAW */
         /* VERTEX SHADER */
         //std::string vshader("../shaders/vshader_simple.txt");
-        std::string vshader("../shaders/vshader_full.txt");
+        //std::string vshader("../shaders/vshader_full.txt");
+        std::string vshader("../shaders/vshader_y_spin.txt");
         /* FRAGMENT SHADER */
         //std::string fshader("../shaders/fshader_simple.txt");
         std::string fshader("../shaders/fshader_lambert.txt");

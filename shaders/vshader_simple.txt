@@ -4,7 +4,6 @@ attribute vec4 in_position;
 attribute vec2 in_plane_coord;
 attribute vec3 in_norm;
 attribute vec4 in_def_color;
-uniform mat4 world_view_position;
 uniform float time;
 
 
@@ -14,19 +13,11 @@ varying vec3 rnorm;
 
 void main()
 {
-        mat3 direction = mat3(world_view_position);
-        float pi = 3.141592653;
-        float spin_freq = 0.5;
-        float new_z = in_position.z * sin(2.0*pi*(time/3.0)*spin_freq);
-        float new_x = in_position.x * cos(2.0*pi*(time/3.0)*spin_freq);
-        //gl_Position = vec4(new_x, in_position.y, new_z, 1.0); // this one rotates our figure around Y-axis
         gl_Position = vec4(in_position); // this one just draws the thing
         figureColor = in_def_color;
         plane_coord = in_plane_coord;
 
-        //vec4 new_pos = in_position * world_view_position;
-        vec4 new_pos = in_position;
-        gl_Position = new_pos;
-        rnorm = in_norm * direction;
+        rnorm = in_norm;
+        gl_Position = in_position;
 }
 
