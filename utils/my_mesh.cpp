@@ -131,13 +131,6 @@ void MyMesh::draw()
 
         BindShadersAttributes(); // passing attributes markup to the shader
 
-        // setting necessary uniforms
-        GLint timeUniformHandle = glGetUniformLocation(mater.GetProgramHandle(), "time");
-        if (timeUniformHandle != -1) {
-                GLfloat time = (GLfloat)clock() / (GLfloat)CLOCKS_PER_SEC  * 10.0;
-                glUniform1f(timeUniformHandle, time);
-        }
-
         // actual drawing
         glDrawElements(GL_TRIANGLES, geom.GetOrderNum(), GL_UNSIGNED_SHORT, (const void *)(0));
 }

@@ -162,8 +162,6 @@ void MyMaterial::AddTexture(std::vector<unsigned char>& data, unsigned int width
 
         GLuint tmp;
 
-        /* !!!! HAVE NO IDEA WHY, BUT GL_TEXTURE0 DOES NOT SEEM TO FUNCTION AT ALL, SO WE START FROM GL_TEXTURE0+1 !!!! */
-        glActiveTexture((GL_TEXTURE0 + 1) + textures.size()); 
         glGenTextures(1, &tmp);
 
         glBindTexture(GL_TEXTURE_2D, tmp);

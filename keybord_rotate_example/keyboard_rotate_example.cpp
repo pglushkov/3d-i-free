@@ -78,26 +78,38 @@ int main(int argc, char *argv[]) {
         glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &max_tex_num);
         printf(" max number of textures = %d ...\n", max_tex_num);
 
-        // MyMesh mesh(geometry_gen::generate_rectangle(1.0f, 1.0f),
-                      // "../shaders/vshader_attr.txt", "../shaders/fshader_attr.txt");
-        // MyMesh mesh(geometry_gen::generate_rectangle(1.0f, 1.0f),
-                      // "../shaders/vshader_attr.txt", "../shaders/fshader_tex.txt");
-        // MyMesh mesh(geometry_gen::generate_rectangle_two_sides(1.0f, 1.0f),
-                      // "../shaders/vshader_attr.txt", "../shaders/fshader_lambert.txt");
-        MyMesh mesh(geometry_gen::generate_cube(1.0f),
-                      "../shaders/vshader_attr.txt", "../shaders/fshader_lambert.txt");
+        /* GENERATING GEOMETRY */
+        MyGeometry geom(geometry_gen::generate_cube(1.0f));
+        //MyGeometry geom(geometry_gen::generate_rectangle(1.0f, 1.0f));
+        //MyGeometry geom(geometry_gen::generate_rectangle_two_sides(1.0f, 1.0f));
+
+        /* SELECTING SHADERS TO DRAW */
+        /* VERTEX SHADER */
+        //std::string vshader("../shaders/vshader_simple.txt");
+        std::string vshader("../shaders/vshader_full.txt");
+        /* FRAGMENT SHADER */
+        //std::string fshader("../shaders/fshader_simple.txt");
+        std::string fshader("../shaders/fshader_lambert.txt");
+        //std::string fshader("../shaders/fshader_tex.txt");
+
+
+        /* GENERATING A DRAWABLE OBJECT (MESH) */
+        MyMesh mesh(geom, vshader.c_str(), fshader.c_str());
+        //mesh.TRACE_GEOM();
+
+        /* TEXTURING */
         mesh.AddTexture("../data/penguin.bmp");
         // std::vector<unsigned char> tex = my_utils::GenerateRgbTexture(256, 256, 255, 0, 255);
         // mesh.AddTexture(tex, 256, 256, GL_RGB);
 
-        //mesh.TRACE_GEOM();
-
-        MyPositionMatrix<float> mat1;
-
-        //mat1.Translate(std::array<float, 3> ({0.2f, 0.2f, 0.0f}));
+        /* INITIALIZING OBJECT POSITION */
+        std::array<float, 3> default_pos({ 0.0f, 0.0f, -1.5f});
+        MyPositionMatrix<float> matWorldPos;
+        matWorldPos.SetPosition(default_pos);
+        MyProjectionMatrix<float> matProj ( 2, 100, 90);
 
         while(true) {
-                for (int i = 0; i < XPending(dpy); i++) 
+                for (int i = 0; i < XPending(dpy); i++)
                 {
                     XNextEvent(dpy, &xev);
                     switch(xev.type)
@@ -105,7 +117,7 @@ int main(int argc, char *argv[]) {
                         case KeyPress :
                         {
                             printf("KeyPress: keycode %u state %u\n", xev.xkey.keycode, xev.xkey.state);
-                            switch (xev.xkey.keycode) 
+                            switch (xev.xkey.keycode)
                             {
                                 case 9: //ESC
                                         glXMakeCurrent(dpy, None, NULL);
@@ -114,19 +126,27 @@ int main(int argc, char *argv[]) {
                                         XCloseDisplay(dpy);
                                         exit(0);
                                 case 111: // up arrow
-                                        mat1.Rotate_X(-ROTATION_INCREMENT);
+                                        matWorldPos.Rotate_X(ROTATION_INCREMENT);
                                         break;
                                 case 116: //down arrow
-                                        mat1.Rotate_X(ROTATION_INCREMENT);
+                                        matWorldPos.Rotate_X(-ROTATION_INCREMENT);
+                                        //matWorldPos.Translate(std::array<float, 3> ({0.0f, 0.0f, 0.1f}));
                                         break;
                                 case 113: //left arrow
-                                        mat1.Rotate_Y(-ROTATION_INCREMENT);
+                                        matWorldPos.Rotate_Y(ROTATION_INCREMENT);
                                         break;
                                 case 114: //right arrow
-                                        mat1.Rotate_Y(ROTATION_INCREMENT);
+                                        matWorldPos.Rotate_Y(-ROTATION_INCREMENT);
+                                        break;
+                                case 35: // right square bracket
+                                        matWorldPos.Rotate_Z(ROTATION_INCREMENT);
+                                        break;
+                                case 34: // left square bracket
+                                        matWorldPos.Rotate_Z(-ROTATION_INCREMENT);
                                         break;
                                 case 36: //Enter
-                                        mat1.Reset();
+                                        matWorldPos.Reset();
+                                        matWorldPos.SetPosition(default_pos);
                                         break;
                                 default:
                                         break;
@@ -140,14 +160,26 @@ int main(int argc, char *argv[]) {
                 //glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                GLint rot = glGetUniformLocation(mesh.GetShaderProgramHandle(), "world_view_position");
-                if (rot != -1) {
-                        glUniformMatrix4fv(rot, 1, false, &mat1.get_data()[0][0]);
+                // setting necessary uniforms
+                GLint timeUniformHandle = glGetUniformLocation(mesh.GetShaderProgramHandle(), "time");
+                if (timeUniformHandle != -1) {
+                        GLfloat time = (GLfloat)clock() / (GLfloat)CLOCKS_PER_SEC  * 10.0;
+                        glUniform1f(timeUniformHandle, time);
                 }
 
-                GLint light = glGetUniformLocation(mesh.GetShaderProgramHandle(), "light_dir");
+                GLint rot = glGetUniformLocation(mesh.GetShaderProgramHandle(), "world_view_position");
+                if (rot != -1) {
+                        glUniformMatrix4fv(rot, 1, false, &matWorldPos.get_data()[0][0]);
+                }
+
+                GLint proj = glGetUniformLocation(mesh.GetShaderProgramHandle(), "projection");
+                if (proj != -1) {
+                        glUniformMatrix4fv(proj, 1, false, &matProj.get_data()[0][0]);
+                }
+
+                GLint light = glGetUniformLocation(mesh.GetShaderProgramHandle(), "light_pos");
                 if (light != -1) {
-                        glUniform3f(light, .0f, .0f, -1.0f);
+                        glUniform3f(light, .0f, .0f, 1.0f);
                 }
 
                 mesh.draw();

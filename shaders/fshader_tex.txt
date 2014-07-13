@@ -8,23 +8,11 @@ uniform sampler2D texture1;
 
 void main()
 {
-        //gl_FragColor = vec4((figureColor + 1.0)/2.0, 1.0);
-        vec2 center; center.x = 0.5; center.y = 0.5;
-        vec2 dist_v = center - plane_coord;
-        float dist = sqrt(dist_v.x*dist_v.x + dist_v.y*dist_v.y);
-        float R = 0.2;
-
-        float intensity = 0.0;
 
         // texturing ...
         vec4 tcolor = texture2D(texture0, plane_coord);
         vec4 tcolor1 = texture2D(texture1, plane_coord) * 0.01;
         gl_FragColor = tcolor + tcolor1;
-        //gl_FragColor = vec4(plane_coord, 0.0, 1.0);
 
-        //float r_chan = R - 
-        //float g_chan = 0.0;
-        //float b_chan = 0.0;
-        //gl_FragColor = (r_chan, g_chan, b_chan, 1.0);
 }
 

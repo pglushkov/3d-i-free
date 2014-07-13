@@ -1,0 +1,35 @@
+
+#version 130
+
+uniform float time;
+varying vec4 figureColor;
+varying vec2 plane_coord;
+uniform sampler2D texture0;
+uniform sampler2D texture1;
+
+void main()
+{
+        float tex_size = 256.0;
+        float ts = 1.0 / tex_size;
+
+
+        // texturing ...
+        vec4 tcolor =
+        texture2D(texture0, plane_coord + vec2(0.0, 0.0)) +
+        texture2D(texture0, plane_coord + vec2(-ts, ts)) +
+        texture2D(texture0, plane_coord + vec2(0.0, ts)) +
+
+        texture2D(texture0, plane_coord + vec2(ts, ts)) +
+        texture2D(texture0, plane_coord + vec2(ts, 0.0)) +
+        texture2D(texture0, plane_coord + vec2(ts, -ts)) +
+
+        texture2D(texture0, plane_coord + vec2(0.0, -ts)) +
+        texture2D(texture0, plane_coord + vec2(-ts, -ts)) +
+        texture2D(texture0, plane_coord + vec2(-ts, 0.0));
+
+        tcolor = tcolor / 9.0;
+
+        gl_FragColor = tcolor;
+
+}
+

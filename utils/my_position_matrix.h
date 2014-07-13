@@ -217,8 +217,39 @@ public:
         {
                 data.Reset();
         }
+
+        void SetPerspective( T per)
+        {
+                /* not quite sure yet how to properly implement it ... */
+        }
 };
 
+
+template<typename T> class MyProjectionMatrix
+{
+        MySquareMatrix<T, 4> data;
+public:
+        const size_t size = 4;
+        typedef typename MySquareMatrix<T, 4>::data_row data_row;
+
+        MySquareMatrix<T,4>& get_data() { return data; }
+
+
+        MyProjectionMatrix(const T near, const T far, const T fov)
+        {
+                float rad = (fov / 360.0f) * 2.0f * M_PI;
+                T scale = T(1) / tan(rad * 0.5f);
+                data[0][0] = scale;
+                data[1][1] = scale;
+                data[2][2] = -far / (far - near);
+                data[3][2] = -far * near / (far - near);
+                data[2][3] = -1;
+                data[3][3] = 0;
+        }
+
+        void TRACE() { data.TRACE(); }
+
+};
 
 #endif
 
