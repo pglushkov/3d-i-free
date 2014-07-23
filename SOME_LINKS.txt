@@ -1,6 +1,18 @@
+
+TUTORIALS:
 http://open.gl/
-http://www.scratchapixel.com/lessons/3d-advanced-lessons/perspective-and-orthographic-projection-matrix/perspective-projection-matrix/
+
+LINEAR ALGEBRA:
+http://stackoverflow.com/questions/1148309/inverting-a-4x4-matrix
+
+ROTATION:
 http://en.wikipedia.org/wiki/Rotation_matrix
+
+PROJECTION:
+http://www.scratchapixel.com/lessons/3d-advanced-lessons/perspective-and-orthographic-projection-matrix/perspective-projection-matrix/
+http://stackoverflow.com/questions/18404890/how-to-build-perspective-projection-matrix-no-api
+http://www.songho.ca/opengl/gl_projectionmatrix.html
+
 
 from Kirill:
 https://gist.github.com/donkaban/c7fed0f3eb922cab3736
