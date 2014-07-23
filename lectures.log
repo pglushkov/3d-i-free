@@ -56,5 +56,7 @@ HW
         1) add tangent and binormal to Vertex!
         2) add TBN (tangent-binormal-normal)  calculation to geometry
 
-
+        21 Jul 2014
+PROJ HW: create space with boarders, fill it with N cubes with some different positions, create camera, that can fly
+between them
 

@@ -31,6 +31,10 @@ GLXContext              glc;
 XWindowAttributes       gwa;
 XEvent                  xev;
 
+#define WIN_WIDTH 640
+#define WIN_HEIGHT 480
+#define ASPECT_RATIO (float)WIN_WIDTH / (float)WIN_HEIGHT
+
 int main(int argc, char *argv[]) {
 
         // test_free_image();
@@ -61,7 +65,7 @@ int main(int argc, char *argv[]) {
         swa.colormap = cmap;
         swa.event_mask = ExposureMask | KeyPressMask;
 
-        win = XCreateWindow(dpy, root, 0, 0, 600, 600, 0, vi->depth, InputOutput, vi->visual, CWColormap | CWEventMask, &swa);
+        win = XCreateWindow(dpy, root, 0, 0, WIN_WIDTH, WIN_HEIGHT, 0, vi->depth, InputOutput, vi->visual, CWColormap | CWEventMask, &swa);
 
         XMapWindow(dpy, win);
         XStoreName(dpy, win, "VERY SIMPLE APPLICATION (PRESS ESC TO EXIT!) ");
@@ -79,35 +83,43 @@ int main(int argc, char *argv[]) {
         printf(" max number of textures = %d ...\n", max_tex_num);
 
         /* GENERATING GEOMETRY */
-        //MyGeometry geom(geometry_gen::generate_cube(1.0f));
-        MyGeometry geom(geometry_gen::generate_rectangle(1.0f, 1.0f));
+        MyGeometry geom(geometry_gen::generate_cube(1.0f));
+        //MyGeometry geom(geometry_gen::generate_rectangle(1.0f, 1.0f));
         //MyGeometry geom(geometry_gen::generate_rectangle_two_sides(1.0f, 1.0f));
 
         /* SELECTING SHADERS TO DRAW */
         /* VERTEX SHADER */
         //std::string vshader("../shaders/vshader_simple.txt");
-        //std::string vshader("../shaders/vshader_full.txt");
-        std::string vshader("../shaders/vshader_y_spin.txt");
+        std::string vshader("../shaders/vshader_full.txt");
+        std::string vshader1("../shaders/vshader_y_spin.txt");
+        std::string vshader2("../shaders/vshader_simple");
         /* FRAGMENT SHADER */
-        //std::string fshader("../shaders/fshader_simple.txt");
         std::string fshader("../shaders/fshader_lambert.txt");
-        //std::string fshader("../shaders/fshader_tex.txt");
-
+        std::string fshader1("../shaders/fshader_tex.txt");
+        std::string fshader2("../shaders/fshader_simple.txt");
 
         /* GENERATING A DRAWABLE OBJECT (MESH) */
         MyMesh mesh(geom, vshader.c_str(), fshader.c_str());
+//        MyMesh mesh2(geom, vshader.c_str(), fshader1.c_str());
         //mesh.TRACE_GEOM();
 
         /* TEXTURING */
-        mesh.AddTexture("../data/penguin.bmp");
-        // std::vector<unsigned char> tex = my_utils::GenerateRgbTexture(256, 256, 255, 0, 255);
-        // mesh.AddTexture(tex, 256, 256, GL_RGB);
+//        mesh.AddTexture("../data/penguin.bmp");
+//        std::vector<unsigned char> tex = my_utils::GenerateRgbTexture(256, 256, 255, 0, 255);
+//        mesh.AddTexture(tex, 256, 256, GL_RGB);
 
         /* INITIALIZING OBJECT POSITION */
-        std::array<float, 3> default_pos({ 0.0f, 0.0f, -1.5f});
+        std::array<float, 3> default_pos({ 0.0f, 0.0f, -21.f});
+//        std::array<float, 3> default_pos2({ 0.0f, 0.5f, -1.0f});
+
         MyPositionMatrix<float> matWorldPos;
         matWorldPos.SetPosition(default_pos);
-        MyProjectionMatrix<float> matProj ( 2, 100, 90);
+
+//        MyPositionMatrix<float> matWorldPos2(matWorldPos);
+//        matWorldPos2.SetPosition(default_pos2);
+
+        std::cout << " ASPECT RATIO = " << ASPECT_RATIO << std::endl;
+        MyProjectionMatrix<float> matProj(0.5, 100, ASPECT_RATIO, 35);
 
         while(true) {
                 for (int i = 0; i < XPending(dpy); i++)
@@ -182,8 +194,28 @@ int main(int argc, char *argv[]) {
                 if (light != -1) {
                         glUniform3f(light, .0f, .0f, 1.0f);
                 }
-
                 mesh.draw();
+
+//                timeUniformHandle = glGetUniformLocation(mesh.GetShaderProgramHandle(), "time");
+//                if (timeUniformHandle != -1) {
+//                        GLfloat time = (GLfloat)clock() / (GLfloat)CLOCKS_PER_SEC  * 10.0;
+//                        glUniform1f(timeUniformHandle, time);
+//                }
+//                rot = glGetUniformLocation(mesh.GetShaderProgramHandle(), "world_view_position");
+//                if (rot != -1) {
+//                        glUniformMatrix4fv(rot, 1, false, &matWorldPos2.get_data()[0][0]);
+//                }
+
+//                proj = glGetUniformLocation(mesh.GetShaderProgramHandle(), "projection");
+//                if (proj != -1) {
+//                        glUniformMatrix4fv(proj, 1, false, &matProj.get_data()[0][0]);
+//                }
+
+//                light = glGetUniformLocation(mesh.GetShaderProgramHandle(), "light_pos");
+//                if (light != -1) {
+//                        glUniform3f(light, .0f, .0f, 1.0f);
+//                }
+//                mesh2.draw();
 
                 glXSwapBuffers(dpy, win);
 

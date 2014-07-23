@@ -247,6 +247,24 @@ public:
                 data[3][3] = 0;
         }
 
+	MyProjectionMatrix(const T near, const T far, const T aspect, const T fov)
+	{
+		T rad = (fov / 360.0f) * 2.0f * M_PI;
+		T scale = 1.0f / tan(rad * 0.5f);
+		//T height = 1.0f;
+		//T width = height * aspect;
+		//data[0][0] = near / (width / 2.0f) * scale;
+		//data[1][1] = near / (height / 2.0f) * scale;
+		/* if we presume, that width = 2.0 as in opengl space and height = width / aspect, then we can write: */
+		data[0][0] = scale / aspect;
+		data[1][1] = scale;
+		data[2][2] = (-(far + near)) / (far - near);
+		data[2][3] = (-2.0f*far*near) / (far - near);
+		data[3][2] = -1.0f;
+		data[3][3] = 0.0f;
+
+	}
+
         void TRACE() { data.TRACE(); }
 
 };

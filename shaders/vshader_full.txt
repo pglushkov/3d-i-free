@@ -6,6 +6,7 @@ attribute vec3 in_norm;
 attribute vec4 in_def_color;
 uniform mat4 world_view_position;
 uniform float time;
+
 uniform mat4 projection;
 uniform vec3 light_pos;
 
@@ -16,14 +17,15 @@ varying vec3 light_dir;
 
 void main()
 {
-        mat3 direction = mat3(world_view_position);
+        mat3 direction = mat3(world_view_position[0].xyz, world_view_position[1].xyz, world_view_position[2].xyz);
         gl_Position = vec4(in_position); // this one just draws the thing
         figureColor = in_def_color;
         plane_coord = in_plane_coord;
 
         vec4 new_pos = in_position * world_view_position * projection;
+        vec4 new_pos_orto = in_position * world_view_position;
         gl_Position = new_pos;
         rnorm = in_norm * direction;
-        light_dir = light_pos - vec3(new_pos);
+        light_dir = normalize(light_pos - vec3(new_pos_orto.xyz));
 }
 
