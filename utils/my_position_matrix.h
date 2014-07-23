@@ -159,6 +159,13 @@ public:
                 data[2][3] = pos[2];
         }
 
+        void SetPosition(const T x, const T y, const T z)
+        {
+        	data[0][3] = x;
+        	data[1][3] = y;
+        	data[2][3] = z;
+        }
+
         void Scale(const scale_vector& sc)
         {
                 for (size_t k = 0; k < this->size - 1; ++k)

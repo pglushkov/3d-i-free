@@ -3,6 +3,7 @@
 
 #include "my_material.h"
 #include "my_geometry.h"
+#include "my_position_matrix.h"
 
 struct DrawableObject
 {
@@ -20,12 +21,14 @@ class MyMesh: public DrawableObject
 {
         MyGeometry geom;
         MyMaterial mater;
+        MyPositionMatrix<float> pos_mat;
 
         MyMesh( const MyMesh& mesh);
         const MyMesh& operator=(const MyMesh& mesh) { return *this; }
 
         void LoadGeometryToGpu();
         void BindShadersAttributes();
+	void BindUniforms();
 
         GLuint vert_buffer_id;
         GLuint ord_buffer_id;
@@ -49,6 +52,8 @@ public:
         void TRACE_GEOM() const { geom.TRACE(); }
 
         GLuint GetShaderProgramHandle() { return mater.GetProgramHandle(); }
+
+        MyPositionMatrix<float>& GetObjTransform() { return pos_mat; }
 };
 
 #endif

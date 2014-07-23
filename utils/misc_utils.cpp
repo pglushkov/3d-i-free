@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <FreeImage.h>
 #include <stdio.h>
+#include <ctime>
 
 namespace my_utils
 {
@@ -148,6 +149,11 @@ std::vector<unsigned char> GenerateRgbaTexture(size_t w, size_t h, unsigned char
                 }
         }
         return result;
+}
+
+float GetTimeInSec()
+{
+	return (float)clock() / (float)CLOCKS_PER_SEC;
 }
 
 } /* of namespace my_utils */

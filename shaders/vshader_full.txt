@@ -4,6 +4,7 @@ attribute vec4 in_position;
 attribute vec2 in_plane_coord;
 attribute vec3 in_norm;
 attribute vec4 in_def_color;
+
 uniform mat4 world_view_position;
 uniform float time;
 

@@ -18,6 +18,8 @@ namespace my_utils
 
         std::vector<unsigned char> GenerateRgbaTexture(size_t w, size_t h, unsigned char R, unsigned char G, unsigned
                         char B, unsigned char A);
+
+	float GetTimeInSec();
 }
 
 #endif

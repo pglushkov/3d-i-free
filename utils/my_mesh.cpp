@@ -1,6 +1,7 @@
 
 
 #include "my_mesh.h"
+#include "my_world.h"
 
 #include <stdio.h>
 
@@ -95,6 +96,36 @@ void MyMesh::BindShadersAttributes()
         }
 }
 
+void MyMesh::BindUniforms()
+{
+        GLuint gl_program = mater.GetProgramHandle();
+	// setting necessary uniforms
+
+	float time = MyWorld::GetTimeSinceCreation();
+	const MyWorld::light_pos_vector& global_light_pos = MyWorld::GetInstance().GetGlobalLightPos(); //non static method!!!
+	MyProjectionMatrix<float>& matProj = MyWorld::GetWorldProjection();
+
+	GLint timeUniformHandle = glGetUniformLocation(gl_program, "time");
+	if (timeUniformHandle != -1) {
+		glUniform1f(timeUniformHandle, time);
+	}
+
+	GLint rot = glGetUniformLocation(gl_program, "world_view_position");
+	if (rot != -1) {
+		glUniformMatrix4fv(rot, 1, false, &pos_mat.get_data()[0][0]);
+	}
+
+	GLint proj = glGetUniformLocation(gl_program, "projection");
+	if (proj != -1) {
+		glUniformMatrix4fv(proj, 1, false, &matProj.get_data()[0][0]);
+	}
+
+	GLint light = glGetUniformLocation(gl_program, "light_pos");
+	if (light != -1) {
+		glUniform3f(light, global_light_pos[0], global_light_pos[1], global_light_pos[2]);
+	}
+}
+
 MyMesh::MyMesh(const MyGeometry& igeom, const char* vshader_file, const char* fshader_file) :
         geom(igeom), mater(vshader_file, fshader_file)
 {
@@ -130,6 +161,7 @@ void MyMesh::draw()
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ord_buffer_id);   // binding current vertex-order buffer
 
         BindShadersAttributes(); // passing attributes markup to the shader
+	BindUniforms();
 
         // actual drawing
         glDrawElements(GL_TRIANGLES, geom.GetOrderNum(), GL_UNSIGNED_SHORT, (const void *)(0));

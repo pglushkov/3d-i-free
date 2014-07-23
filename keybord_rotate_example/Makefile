@@ -9,6 +9,7 @@ SOURCES += ../utils/my_geometry.cpp
 SOURCES += ../utils/my_mesh.cpp
 SOURCES += ../utils/opengl.cpp
 SOURCES += ../utils/misc_utils.cpp
+SOURCES += ../utils/my_world.cpp
 OBJECTS = $(SOURCES:%.cpp=%.o)
 TARGET = keyboard_rotate
 
