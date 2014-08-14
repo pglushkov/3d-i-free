@@ -20,6 +20,8 @@ namespace my_utils
                         char B, unsigned char A);
 
 	float GetTimeInSec();
+	float DegToRad(float deg);
+	float RadToDeg(float rad);
 }
 
 #endif

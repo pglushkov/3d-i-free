@@ -7,6 +7,7 @@
 #include <FreeImage.h>
 #include <stdio.h>
 #include <ctime>
+#include <cmath>
 
 namespace my_utils
 {
@@ -155,6 +156,18 @@ float GetTimeInSec()
 {
 	return (float)clock() / (float)CLOCKS_PER_SEC;
 }
+
+float DegToRad(float deg)
+{
+        return (deg/360.0f) * 2.0f * M_PI;
+}
+
+float RadToDeg(float rad)
+{
+        return (rad / (2.0f * M_PI)) * 360.0f;
+}
+
+
 
 } /* of namespace my_utils */
 

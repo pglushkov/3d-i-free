@@ -10,8 +10,8 @@ void main()
 {
 
         // texturing ...
-        vec4 tcolor = texture2D(texture0, plane_coord);
-        vec4 tcolor1 = texture2D(texture1, plane_coord) * 0.01;
+        vec4 tcolor = texture2D(texture0, plane_coord) * 0.5;
+        vec4 tcolor1 = texture2D(texture1, plane_coord) * 0.5;
         gl_FragColor = tcolor + tcolor1;
 
 }

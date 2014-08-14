@@ -2,9 +2,15 @@
 
         16 Jun 2014
 
-0) Create some decent structure in repository
-1) Remove all fixed-pipeline-related code ( glBegin() ... glEnd() )
-2) Draw a square as array of vertices
-3) Draw a flag on the square with fragment shader
+0) Create some decent structure in repository (sort of done ...)
+1) Remove all fixed-pipeline-related code ( glBegin() ... glEnd() ) (done)
+2) Draw a square as array of vertices (done)
+3) Draw a flag on the square with fragment shader (done)
 
+
+        12 Aug 2014
+1) Work on Camera_move_example:
+        - fix bugs with left/right movement (done)
+        - place light source in camera
+        - play with light direction relatively to camera position
 

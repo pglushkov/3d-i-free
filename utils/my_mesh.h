@@ -40,6 +40,8 @@ public:
         MyMesh(const float* vert_data, size_t vert_num, const unsigned short *ord_data, size_t ord_num,
                         const char* vshader_file, const char* fshader_file);
 
+        MyMesh();
+
         void AddTexture(const char* file_name) { mater.AddTexture(file_name); }
         void AddTexture(std::vector<unsigned char>& data, unsigned int width, unsigned int height, GLuint gl_flag)
         {

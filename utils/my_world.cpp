@@ -6,6 +6,9 @@ MyProjectionMatrix<float> MyWorld::world_proj(WORLD_DEFAULT_NEAR_PLANE,
 					       WORLD_DEFAULT_ASPECT_RATIO,
 					       WORLD_DEFAULT_FOV_ANGLE);
 
+MyPositionMatrix<float> MyWorld::camera_view;
+MySquareMatrix<float, 4> MyWorld::result_camera_view;
+
 float MyWorld::creation_time = my_utils::GetTimeInSec();
 std::vector<MyWorld::light_pos_vector> MyWorld::global_lights(1);
 
@@ -13,6 +16,7 @@ MyWorld::MyWorld()
 {
 	/* When World is created - at least on global light source is created! */
 	global_lights[0] = light_pos_vector( {0.0f, 0.0f, 1.0f} );
+        UpdateCameraView();
 }
 
 float MyWorld::GetTimeSinceCreation()

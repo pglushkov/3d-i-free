@@ -7,97 +7,15 @@
 #include <iostream>
 #include <memory.h>
 
-template<typename T, size_t dim> class MySquareMatrix
-{
-public:
-        typedef std::array<T, dim> data_row;
-        typedef std::array<data_row, dim> full_data;
-        const size_t size = dim;
-
-private:
-        std::array<data_row, dim> _data;
-
-public:
-        MySquareMatrix()
-        {
-                Reset();
-        }
-        data_row* data() { return &_data[0]; }
-        data_row& operator[] (const size_t idx)
-        {
-                if (idx >= dim)
-                        throw std::runtime_error("In MyPositionMatrix : index exceeds matrix dimension!");
-                return _data[idx];
-        }
-
-
-        void operator=(MySquareMatrix<T, dim>& inp)
-        {
-                for (size_t k = 0; k < dim; ++k)
-                        for (size_t m = 0; m < dim; ++m)
-                                _data[k][m] = inp[k][m];
-        }
-
-        MySquareMatrix<T, dim>& operator*=(MySquareMatrix<T,dim>& inp)
-        {
-                MySquareMatrix<T, dim> tmp;
-                for (size_t k = 0; k < dim; ++k) {
-                        for (size_t m = 0 ; m < dim; ++m) {
-
-                                /* row-by-column multiplication */
-                                tmp[k][m] = T(0);
-                                for (size_t idx = 0; idx < dim; ++idx)
-                                        tmp[k][m] += _data[k][idx] * inp[m][idx];
-                        }
-                }
-
-                *this = tmp;
-                return *this;
-        }
-
-        data_row operator*(data_row& vec)
-        {
-                data_row res;
-
-                for (size_t k = 0; k < dim; ++k) {
-                        res[k] = T(0);
-                        for (size_t m = 0; m < dim; ++m) {
-                                res[k] += _data[k][m] * vec[m];
-                        }
-                }
-
-                return res;
-        }
-
-        void TRACE()
-        {
-                std::cout << "Tracing MySquareMatrix " << this << std::endl;
-                for (size_t k = 0; k < dim; ++k) {
-                        std::cout << "row " << k + 1 << ": ";
-                        for (size_t m = 0; m < dim; ++m) {
-                                std::cout << _data[k][m] << " ";
-                        }
-                        std::cout << std::endl;
-                }
-                std::cout << std::endl;
-        }
-
-        void Reset()
-        {
-                // reset matrix to unity
-                for (size_t k = 0; k < dim; ++k) {
-                        memset(&_data[k][0], 0, sizeof(T) * dim);
-                        _data[k][k] = T(1);
-                }
-        }
-};
-
+#include "misc_utils.h"
+#include "my_square_matrix.h"
 
 template<typename T> MySquareMatrix<T, 4> CreateOXRotation(float angle)
 {
         MySquareMatrix<T, 4> r;
 
-        float rad = (angle/360.0f) * 2.0f * M_PI;
+//        float rad = (angle/360.0f) * 2.0f * M_PI;
+        float rad = my_utils::DegToRad(angle);
 
         r[1][1] = cos(rad);
         r[1][2] = -sin(rad);
@@ -111,7 +29,8 @@ template<typename T> MySquareMatrix<T, 4> CreateOYRotation(float angle)
 {
         MySquareMatrix<T, 4> r;
 
-        float rad = (angle/360.0f) * 2.0f * M_PI;
+//        float rad = (angle/360.0f) * 2.0f * M_PI;
+        float rad = my_utils::DegToRad(angle);
 
         r[0][0] = cos(rad);
         r[0][2] = sin(rad);
@@ -125,12 +44,27 @@ template<typename T> MySquareMatrix<T, 4> CreateOZRotation(float angle)
 {
         MySquareMatrix<T, 4> r;
 
-        float rad = (angle/360.0f) * 2.0f * M_PI;
+//        float rad = (angle/360.0f) * 2.0f * M_PI;
+        float rad = my_utils::DegToRad(angle);
 
-        r[0][0] = cos(rad);
         r[0][1] = -sin(rad);
         r[1][0] = sin(rad);
         r[1][1] = cos(rad);
+
+        return r;
+}
+
+template<typename T> MySquareMatrix<T, 4> CreateAxisRotation(T x, T y, T z, float angle)
+{
+        float rad = my_utils::DegToRad(angle);
+        float COS = cos(rad);
+        float SIN = sin(rad);
+
+        MySquareMatrix<T, 4> r;
+
+        r[0][0] = COS + (1.0f - COS)*x*x;       r[0][1] = (1.0f - COS)*x*y - SIN*z;     r[0][2] = (1.0f - COS)*x*z + SIN*y;
+        r[1][0] = (1.0f - COS)*y*x + SIN*z;     r[1][1] = COS + (1.0f - COS)*y*y;       r[1][2] = (1.0f - COS)*y*z - SIN*x;
+        r[2][0] = (1.0f - COS)*z*x - SIN*y;     r[2][1] = (1.0f - COS)*z*y + SIN*x;     r[2][2] = COS + (1.0f - COS)*z*z;
 
         return r;
 }
@@ -205,6 +139,30 @@ public:
         {
                 auto tmp = CreateOZRotation<T>(angle);
                 data *= tmp;
+        }
+
+        void Rotate_Axis( T x, T y, T z, float angle)
+        {
+                auto tmp = CreateAxisRotation<T>(x, y, z, angle);
+                data *= tmp;
+        }
+
+        void RotateGlobal_Y(float angle)
+        {
+//                auto inv = data.Invert();
+                data_row y_axis({0.0f, 1.0f, 0.0f, 1.0f});
+                data_row global_y_axis = (*this) * y_axis;
+                Rotate_Axis(global_y_axis, angle);
+        }
+
+        void Rotate_Axis(std::array<T,3>& axis, float angle)
+        {
+                Rotate_Axis(axis[0], axis[1], axis[2], angle);
+        }
+
+        void Rotate_Axis(data_row& axis, float angle)
+        {
+                Rotate_Axis(axis[0], axis[1], axis[2], angle);
         }
 
         MyPositionMatrix<T>& operator *= (MyPositionMatrix<T>& inp)

@@ -28,16 +28,53 @@ public:
 	static float GetCreationTime() { return creation_time; }
 	static float GetTimeSinceCreation();
 	const light_pos_vector& GetGlobalLightPos( size_t idx = 0 ) const;
+        static MySquareMatrix<float, 4>& GetWorldCameraView() { return result_camera_view; }
+
+        static void RotateCamera_X(float angle_deg) { camera_view.Rotate_X(angle_deg); UpdateCameraView(); }
+        static void RotateCamera_Y(float angle_deg) { camera_view.Rotate_Y(angle_deg); UpdateCameraView(); }
+        static void RotateCamera_Z(float angle_deg) { camera_view.Rotate_Z(angle_deg); UpdateCameraView(); }
+        static void RotateCamera_Axis(float x, float y, float z, float angle_deg)
+        {
+                camera_view.Rotate_Axis(x, y, z, angle_deg);
+                UpdateCameraView();
+        }
+
+        static void MoveCamera_Z(float step)
+        {
+                camera_view.Translate( MyPositionMatrix<float>::translation_vector({0.0f, 0.0f, step}) );
+                UpdateCameraView();
+        }
+        static void MoveCamera_X(float step)
+        {
+                camera_view.Translate( MyPositionMatrix<float>::translation_vector({step, 0.0f, 0.0f}) );
+                UpdateCameraView();
+        }
+        static void MoveCamera_Y(float step)
+        {
+                camera_view.Translate( MyPositionMatrix<float>::translation_vector({0.0f, step, 0.0f}) );
+                UpdateCameraView();
+        }
+        static void ResetCameraPos() { camera_view.Reset(); UpdateCameraView(); }
+
+        static const char* Default_VShader() { return "../shaders/vshader_full.txt"; }
+        static const char* Default_FShader() { return "../shaders/fshader_simple.txt"; }
 
 private:
 
 	static MyProjectionMatrix<float> world_proj;
 	static float creation_time;
 	static std::vector<light_pos_vector> global_lights;
+	static MyPositionMatrix<float> camera_view;
+	static MySquareMatrix<float, 4> result_camera_view;
 
 	MyWorld& operator=(MyWorld& in) { return *this; }
 	MyWorld(MyWorld& in) { }
 	MyWorld();
+	static void UpdateCameraView()
+	{
+                MySquareMatrix<float, 4> tmp = camera_view.get_data().Invert();
+                result_camera_view = tmp;
+	}
 };
 
 #endif // MY_WORLD_H

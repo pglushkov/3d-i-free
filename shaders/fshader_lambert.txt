@@ -1,5 +1,5 @@
-
 #version 130
+
 
 varying vec4 figureColor;
 varying vec2 plane_coord;
@@ -20,14 +20,6 @@ void main()
 
         //DBG!!!
         //gl_FragColor = vec4(rnorm, 1.0);
-
-
-
-
-        //vec3 lambert_color = vec3(figureColor[0] * intensity, figureColor[1] * intensity, figureColor[2] * intensity);
-        //vec3 lambert_color = vec3(plane_coord[0] * intensity, plane_coord[1] * intensity, 0.0);
-        //vec3 lambert_color = vec3(figureColor[0], figureColor[1], figureColor[2]);
-
 
 }
 

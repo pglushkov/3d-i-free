@@ -104,6 +104,7 @@ void MyMesh::BindUniforms()
 	float time = MyWorld::GetTimeSinceCreation();
 	const MyWorld::light_pos_vector& global_light_pos = MyWorld::GetInstance().GetGlobalLightPos(); //non static method!!!
 	MyProjectionMatrix<float>& matProj = MyWorld::GetWorldProjection();
+        MySquareMatrix<float, 4>& view = MyWorld::GetWorldCameraView();
 
 	GLint timeUniformHandle = glGetUniformLocation(gl_program, "time");
 	if (timeUniformHandle != -1) {
@@ -124,6 +125,11 @@ void MyMesh::BindUniforms()
 	if (light != -1) {
 		glUniform3f(light, global_light_pos[0], global_light_pos[1], global_light_pos[2]);
 	}
+
+	GLint camera = glGetUniformLocation(gl_program, "camera_transform");
+	if (camera != -1) {
+	        glUniformMatrix4fv(camera, 1, false, &view.data()[0][0]);
+	}
 }
 
 MyMesh::MyMesh(const MyGeometry& igeom, const char* vshader_file, const char* fshader_file) :
@@ -143,6 +149,12 @@ MyMesh::MyMesh(const float* vert_data, size_t vert_num, const unsigned short *or
                 const char* vshader_file, const char* fshader_file) :
         geom(vert_data, vert_num, ord_data, ord_num), mater(vshader_file, fshader_file)
 
+{
+        LoadGeometryToGpu();
+}
+
+MyMesh::MyMesh() : geom(geometry_gen::generate_cube(DEFAULT_CUBE_SIZE)),
+                   mater( MyWorld::Default_VShader(), MyWorld::Default_FShader())
 {
         LoadGeometryToGpu();
 }

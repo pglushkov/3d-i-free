@@ -4,13 +4,13 @@
 #include <stdlib.h>
 #include <iostream>
 #include <cmath>
+#include <random>
 
 /* x-server related includes */
 #include<X11/X.h>
 #include<X11/Xlib.h>
 
 #include <utils/opengl.h>
-
 #include <utils/my_world.h>
 #include <utils/my_mesh.h>
 #include <utils/misc_utils.h>
@@ -18,7 +18,8 @@
 
 #include "small_tests.h"
 
-#define ROTATION_INCREMENT 3.0f
+#define ROTATION_INCREMENT 3.0f // degrees
+#define MOVE_INCREMENT 0.3f     // some parrots ...
 
 Display                 *dpy;
 Window                  root;
@@ -100,9 +101,17 @@ int main(int argc, char *argv[]) {
         std::string fshader2("../shaders/fshader_simple.txt");
 
         /* GENERATING A DRAWABLE OBJECT (MESH) */
-        MyMesh mesh(geom, vshader.c_str(), fshader.c_str());
+        MyMesh mesh(geom, vshader.c_str(), fshader2.c_str());
         MyMesh mesh2(geom, vshader.c_str(), fshader1.c_str());
         //mesh.TRACE_GEOM();
+
+        MyMesh mesh_arr[30];
+        std::default_random_engine gen;
+        std::uniform_real_distribution<float> rnd(-7.0f, 7.0f);
+        for (unsigned int k = 0; k < 30; ++k) {
+                std::array<float, 3> pos({ rnd(gen), rnd(gen), rnd(gen)});
+                mesh_arr[k].GetObjTransform().SetPosition(pos);
+        }
 
         /* TEXTURING */
         mesh2.AddTexture("../data/penguin.bmp");
@@ -134,39 +143,49 @@ int main(int argc, char *argv[]) {
                                         XCloseDisplay(dpy);
                                         exit(0);
                                 case 111: // up arrow
-                                        mesh.GetObjTransform().Rotate_X(ROTATION_INCREMENT);
-                                        break;
-                                case 116: //down arrow
-                                        mesh.GetObjTransform().Rotate_X(-ROTATION_INCREMENT);
-                                        //matWorldPos.Translate(std::array<float, 3> ({0.0f, 0.0f, 0.1f}));
-                                        break;
-                                case 113: //left arrow
-                                        mesh.GetObjTransform().Rotate_Y(ROTATION_INCREMENT);
-                                        break;
-                                case 114: //right arrow
-                                        mesh.GetObjTransform().Rotate_Y(-ROTATION_INCREMENT);
-                                        break;
-                                case 35: // right square bracket
-                                        mesh.GetObjTransform().Rotate_Z(ROTATION_INCREMENT);
-                                        break;
-                                case 34: // left square bracket
-                                        mesh.GetObjTransform().Rotate_Z(-ROTATION_INCREMENT);
-                                        break;
-                                case 36: //Enter
-                                        mesh.GetObjTransform().Reset();
-                                        mesh.GetObjTransform().SetPosition(default_pos);
-                                        break;
-                                case 38: // button 'a'
-                                        MyWorld::RotateCamera_Y(-ROTATION_INCREMENT);
-                                        break;
-                                case 25: // button 'w'
                                         MyWorld::RotateCamera_X(ROTATION_INCREMENT);
                                         break;
-                                case 39: // button 's'
+                                case 116: //down arrow
                                         MyWorld::RotateCamera_X(-ROTATION_INCREMENT);
                                         break;
-                                case 40: // button 'd'
+                                case 113: //left arrow
+                                        MyWorld::RotateCamera_Y(-ROTATION_INCREMENT);
+//                                        MyWorld::RotateCamera_Axis(0.0f, 1.0f, 0.0f, -ROTATION_INCREMENT);
+                                        break;
+                                case 114: //right arrow
                                         MyWorld::RotateCamera_Y(ROTATION_INCREMENT);
+//                                        MyWorld::RotateCamera_Axis(0.0f, 1.0f, 0.0f, ROTATION_INCREMENT);
+                                        break;
+                                case 35: // right square bracket
+                                        break;
+                                case 34: // left square bracket
+                                        break;
+                                case 36: //Enter
+                                        MyWorld::ResetCameraPos();
+                                        break;
+                                case 38: // button 'a'
+                                        MyWorld::MoveCamera_X(MOVE_INCREMENT);
+                                        break;
+                                case 25: // button 'w'
+                                        MyWorld::MoveCamera_Z(MOVE_INCREMENT);
+                                        break;
+                                case 39: // button 's'
+                                        MyWorld::MoveCamera_Z(-MOVE_INCREMENT);
+                                        break;
+                                case 40: // button 'd'
+                                        MyWorld::MoveCamera_X(-MOVE_INCREMENT);
+                                        break;
+                                case 26: // button 'e'
+                                        MyWorld::MoveCamera_Y(MOVE_INCREMENT);
+                                        break;
+                                case 24: // button 'q'
+                                        MyWorld::MoveCamera_Y(-MOVE_INCREMENT);
+                                        break;
+                                case 79: // home / 7
+                                        MyWorld::RotateCamera_Axis(-1.0f, 1.0f, 0.0f, -ROTATION_INCREMENT);
+                                        break;
+                                case 89: // PgDn / 3
+                                        MyWorld::RotateCamera_Axis(-1.0f, 1.0f, 0.0f, ROTATION_INCREMENT);
                                         break;
                                 default:
                                         break;
@@ -181,6 +200,8 @@ int main(int argc, char *argv[]) {
 
                 mesh.draw();
                 mesh2.draw();
+                for (unsigned int k = 0; k < 30; ++k)
+                        mesh_arr[k].draw();
 
                 glXSwapBuffers(dpy, win);
 

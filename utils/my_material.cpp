@@ -120,17 +120,15 @@ void MyMaterial::UseMaterial(bool use)
                 for (unsigned int k = 0; k < textures.size(); ++k) {
                         snprintf(tex_name, 20, "texture%d", k);
 
-                        /* !!!! HAVE NO IDEA WHY, BUT GL_TEXTURE0 DOES NOT SEEM TO FUNCTION AT ALL,
-                           SO WE START FROM GL_TEXTURE0+1 !!!! */
-                        glActiveTexture((GL_TEXTURE0 + 1) + k);
+                        glActiveTexture((GL_TEXTURE0 + k));
                         glBindTexture(GL_TEXTURE_2D, textures[k]);
                         GLint uniform = glGetUniformLocation(gl_program, tex_name);
                         if (uniform != -1) {
-                                glUniform1i(uniform, textures[k]);
+                                glUniform1i(uniform, k);
                         }
 
                         /* DBG */
-                        // printf("Texture:%s , found id = %d , texture_for_id = %u ...\n", tex_name, uniform, textures[k]);
+//                         printf("Texture:%s , found id = %d , texture_for_id = %u ...\n", tex_name, uniform, textures[k]);
                 }
         } else {
                 /* glDontUseProgram :))) */;
