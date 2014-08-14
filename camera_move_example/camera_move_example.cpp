@@ -5,6 +5,7 @@
 #include <iostream>
 #include <cmath>
 #include <random>
+#include <ctime>
 
 /* x-server related includes */
 #include<X11/X.h>
@@ -107,6 +108,7 @@ int main(int argc, char *argv[]) {
 
         MyMesh mesh_arr[30];
         std::default_random_engine gen;
+        gen.seed(std::time(0));
         std::uniform_real_distribution<float> rnd(-7.0f, 7.0f);
         for (unsigned int k = 0; k < 30; ++k) {
                 std::array<float, 3> pos({ rnd(gen), rnd(gen), rnd(gen)});
