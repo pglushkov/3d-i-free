@@ -33,6 +33,8 @@ public:
         static void RotateCamera_X(float angle_deg) { camera_view.Rotate_X(angle_deg); UpdateCameraView(); }
         static void RotateCamera_Y(float angle_deg) { camera_view.Rotate_Y(angle_deg); UpdateCameraView(); }
         static void RotateCamera_Z(float angle_deg) { camera_view.Rotate_Z(angle_deg); UpdateCameraView(); }
+        static void RotateCamera_X1(float angle_deg);
+        static void RotateCamera_Y1(float angle_deg);
         static void RotateCamera_Axis(float x, float y, float z, float angle_deg)
         {
                 camera_view.Rotate_Axis(x, y, z, angle_deg);

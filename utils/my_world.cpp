@@ -31,3 +31,26 @@ const MyWorld::light_pos_vector& MyWorld::GetGlobalLightPos( size_t idx ) const
 
 	return global_lights[idx];
 }
+
+
+void MyWorld::RotateCamera_X1(float angle_deg)
+{
+        camera_view.Rotate_X(angle_deg);
+        UpdateCameraView();
+        camera_view.TRACE_AXIS_GLOB();
+}
+
+void MyWorld::RotateCamera_Y1(float angle_deg)
+{
+        MyPositionMatrix<float>::data_row y_axis({0.0f, 1.0f, 0.0f, 1.0f});
+        MySquareMatrix<float, 4> inv = camera_view.get_data().Invert();
+        MyPositionMatrix<float>::data_row new_y = inv * y_axis;
+        new_y[2] = - new_y[2];
+        new_y[0] -= inv[0][3];
+        new_y[1] -= inv[1][3];
+        new_y[2] -= -inv[2][3];
+        camera_view.Rotate_Axis(new_y, angle_deg);
+//        camera_view.RotateGlobal_Y(angle_deg);
+        UpdateCameraView();
+        camera_view.TRACE_AXIS_GLOB();
+}

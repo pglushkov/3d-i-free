@@ -47,6 +47,7 @@ template<typename T> MySquareMatrix<T, 4> CreateOZRotation(float angle)
 //        float rad = (angle/360.0f) * 2.0f * M_PI;
         float rad = my_utils::DegToRad(angle);
 
+        r[0][0] = cos(rad);
         r[0][1] = -sin(rad);
         r[1][0] = sin(rad);
         r[1][1] = cos(rad);
@@ -122,6 +123,18 @@ public:
 
 
         void TRACE() { data.TRACE(); }
+        void TRACE_AXIS_GLOB()
+        {
+                data_row axis({0.0f, 0.0f, 1.0f, 1.0f});
+                MySquareMatrix<float, 4> inv = data.Invert();
+                data_row global_axis = inv * axis;
+                global_axis[2] = -global_axis[2];
+                std::cout << "axis.x=" << global_axis[0] << " axis.y="
+                          << global_axis[1] << " axis.z=" << global_axis[2] << std::endl;
+
+                std::cout << "glob_pos.x=" << inv[0][3] << " glob_pos.y="
+                          << inv[1][3] << " glob_pos.z=" << inv[2][3] << std::endl;
+        }
 
         void Rotate_X(float angle)
         {
@@ -151,7 +164,10 @@ public:
         {
 //                auto inv = data.Invert();
                 data_row y_axis({0.0f, 1.0f, 0.0f, 1.0f});
-                data_row global_y_axis = (*this) * y_axis;
+                MySquareMatrix<float, 4> inv = data.Invert();
+                data_row global_y_axis = inv * y_axis;
+//                std::cout << "glob_y.x=" << global_y_axis[0] << " glob_y.y="
+//                          << global_y_axis[1] << " glob_y.z=" << global_y_axis[2] << std::endl;
                 Rotate_Axis(global_y_axis, angle);
         }
 

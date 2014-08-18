@@ -145,17 +145,21 @@ int main(int argc, char *argv[]) {
                                         XCloseDisplay(dpy);
                                         exit(0);
                                 case 111: // up arrow
-                                        MyWorld::RotateCamera_X(ROTATION_INCREMENT);
+//                                        MyWorld::RotateCamera_X(ROTATION_INCREMENT);
+                                        MyWorld::RotateCamera_X1(ROTATION_INCREMENT);
                                         break;
                                 case 116: //down arrow
-                                        MyWorld::RotateCamera_X(-ROTATION_INCREMENT);
+//                                        MyWorld::RotateCamera_X(-ROTATION_INCREMENT);
+                                        MyWorld::RotateCamera_X1(-ROTATION_INCREMENT);
                                         break;
                                 case 113: //left arrow
-                                        MyWorld::RotateCamera_Y(-ROTATION_INCREMENT);
+//                                        MyWorld::RotateCamera_Y(-ROTATION_INCREMENT);
+                                        MyWorld::RotateCamera_Y1(-ROTATION_INCREMENT);
 //                                        MyWorld::RotateCamera_Axis(0.0f, 1.0f, 0.0f, -ROTATION_INCREMENT);
                                         break;
                                 case 114: //right arrow
-                                        MyWorld::RotateCamera_Y(ROTATION_INCREMENT);
+//                                        MyWorld::RotateCamera_Y(ROTATION_INCREMENT);
+                                        MyWorld::RotateCamera_Y1(ROTATION_INCREMENT);
 //                                        MyWorld::RotateCamera_Axis(0.0f, 1.0f, 0.0f, ROTATION_INCREMENT);
                                         break;
                                 case 35: // right square bracket
