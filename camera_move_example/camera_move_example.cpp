@@ -173,10 +173,12 @@ int main(int argc, char *argv[]) {
                                         MyWorld::MoveCamera_X(MOVE_INCREMENT);
                                         break;
                                 case 25: // button 'w'
-                                        MyWorld::MoveCamera_Z(MOVE_INCREMENT);
+//                                        MyWorld::MoveCamera_Z(MOVE_INCREMENT);
+                                        MyWorld::CameraStepForward(MOVE_INCREMENT);
                                         break;
                                 case 39: // button 's'
-                                        MyWorld::MoveCamera_Z(-MOVE_INCREMENT);
+//                                        MyWorld::MoveCamera_Z(-MOVE_INCREMENT);
+                                        MyWorld::CameraStepForward(-MOVE_INCREMENT);
                                         break;
                                 case 40: // button 'd'
                                         MyWorld::MoveCamera_X(-MOVE_INCREMENT);

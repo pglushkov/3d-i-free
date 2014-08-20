@@ -57,6 +57,8 @@ public:
                 UpdateCameraView();
         }
         static void ResetCameraPos() { camera_view.Reset(); UpdateCameraView(); }
+        static void CameraStepForward(float step);
+        static void CameraStepSide(float step);
 
         static const char* Default_VShader() { return "../shaders/vshader_full.txt"; }
         static const char* Default_FShader() { return "../shaders/fshader_simple.txt"; }
@@ -68,15 +70,12 @@ private:
 	static std::vector<light_pos_vector> global_lights;
 	static MyPositionMatrix<float> camera_view;
 	static MySquareMatrix<float, 4> result_camera_view;
+	static MySquareMatrix<float, 4>::data_row camera_direction;
 
 	MyWorld& operator=(MyWorld& in) { return *this; }
 	MyWorld(MyWorld& in) { }
 	MyWorld();
-	static void UpdateCameraView()
-	{
-                MySquareMatrix<float, 4> tmp = camera_view.get_data().Invert();
-                result_camera_view = tmp;
-	}
+	static void UpdateCameraView();
 };
 
 #endif // MY_WORLD_H
