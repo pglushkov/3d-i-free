@@ -9,6 +9,7 @@ MyProjectionMatrix<float> MyWorld::world_proj(WORLD_DEFAULT_NEAR_PLANE,
 MyPositionMatrix<float> MyWorld::camera_view;
 MySquareMatrix<float, 4> MyWorld::result_camera_view;
 MySquareMatrix<float, 4>::data_row MyWorld::camera_direction;
+MySquareMatrix<float, 4>::data_row MyWorld::camera_side_direction;
 
 float MyWorld::creation_time = my_utils::GetTimeInSec();
 std::vector<MyWorld::light_pos_vector> MyWorld::global_lights(1);
@@ -84,6 +85,13 @@ void MyWorld::CameraStepForward(float step)
 void MyWorld::CameraStepSide(float step)
 {
 
+       float x_inc = camera_side_direction[0] * step;
+       float y_inc = camera_side_direction[1] * step;
+       float z_inc = camera_side_direction[2] * step;
+
+       MoveCamera_X(-x_inc);
+       MoveCamera_Y(y_inc);
+       MoveCamera_Z(-z_inc);
 }
 
 
@@ -92,6 +100,7 @@ void MyWorld::UpdateCameraView()
         MySquareMatrix<float, 4> inv = camera_view.get_data().Invert();
         result_camera_view = inv;
         MySquareMatrix<float, 4>::data_row axis({0.0f, 0.0f, -1.0f, 1.0f});
+        MySquareMatrix<float, 4>::data_row x_axis({1.0f, 0.0f, 0.0f, 1.0f});
         camera_direction = camera_view.get_data() * axis;
         camera_direction[1] = -camera_direction[1];
         camera_direction[2] = camera_direction[2];
@@ -100,10 +109,17 @@ void MyWorld::UpdateCameraView()
         camera_direction[1] -= -camera_view.get_data()[1][3];
         camera_direction[2] -= camera_view.get_data()[2][3];
 
+        camera_side_direction = camera_view.get_data() * x_axis;
+        camera_side_direction[0] -= camera_view.get_data()[0][3];
+        camera_side_direction[1] -= camera_view.get_data()[1][3];
+        camera_side_direction[2] -= camera_view.get_data()[2][3];
+
         // DBG
         std::cout << "direction.x=" << camera_direction[0] << " direction.y="
                   << camera_direction[1] << " direction.z=" << camera_direction[2] << std::endl;
         std::cout << "glob_pos.x=" << inv[0][3] << " glob_pos.y="
                   << inv[1][3] << " glob_pos.z=" << inv[2][3] << std::endl;
+        std::cout << "s_direction.x=" << camera_side_direction[0] << " s_direction.y="
+                  << camera_side_direction[1] << " s_direction.z=" << camera_side_direction[2] << std::endl;
 }
 

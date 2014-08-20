@@ -71,6 +71,7 @@ private:
 	static MyPositionMatrix<float> camera_view;
 	static MySquareMatrix<float, 4> result_camera_view;
 	static MySquareMatrix<float, 4>::data_row camera_direction;
+	static MySquareMatrix<float, 4>::data_row camera_side_direction;
 
 	MyWorld& operator=(MyWorld& in) { return *this; }
 	MyWorld(MyWorld& in) { }
