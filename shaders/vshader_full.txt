@@ -16,6 +16,7 @@ varying vec4 figureColor;
 varying vec2 plane_coord;
 varying vec3 rnorm;
 varying vec3 light_dir;
+varying float light_dist;
 
 void main()
 {
@@ -26,8 +27,10 @@ void main()
 
         vec4 new_pos = in_position * world_view_position * camera_transform * projection;
         vec4 new_pos_orto = in_position * world_view_position;
+
         gl_Position = new_pos;
         rnorm = in_norm * direction;
         light_dir = normalize(light_pos - vec3(new_pos_orto.xyz));
+        light_dist = length(light_pos - vec3(new_pos_orto.xyz));
 }
 

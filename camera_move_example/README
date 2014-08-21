@@ -1,9 +1,14 @@
 
+Common controls:
+        ESC - exit
+        ENTER - reset camera position to (0,0,0)
+
 Controlling camera:
-a - strafe left
-d - strafe right
-w - step forward
-s - step backward
-e - move vertically up
-q - move vertically down
-arrows - control of camera direction
+        a - strafe left
+        d - strafe right
+        w - step forward
+        s - step backward
+        e - move vertically up
+        q - move vertically down
+        arrows - control of camera direction
+

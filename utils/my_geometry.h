@@ -45,7 +45,7 @@ public:
 
 namespace geometry_gen
 {
-        #define DEFAULT_CUBE_SIZE 0.5
+        #define DEFAULT_CUBE_SIZE 3.0f
 
         MyGeometry generate_rectangle(float width, float height);
         MyGeometry generate_rectangle_two_sides(float width, float height);

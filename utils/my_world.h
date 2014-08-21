@@ -61,7 +61,7 @@ public:
         static void CameraStepSide(float step);
 
         static const char* Default_VShader() { return "../shaders/vshader_full.txt"; }
-        static const char* Default_FShader() { return "../shaders/fshader_simple.txt"; }
+        static const char* Default_FShader() { return "../shaders/fshader_lambert.txt"; }
 
 private:
 
@@ -72,6 +72,7 @@ private:
 	static MySquareMatrix<float, 4> result_camera_view;
 	static MySquareMatrix<float, 4>::data_row camera_direction;
 	static MySquareMatrix<float, 4>::data_row camera_side_direction;
+	static MySquareMatrix<float, 4>::data_row camera_position;
 
 	MyWorld& operator=(MyWorld& in) { return *this; }
 	MyWorld(MyWorld& in) { }
