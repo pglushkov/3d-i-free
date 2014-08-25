@@ -5,16 +5,17 @@ varying vec4 figureColor;
 varying vec2 plane_coord;
 varying vec3 rnorm;
 varying vec3 light_dir;
-varying float dist;
+varying float light_dist;
 
 void main()
 {
-        float intensity = dot(rnorm, light_dir); // / (dist + 0.01);
-	float orig_intensity = 0.2;
+        float K = (-(light_dist - 10) / 15.0);
+        float intensity = dot(rnorm, light_dir) * exp(K);
+	float orig_intensity = 0.05;
 
-        float rchan = orig_intensity*figureColor[0] + figureColor[0] * intensity;
-        float gchan = orig_intensity*figureColor[1] + figureColor[1] * intensity;
-        float bchan = orig_intensity*figureColor[2] + figureColor[2] * intensity;
+        float rchan = figureColor[0] * (intensity + orig_intensity);
+        float gchan = figureColor[1] * (intensity + orig_intensity);
+        float bchan = figureColor[2] * (intensity + orig_intensity);
 
         vec3 lambert_color = vec3(rchan, gchan, bchan);
         gl_FragColor = vec4(lambert_color, figureColor[3]);
