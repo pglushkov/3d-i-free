@@ -11,6 +11,13 @@
         12 Aug 2014
 1) Work on Camera_move_example:
         - fix bugs with left/right movement (done)
-        - place light source in camera
-        - play with light direction relatively to camera position
+        - place light source in camera (done)
+        - play with light direction relatively to camera position (done)
+
+        26 Aug 2014
+1) Fix MyWorld::default_material
+2) finish material-related refactoring
+3) create separate class for the camera!
+
+
 

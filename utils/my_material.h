@@ -1,3 +1,5 @@
+#ifndef MY_MATERIAL_H
+#define MY_MATERIAL_H
 
 #include <string>
 #include <stdexcept>
@@ -16,10 +18,14 @@ class MyMaterial
         const MyMaterial& operator=(const MyMaterial& inp) { return *this; }
 public:
         MyMaterial(const char* vshader_file, const char* fshader_file);
-        void UseMaterial(bool use);
+        MyMaterial();
+        void UseMaterial(bool use) const;
         const GLuint GetProgramHandle() const { return gl_program; }
         void AddTexture(const char* texture_file_name);
         void AddTexture(std::vector<unsigned char>& data, unsigned int width, unsigned int height, GLuint gl_flag);
         ~MyMaterial();
 };
+
+
+#endif //of MY_MATERIAL_H
 

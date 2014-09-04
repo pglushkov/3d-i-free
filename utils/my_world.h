@@ -5,7 +5,7 @@
 #include "opengl.h"
 #include "simple_vectors.h"
 #include "my_position_matrix.h"
-
+#include "my_material.h"
 
 #define WORLD_DEFAULT_FAR_PLANE 100.0f
 #define WORLD_DEFAULT_NEAR_PLANE 0.5f
@@ -63,6 +63,7 @@ public:
         static const char* Default_VShader() { return "../shaders/vshader_full.txt"; }
         static const char* Default_FShader() { return "../shaders/fshader_lambert.txt"; }
 
+        static const MyMaterial& GetDefaultMaterial() { return default_mater; }
 private:
 
 	static MyProjectionMatrix<float> world_proj;
@@ -73,6 +74,8 @@ private:
 	static MySquareMatrix<float, 4>::data_row camera_direction;
 	static MySquareMatrix<float, 4>::data_row camera_side_direction;
 	static MySquareMatrix<float, 4>::data_row camera_position;
+
+	static MyMaterial default_mater;
 
 	MyWorld& operator=(MyWorld& in) { return *this; }
 	MyWorld(MyWorld& in) { }

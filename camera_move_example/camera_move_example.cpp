@@ -11,6 +11,7 @@
 #include<X11/X.h>
 #include<X11/Xlib.h>
 
+#include <utils/my_material.h>
 #include <utils/opengl.h>
 #include <utils/my_world.h>
 #include <utils/my_mesh.h>
@@ -102,8 +103,8 @@ int main(int argc, char *argv[]) {
         std::string fshader2("../shaders/fshader_simple.txt");
 
         /* GENERATING A DRAWABLE OBJECT (MESH) */
-        MyMesh mesh(geom, vshader.c_str(), fshader2.c_str());
-        MyMesh mesh2(geom, vshader.c_str(), fshader1.c_str());
+        MyMesh mesh(geom);
+        MyMesh mesh2(geom);
         //mesh.TRACE_GEOM();
 
         MyMesh mesh_arr[30];
@@ -116,9 +117,11 @@ int main(int argc, char *argv[]) {
         }
 
         /* TEXTURING */
-        mesh2.AddTexture("../data/penguin.bmp");
+        MyMaterial def_mat(MyWorld::Default_VShader(), MyWorld::Default_FShader());
+        MyMaterial tex_mat(vshader.c_str(), fshader1.c_str());
+        tex_mat.AddTexture("../data/penguin.bmp");
         std::vector<unsigned char> tex = my_utils::GenerateRgbTexture(256, 256, 255, 0, 0);
-        mesh2.AddTexture(tex, 256, 256, GL_RGB);
+        tex_mat.AddTexture(tex, 256, 256, GL_RGB);
 
         /* INITIALIZING OBJECT POSITION */
         std::array<float, 3> default_pos({ 0.0f, 0.0f, -6.0f});
@@ -208,8 +211,8 @@ int main(int argc, char *argv[]) {
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                mesh.draw();
-                mesh2.draw();
+                mesh.draw(def_mat);
+                mesh2.draw(tex_mat);
                 for (unsigned int k = 0; k < 30; ++k)
                         mesh_arr[k].draw();
 

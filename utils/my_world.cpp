@@ -11,6 +11,7 @@ MySquareMatrix<float, 4> MyWorld::result_camera_view;
 MySquareMatrix<float, 4>::data_row MyWorld::camera_direction;
 MySquareMatrix<float, 4>::data_row MyWorld::camera_side_direction;
 MySquareMatrix<float, 4>::data_row MyWorld::camera_position;
+MyMaterial MyWorld::default_mater;
 
 float MyWorld::creation_time = my_utils::GetTimeInSec();
 std::vector<MyWorld::light_pos_vector> MyWorld::global_lights(1);

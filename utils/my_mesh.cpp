@@ -23,7 +23,7 @@ void MyMesh::LoadGeometryToGpu()
         //printf("geometry: vert : %lu bytes; ndx: %lu bytes\n", vsz, osz);
 }
 
-void MyMesh::BindShadersAttributes()
+void MyMesh::BindShadersAttributes(const MyMaterial& mater)
 {
         /*
            We here assume that shaders have further attributes:
@@ -96,7 +96,7 @@ void MyMesh::BindShadersAttributes()
         }
 }
 
-void MyMesh::BindUniforms()
+void MyMesh::BindUniforms(const MyMaterial& mater)
 {
         GLuint gl_program = mater.GetProgramHandle();
 	// setting necessary uniforms
@@ -132,29 +132,25 @@ void MyMesh::BindUniforms()
 	}
 }
 
-MyMesh::MyMesh(const MyGeometry& igeom, const char* vshader_file, const char* fshader_file) :
-        geom(igeom), mater(vshader_file, fshader_file)
+MyMesh::MyMesh(const MyGeometry& igeom) : geom(igeom)
 {
         LoadGeometryToGpu();
 }
 
-MyMesh::MyMesh(const std::vector<MyVertex>& vert, const std::vector<unsigned short>& ord, const char* vshader_file,
-                const char* fshader_file) :
-        geom(vert, ord), mater(vshader_file, fshader_file)
+MyMesh::MyMesh(const std::vector<MyVertex>& vert, const std::vector<unsigned short>& ord) :
+        geom(vert, ord)
 {
         LoadGeometryToGpu();
 }
 
-MyMesh::MyMesh(const float* vert_data, size_t vert_num, const unsigned short *ord_data, size_t ord_num,
-                const char* vshader_file, const char* fshader_file) :
-        geom(vert_data, vert_num, ord_data, ord_num), mater(vshader_file, fshader_file)
+MyMesh::MyMesh(const float* vert_data, size_t vert_num, const unsigned short *ord_data, size_t ord_num) :
+        geom(vert_data, vert_num, ord_data, ord_num)
 
 {
         LoadGeometryToGpu();
 }
 
-MyMesh::MyMesh() : geom(geometry_gen::generate_cube(DEFAULT_CUBE_SIZE)),
-                   mater( MyWorld::Default_VShader(), MyWorld::Default_FShader())
+MyMesh::MyMesh() : geom(geometry_gen::generate_cube(DEFAULT_CUBE_SIZE))
 {
         LoadGeometryToGpu();
 }
@@ -165,15 +161,29 @@ MyMesh::~MyMesh()
         glDeleteBuffers(1, &ord_buffer_id);
 }
 
-void MyMesh::draw()
+void MyMesh::draw(const MyMaterial &mater)
 {
+        mater.UseMaterial(true);
 
-        mater.UseMaterial(true);                                // setting current shader program
         glBindBuffer(GL_ARRAY_BUFFER, vert_buffer_id);          // binding current vertex buffer
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ord_buffer_id);   // binding current vertex-order buffer
 
-        BindShadersAttributes(); // passing attributes markup to the shader
-	BindUniforms();
+        BindShadersAttributes(mater); // passing attributes markup to the shader
+	BindUniforms(mater);
+
+        // actual drawing
+        glDrawElements(GL_TRIANGLES, geom.GetOrderNum(), GL_UNSIGNED_SHORT, (const void *)(0));
+}
+
+void MyMesh::draw()
+{
+        MyWorld::GetDefaultMaterial().UseMaterial(true);
+
+        glBindBuffer(GL_ARRAY_BUFFER, vert_buffer_id);          // binding current vertex buffer
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ord_buffer_id);   // binding current vertex-order buffer
+
+        BindShadersAttributes(MyWorld::GetDefaultMaterial()); // passing attributes markup to the shader
+	BindUniforms(MyWorld::GetDefaultMaterial());
 
         // actual drawing
         glDrawElements(GL_TRIANGLES, geom.GetOrderNum(), GL_UNSIGNED_SHORT, (const void *)(0));

@@ -9,7 +9,7 @@ varying float light_dist;
 
 void main()
 {
-        float K = (-(light_dist - 10) / 15.0);
+        float K = ((-light_dist + 5) / 10.0);
         float intensity = dot(rnorm, light_dir) * exp(K);
 	float orig_intensity = 0.05;
 
