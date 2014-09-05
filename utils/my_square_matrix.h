@@ -44,7 +44,7 @@ public:
         {
         	if (dim < 1) {
         		throw std::runtime_error("ERROR in MySquareMatrix() : Size of square matrix can not be less then 1 !!!");
-		}
+            }
 
                 Reset();
         }

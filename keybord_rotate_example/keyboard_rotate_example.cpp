@@ -19,6 +19,7 @@
 #include "small_tests.h"
 
 #define ROTATION_INCREMENT 3.0f
+#define TRANSLATION_INCREMENT 0.5f
 
 Display                 *dpy;
 Window                  root;
@@ -86,7 +87,7 @@ int main(int argc, char *argv[]) {
         /* GENERATING GEOMETRY */
         MyGeometry geom(geometry_gen::generate_cube(1.0f));
 //        MyGeometry geom(geometry_gen::generate_rectangle(1.0f, 1.0f));
-//        MyGeometry geom(geometry_gen::generate_rectangle_two_sides(1.0f, 1.0f));
+//        MyGeometry geom(geometry_gen::generate_rectangle_two_sides(2.0f, 2.0f));
 
         /* SELECTING SHADERS TO DRAW */
         /* VERTEX SHADER */
@@ -100,21 +101,24 @@ int main(int argc, char *argv[]) {
         std::string fshader2("../shaders/fshader_simple.txt");
 
         /* GENERATING A DRAWABLE OBJECT (MESH) */
-        MyMesh mesh(geom, vshader.c_str(), fshader.c_str());
-        MyMesh mesh2(geom, vshader.c_str(), fshader1.c_str());
+        MyMesh mesh(geom);
+        MyMesh mesh2(geom);
         //mesh.TRACE_GEOM();
 
         /* TEXTURING */
-        mesh2.AddTexture("../data/penguin.bmp");
+        /* TEXTURING */
+        MyMaterial def_mat(MyWorld::Default_VShader(), MyWorld::Default_FShader());
+        MyMaterial tex_mat(vshader.c_str(), fshader1.c_str());
+        tex_mat.AddTexture("../data/penguin.bmp");
         std::vector<unsigned char> tex = my_utils::GenerateRgbTexture(256, 256, 255, 0, 0);
-        mesh2.AddTexture(tex, 256, 256, GL_RGB);
+        tex_mat.AddTexture(tex, 256, 256, GL_RGB);
 
         /* INITIALIZING OBJECT POSITION */
         std::array<float, 3> default_pos({ 0.0f, 0.0f, -6.0f});
         std::array<float, 3> default_pos2({ 2.0f, 2.5f, -10.0f});
 
-	mesh.GetObjTransform().SetPosition(default_pos);
-	mesh2.GetObjTransform().SetPosition(default_pos2);
+        mesh.GetObjTransform().SetPosition(default_pos);
+        mesh2.GetObjTransform().SetPosition(default_pos2);
 
         while(true) {
                 for (int i = 0; i < XPending(dpy); i++)
@@ -134,39 +138,53 @@ int main(int argc, char *argv[]) {
                                         XCloseDisplay(dpy);
                                         exit(0);
                                 case 111: // up arrow
-                                        mesh.GetObjTransform().Rotate_X(ROTATION_INCREMENT);
+                                        mesh.GetObjTransform().Rotate_X(-ROTATION_INCREMENT);
                                         break;
                                 case 116: //down arrow
-                                        mesh.GetObjTransform().Rotate_X(-ROTATION_INCREMENT);
+                                        mesh.GetObjTransform().Rotate_X(ROTATION_INCREMENT);
                                         //matWorldPos.Translate(std::array<float, 3> ({0.0f, 0.0f, 0.1f}));
                                         break;
                                 case 113: //left arrow
-                                        mesh.GetObjTransform().Rotate_Y(ROTATION_INCREMENT);
-                                        break;
-                                case 114: //right arrow
                                         mesh.GetObjTransform().Rotate_Y(-ROTATION_INCREMENT);
                                         break;
+                                case 114: //right arrow
+                                        mesh.GetObjTransform().Rotate_Y(ROTATION_INCREMENT);
+                                        break;
                                 case 35: // right square bracket
-                                        mesh.GetObjTransform().Rotate_Z(ROTATION_INCREMENT);
+                                        //mesh.GetObjTransform().Rotate_Z(ROTATION_INCREMENT);
+                                        mesh.GetObjTransform().Rotate_Axis(0, 0, 1, -ROTATION_INCREMENT);
                                         break;
                                 case 34: // left square bracket
-                                        mesh.GetObjTransform().Rotate_Z(-ROTATION_INCREMENT);
+                                        //mesh.GetObjTransform().Rotate_Z(-ROTATION_INCREMENT);
+                                        mesh.GetObjTransform().Rotate_Axis(0, 0, 1, ROTATION_INCREMENT);
                                         break;
                                 case 36: //Enter
                                         mesh.GetObjTransform().Reset();
                                         mesh.GetObjTransform().SetPosition(default_pos);
                                         break;
                                 case 38: // button 'a'
-                                        MyWorld::RotateCamera_Y(-ROTATION_INCREMENT);
+                                        //MyWorld::RotateCamera_Y(-ROTATION_INCREMENT);
+                                        mesh.GetObjTransform().Translate(-TRANSLATION_INCREMENT, 0, 0);
                                         break;
                                 case 25: // button 'w'
-                                        MyWorld::RotateCamera_X(ROTATION_INCREMENT);
+                                        //MyWorld::RotateCamera_X(ROTATION_INCREMENT);
+                                        mesh.GetObjTransform().Translate(0, 0, -TRANSLATION_INCREMENT);
                                         break;
                                 case 39: // button 's'
-                                        MyWorld::RotateCamera_X(-ROTATION_INCREMENT);
+                                        //MyWorld::RotateCamera_X(-ROTATION_INCREMENT);
+                                        mesh.GetObjTransform().Translate(0, 0, TRANSLATION_INCREMENT);
                                         break;
                                 case 40: // button 'd'
-                                        MyWorld::RotateCamera_Y(ROTATION_INCREMENT);
+                                        //MyWorld::RotateCamera_Y(ROTATION_INCREMENT);
+                                        mesh.GetObjTransform().Translate(TRANSLATION_INCREMENT, 0, 0);
+                                        break;
+                                case 26: // button 'e'
+                                        //MyWorld::RotateCamera_X(-ROTATION_INCREMENT);
+                                        mesh.GetObjTransform().Translate(0, TRANSLATION_INCREMENT, 0);
+                                        break;
+                                case 24: // button 'q'
+                                        //MyWorld::RotateCamera_Y(ROTATION_INCREMENT);
+                                        mesh.GetObjTransform().Translate(0, -TRANSLATION_INCREMENT, 0);
                                         break;
                                 default:
                                         break;
@@ -179,8 +197,8 @@ int main(int argc, char *argv[]) {
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                mesh.draw();
-                mesh2.draw();
+                mesh.draw(tex_mat);
+                mesh2.draw(tex_mat);
 
                 glXSwapBuffers(dpy, win);
 

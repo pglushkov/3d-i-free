@@ -72,8 +72,8 @@ void test_pos_mat()
         for (unsigned int k = 0; k < 16; ++k)
                 printf(" %f ", dbg[k]);
         printf("\n ************* \n");
-        printf(" size of data_row: %lu \n",sizeof(MyPositionMatrix<float>::data_row));
-        printf(" size of full_data: %lu \n",sizeof(MySquareMatrix<float, 4>::full_data));
+        printf(" size of data_row: %u \n",sizeof(MyPositionMatrix<float>::data_row));
+        printf(" size of full_data: %u \n",sizeof(MySquareMatrix<float, 4>::full_data));
 }
 
 void test_free_image()

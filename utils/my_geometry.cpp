@@ -249,89 +249,118 @@ namespace geometry_gen
                 vert[15].position[0] = ltfx; vert[15].position[1] = ltfy - sz; vert[15].position[2] = ltfz - sz;
                 vert[23].position[0] = ltfx; vert[23].position[1] = ltfy - sz; vert[23].position[2] = ltfz - sz;
 
-                /* 1st side */
+                /* 1st side  (front) */
                 vert[0].plane_coord[0] = 0.0f; vert[0].plane_coord[1] = 1.0f;
                 vert[0].def_color[0] = 1.0f; vert[0].def_color[1] = 0.0f; vert[0].def_color[2] = 0.0f; vert[0].def_color[3] = 1.0f;
                 vert[0].normal[0] = 0.0f; vert[0].normal[1] = 0.0f; vert[0].normal[2] = 1.0f;
-                vert[1].plane_coord[0] = 1.0f; vert[1].plane_coord[1] = 1.0f;
+
+                vert[1].plane_coord[0] = 1.0f; vert[1].plane_coord[1] = 1.0f;        
                 vert[1].def_color[0] = 1.0f; vert[1].def_color[1] = 0.0f; vert[1].def_color[2] = 0.0f; vert[1].def_color[3] = 1.0f;
                 vert[1].normal[0] = 0.0f; vert[1].normal[1] = 0.0f; vert[1].normal[2] = 1.0f;
-                vert[2].plane_coord[0] = 1.0f; vert[2].plane_coord[1] = 0.0f;
+
+                vert[2].plane_coord[0] = 1.0f; vert[2].plane_coord[1] = 0.0f;                
                 vert[2].def_color[0] = 1.0f; vert[2].def_color[1] = 0.0f; vert[2].def_color[2] = 0.0f; vert[2].def_color[3] = 1.0f;
                 vert[2].normal[0] = 0.0f; vert[2].normal[1] = 0.0f; vert[2].normal[2] = 1.0f;
+
                 vert[3].plane_coord[0] = 0.0f; vert[3].plane_coord[1] = 0.0f;
                 vert[3].def_color[0] = 1.0f; vert[3].def_color[1] = 0.0f; vert[3].def_color[2] = 0.0f; vert[3].def_color[3] = 1.0f;
                 vert[3].normal[0] = 0.0f; vert[3].normal[1] = 0.0f; vert[3].normal[2] = 1.0f;
 
-                /* 2nd side */
+
+
+                /* 2nd side  (right) */
                 vert[4].plane_coord[0] = 0.0f; vert[4].plane_coord[1] = 1.0f;
                 vert[4].def_color[0] = 1.0f; vert[4].def_color[1] = 1.0f; vert[4].def_color[2] = 0.0f; vert[4].def_color[3] = 1.0f;
                 vert[4].normal[0] = 1.0f; vert[4].normal[1] = 0.0f; vert[4].normal[2] = 0.0f;
+
                 vert[5].plane_coord[0] = 1.0f; vert[5].plane_coord[1] = 1.0f;
                 vert[5].def_color[0] = 1.0f; vert[5].def_color[1] = 1.0f; vert[5].def_color[2] = 0.0f; vert[5].def_color[3] = 1.0f;
                 vert[5].normal[0] = 1.0f; vert[5].normal[1] = 0.0f; vert[5].normal[2] = 0.0f;
+
                 vert[6].plane_coord[0] = 1.0f; vert[6].plane_coord[1] = 0.0f;
                 vert[6].def_color[0] = 1.0f; vert[6].def_color[1] = 1.0f; vert[6].def_color[2] = 0.0f; vert[6].def_color[3] = 1.0f;
                 vert[6].normal[0] = 1.0f; vert[6].normal[1] = 0.0f; vert[6].normal[2] = 0.0f;
+
                 vert[7].plane_coord[0] = 0.0f; vert[7].plane_coord[1] = 0.0f;
                 vert[7].def_color[0] = 1.0f; vert[7].def_color[1] = 1.0f; vert[7].def_color[2] = 0.0f; vert[7].def_color[3] = 1.0f;
                 vert[7].normal[0] = 1.0f; vert[7].normal[1] = 0.0f; vert[7].normal[2] = 0.0f;
 
-                /* 3rd side */
+
+
+                /* 3rd side (back) */
                 vert[8].plane_coord[0] = 0.0f; vert[8].plane_coord[1] = 1.0f;
                 vert[8].def_color[0] = 0.0f; vert[8].def_color[1] = 1.0f; vert[8].def_color[2] = 0.0f; vert[8].def_color[3] = 1.0f;
                 vert[8].normal[0] = 0.0f; vert[8].normal[1] = 0.0f; vert[8].normal[2] = -1.0f;
+
                 vert[9].plane_coord[0] = 1.0f; vert[9].plane_coord[1] = 1.0f;
                 vert[9].def_color[0] = 0.0f; vert[9].def_color[1] = 1.0f; vert[9].def_color[2] = 0.0f; vert[9].def_color[3] = 1.0f;
                 vert[9].normal[0] = 0.0f; vert[9].normal[1] = 0.0f; vert[9].normal[2] = -1.0f;
+
                 vert[10].plane_coord[0] = 1.0f; vert[10].plane_coord[1] = 0.0f;
                 vert[10].def_color[0] = 0.0f; vert[10].def_color[1] = 1.0f; vert[10].def_color[2] = 0.0f; vert[10].def_color[3] = 1.0f;
                 vert[10].normal[0] = 0.0f; vert[10].normal[1] = 0.0f; vert[10].normal[2] = -1.0f;
+
                 vert[11].plane_coord[0] = 0.0f; vert[11].plane_coord[1] = 0.0f;
                 vert[11].def_color[0] = 0.0f; vert[11].def_color[1] = 1.0f; vert[11].def_color[2] = 0.0f; vert[11].def_color[3] = 1.0f;
                 vert[11].normal[0] = 0.0f; vert[11].normal[1] = 0.0f; vert[11].normal[2] = -1.0f;
 
-                /* 4th side */
+
+
+                /* 4th side (left) */
                 vert[12].plane_coord[0] = 0.0f; vert[12].plane_coord[1] = 1.0f;
                 vert[12].def_color[0] = 0.0f; vert[12].def_color[1] = 1.0f; vert[12].def_color[2] = 1.0f; vert[12].def_color[3] = 1.0f;
                 vert[12].normal[0] = -1.0f; vert[12].normal[1] = 0.0f; vert[12].normal[2] = 0.0f;
+
                 vert[13].plane_coord[0] = 1.0f; vert[13].plane_coord[1] = 1.0f;
                 vert[13].def_color[0] = 0.0f; vert[13].def_color[1] = 1.0f; vert[13].def_color[2] = 1.0f; vert[13].def_color[3] = 1.0f;
                 vert[13].normal[0] = -1.0f; vert[13].normal[1] = 0.0f; vert[13].normal[2] = 0.0f;
+
                 vert[14].plane_coord[0] = 1.0f; vert[14].plane_coord[1] = 0.0f;
                 vert[14].def_color[0] = 0.0f; vert[14].def_color[1] = 1.0f; vert[14].def_color[2] = 1.0f; vert[14].def_color[3] = 1.0f;
                 vert[14].normal[0] = -1.0f; vert[14].normal[1] = 0.0f; vert[14].normal[2] = 0.0f;
+
                 vert[15].plane_coord[0] = 0.0f; vert[15].plane_coord[1] = 0.0f;
                 vert[15].def_color[0] = 0.0f; vert[15].def_color[1] = 1.0f; vert[15].def_color[2] = 1.0f; vert[15].def_color[3] = 1.0f;
                 vert[15].normal[0] = -1.0f; vert[15].normal[1] = 0.0f; vert[15].normal[2] = 0.0f;
 
-                /* 5th side */
+
+
+                /* 5th side (top) */
                 vert[16].plane_coord[0] = 0.0f; vert[16].plane_coord[1] = 0.0f;
                 vert[16].def_color[0] = 0.0f; vert[16].def_color[1] = 0.0f; vert[16].def_color[2] = 1.0f; vert[16].def_color[3] = 1.0f;
                 vert[16].normal[0] = 0.0f; vert[16].normal[1] = 1.0f; vert[16].normal[2] = 0.0f;
+
                 vert[17].plane_coord[0] = 1.0f; vert[17].plane_coord[1] = 0.0f;
                 vert[17].def_color[0] = 0.0f; vert[17].def_color[1] = 0.0f; vert[17].def_color[2] = 1.0f; vert[17].def_color[3] = 1.0f;
                 vert[17].normal[0] = 0.0f; vert[17].normal[1] = 1.0f; vert[17].normal[2] = 0.0f;
+
                 vert[18].plane_coord[0] = 1.0f; vert[18].plane_coord[1] = 1.0f;
                 vert[18].def_color[0] = 0.0f; vert[18].def_color[1] = 0.0f; vert[18].def_color[2] = 1.0f; vert[18].def_color[3] = 1.0f;
                 vert[18].normal[0] = 0.0f; vert[18].normal[1] = 1.0f; vert[18].normal[2] = 0.0f;
+
                 vert[19].plane_coord[0] = 0.0f; vert[19].plane_coord[1] = 1.0f;
                 vert[19].def_color[0] = 0.0f; vert[19].def_color[1] = 0.0f; vert[19].def_color[2] = 1.0f; vert[19].def_color[3] = 1.0f;
                 vert[19].normal[0] = 0.0f; vert[19].normal[1] = 1.0f; vert[19].normal[2] = 0.0f;
 
-                /* 6th side */
+
+
+                /* 6th side (bottom) */
                 vert[20].plane_coord[0] = 1.0f; vert[20].plane_coord[1] = 1.0f;
                 vert[20].def_color[0] = 1.0f; vert[20].def_color[1] = 0.0f; vert[20].def_color[2] = 1.0f; vert[20].def_color[3] = 1.0f;
                 vert[20].normal[0] = 0.0f; vert[20].normal[1] = -1.0f; vert[20].normal[2] = 0.0f;
+
                 vert[21].plane_coord[0] = 0.0f; vert[21].plane_coord[1] = 1.0f;
                 vert[21].def_color[0] = 1.0f; vert[21].def_color[1] = 0.0f; vert[21].def_color[2] = 1.0f; vert[21].def_color[3] = 1.0f;
                 vert[21].normal[0] = 0.0f; vert[21].normal[1] = -1.0f; vert[21].normal[2] = 0.0f;
+
                 vert[22].plane_coord[0] = 0.0f; vert[22].plane_coord[1] = 0.0f;
                 vert[22].def_color[0] = 1.0f; vert[22].def_color[1] = 0.0f; vert[22].def_color[2] = 1.0f; vert[22].def_color[3] = 1.0f;
                 vert[22].normal[0] = 0.0f; vert[22].normal[1] = -1.0f; vert[22].normal[2] = 0.0f;
+
                 vert[23].plane_coord[0] = 1.0f; vert[23].plane_coord[1] = 0.0f;
                 vert[23].def_color[0] = 1.0f; vert[23].def_color[1] = 0.0f; vert[23].def_color[2] = 1.0f; vert[23].def_color[3] = 1.0f;
                 vert[23].normal[0] = 0.0f; vert[23].normal[1] = -1.0f; vert[23].normal[2] = 0.0f;
+
 
                 for (size_t k = 0; k < 4 * CUBE_SIDES; ++k)
                         vert[k].position[3] = 1.0f;

@@ -32,3 +32,11 @@
 ../utils/opengl.cpp
 ../utils/opengl.h
 ../utils/simple_vectors.h
+../shaders/vshader_y_spin.txt
+../shaders/vshader_simple.txt
+../shaders/vshader_full.txt
+../shaders/fshader_tex.txt
+../shaders/fshader_simple.txt
+../shaders/fshader_lambert.txt
+../shaders/fshader_circle.txt
+../shaders/fshader_blur.txt

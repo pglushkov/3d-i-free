@@ -12,14 +12,16 @@
 
 template<typename T> MySquareMatrix<T, 4> CreateOXRotation(float angle)
 {
-        MySquareMatrix<T, 4> r;
+        // !!!!!!!!! ATTENTION !!!!!!!!!!!!
+        // GENERATION ROTATION MATRIX FOR ROW-BASED POSITION VECTOR !
+        // I.E. MAKING COLUMN-BASED ROTATION MATRIX !
 
-//        float rad = (angle/360.0f) * 2.0f * M_PI;
+        MySquareMatrix<T, 4> r;
         float rad = my_utils::DegToRad(angle);
 
         r[1][1] = cos(rad);
-        r[1][2] = -sin(rad);
-        r[2][1] = sin(rad);
+        r[1][2] = sin(rad);
+        r[2][1] = -sin(rad);
         r[2][2] = cos(rad);
 
         return r;
@@ -27,14 +29,16 @@ template<typename T> MySquareMatrix<T, 4> CreateOXRotation(float angle)
 
 template<typename T> MySquareMatrix<T, 4> CreateOYRotation(float angle)
 {
-        MySquareMatrix<T, 4> r;
+        // !!!!!!!!! ATTENTION !!!!!!!!!!!!
+        // GENERATION ROTATION MATRIX FOR ROW-BASED POSITION VECTOR !
+        // I.E. MAKING COLUMN-BASED ROTATION MATRIX !
 
-//        float rad = (angle/360.0f) * 2.0f * M_PI;
+        MySquareMatrix<T, 4> r;
         float rad = my_utils::DegToRad(angle);
 
         r[0][0] = cos(rad);
-        r[0][2] = sin(rad);
-        r[2][0] = -sin(rad);
+        r[0][2] = -sin(rad);
+        r[2][0] = sin(rad);
         r[2][2] = cos(rad);
 
         return r;
@@ -42,14 +46,16 @@ template<typename T> MySquareMatrix<T, 4> CreateOYRotation(float angle)
 
 template<typename T> MySquareMatrix<T, 4> CreateOZRotation(float angle)
 {
-        MySquareMatrix<T, 4> r;
+        // !!!!!!!!! ATTENTION !!!!!!!!!!!!
+        // GENERATION ROTATION MATRIX FOR ROW-BASED POSITION VECTOR !
+        // I.E. MAKING COLUMN-BASED ROTATION MATRIX !
 
-//        float rad = (angle/360.0f) * 2.0f * M_PI;
+        MySquareMatrix<T, 4> r;
         float rad = my_utils::DegToRad(angle);
 
         r[0][0] = cos(rad);
-        r[0][1] = -sin(rad);
-        r[1][0] = sin(rad);
+        r[0][1] = sin(rad);
+        r[1][0] = -sin(rad);
         r[1][1] = cos(rad);
 
         return r;
@@ -57,15 +63,19 @@ template<typename T> MySquareMatrix<T, 4> CreateOZRotation(float angle)
 
 template<typename T> MySquareMatrix<T, 4> CreateAxisRotation(T x, T y, T z, float angle)
 {
+        // !!!!!!!!! ATTENTION !!!!!!!!!!!!
+        // GENERATION ROTATION MATRIX FOR ROW-BASED POSITION VECTOR !
+        // I.E. MAKING COLUMN-BASED ROTATION MATRIX !
+
         float rad = my_utils::DegToRad(angle);
         float COS = cos(rad);
         float SIN = sin(rad);
 
         MySquareMatrix<T, 4> r;
 
-        r[0][0] = COS + (1.0f - COS)*x*x;       r[0][1] = (1.0f - COS)*x*y - SIN*z;     r[0][2] = (1.0f - COS)*x*z + SIN*y;
-        r[1][0] = (1.0f - COS)*y*x + SIN*z;     r[1][1] = COS + (1.0f - COS)*y*y;       r[1][2] = (1.0f - COS)*y*z - SIN*x;
-        r[2][0] = (1.0f - COS)*z*x - SIN*y;     r[2][1] = (1.0f - COS)*z*y + SIN*x;     r[2][2] = COS + (1.0f - COS)*z*z;
+        r[0][0] = COS + (1.0f - COS)*x*x;       r[0][1] = (1.0f - COS)*x*y + SIN*z;     r[0][2] = (1.0f - COS)*x*z - SIN*y;
+        r[1][0] = (1.0f - COS)*y*x - SIN*z;     r[1][1] = COS + (1.0f - COS)*y*y;       r[1][2] = (1.0f - COS)*y*z + SIN*x;
+        r[2][0] = (1.0f - COS)*z*x + SIN*y;     r[2][1] = (1.0f - COS)*z*y - SIN*x;     r[2][2] = COS + (1.0f - COS)*z*z;
 
         return r;
 }
@@ -85,6 +95,13 @@ public:
         {
                 for (size_t k = 0; k < this->size - 1; ++k)
                         this->data[k][this->size - 1] += tr[k];
+        }
+
+        void Translate(const T x, const T y, const T z)
+        {
+                this->data[0][3] += x;
+                this->data[1][3] += y;
+                this->data[2][3] += z;
         }
 
         void SetPosition(const translation_vector& pos)
@@ -199,10 +216,6 @@ public:
                 data.Reset();
         }
 
-        void SetPerspective( T per)
-        {
-                /* not quite sure yet how to properly implement it ... */
-        }
 };
 
 
@@ -244,6 +257,8 @@ public:
 		data[3][2] = -1.0f;
 		data[3][3] = 0.0f;
 
+        /* dbg */
+        //data.Reset();
 	}
 
         void TRACE() { data.TRACE(); }

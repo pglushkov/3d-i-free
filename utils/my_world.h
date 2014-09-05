@@ -61,7 +61,10 @@ public:
         static void CameraStepSide(float step);
 
         static const char* Default_VShader() { return "../shaders/vshader_full.txt"; }
-        static const char* Default_FShader() { return "../shaders/fshader_lambert.txt"; }
+        //static const char* Default_FShader() { return "../shaders/fshader_lambert.txt"; }
+
+        //static const char* Default_VShader() { return "../shaders/vshader_simple.txt"; }
+        static const char* Default_FShader() { return "../shaders/fshader_simple.txt"; }
 
         static const MyMaterial& GetDefaultMaterial() { return default_mater; }
 private:

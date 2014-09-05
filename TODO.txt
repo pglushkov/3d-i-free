@@ -15,6 +15,18 @@
         - play with light direction relatively to camera position (done)
 
         26 Aug 2014
+!!!!!!!!!!!!!!!!!!!!!
+	0.1) SEEMS LIKE YOUR ROTATION MATRICES HAVE WRONG ORIENTATION COLUMN-ROW-WISE! FIX IT!!!!
+		- Fixed for example 'keyboard_rotate'!
+		- Make same thing for 'camera_move' example, cause for now it expects old broken type of rotatio
+		matrices, while they've been fixed to correct ones!!!
+		- after that - go on with further tasks
+	0.2) STILL HAVE NO CLUE, WHY WE SEE SUCH PERVERTED PICTURE WHEN NOT USING PROJECTION MATRIX !!!!
+		- when we use projection matrix we have classic right-handed coordinate-system, i.e. Z points 'out of
+		the monitor', X points right, Y points up
+		- when NOT using projection matrix - Z axis seems inverted. WTF?!?!?!?
+!!!!!!!!!!!!!!!!!!!!!
+
 1) Fix MyWorld::default_material
 2) finish material-related refactoring
 3) create separate class for the camera!

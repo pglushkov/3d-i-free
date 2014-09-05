@@ -169,7 +169,7 @@ void MyMesh::draw(const MyMaterial &mater)
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ord_buffer_id);   // binding current vertex-order buffer
 
         BindShadersAttributes(mater); // passing attributes markup to the shader
-	BindUniforms(mater);
+        BindUniforms(mater);
 
         // actual drawing
         glDrawElements(GL_TRIANGLES, geom.GetOrderNum(), GL_UNSIGNED_SHORT, (const void *)(0));
@@ -183,7 +183,7 @@ void MyMesh::draw()
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ord_buffer_id);   // binding current vertex-order buffer
 
         BindShadersAttributes(MyWorld::GetDefaultMaterial()); // passing attributes markup to the shader
-	BindUniforms(MyWorld::GetDefaultMaterial());
+        BindUniforms(MyWorld::GetDefaultMaterial());
 
         // actual drawing
         glDrawElements(GL_TRIANGLES, geom.GetOrderNum(), GL_UNSIGNED_SHORT, (const void *)(0));
