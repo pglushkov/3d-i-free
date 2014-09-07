@@ -136,20 +136,20 @@ public:
         	if ( row >= size || col >= size)
         		throw std::runtime_error("In MySquareMatrix.Minor() : invalid row / col input params!");
 //        	Squareuconst unsigned int sz = dim - 1;
-		MySquareMatrix<T, dim - 1> res;
+            MySquareMatrix<T, dim - 1> res;
 
-		unsigned int rr = 0;
-		unsigned int cc = 0;
-		for ( unsigned int r = 0; r < size; ++r) {
-			if ( r == row) continue;
-			for (unsigned int c = 0; c < size; ++c) {
-				if (c == col) continue;
-				res[rr][cc++] = _data[r][c];
-			}
-			cc = 0;
-			rr++;
-		}
-		return res;
+            unsigned int rr = 0;
+            unsigned int cc = 0;
+            for ( unsigned int r = 0; r < size; ++r) {
+                if ( r == row) continue;
+                for (unsigned int c = 0; c < size; ++c) {
+                    if (c == col) continue;
+                    res[rr][cc++] = _data[r][c];
+                }
+                cc = 0;
+                rr++;
+            }
+            return res;
         }
 
         T Cofactor(unsigned int row, unsigned int col)
@@ -202,5 +202,19 @@ public:
 //        }
 
 };
+
+template<typename T, size_t dim>
+std::array<T, dim> operator * (const std::array<T, dim>& vec, MySquareMatrix<T, dim>& mat)
+{
+    std::array<T, dim> res;
+
+    for (size_t c = 0; c < dim; ++c) {
+        res[c] = T(0);
+        for(size_t r = 0; r < dim; ++r) {
+            res[c] += vec[r] * mat[r][c];
+        }
+    }
+    return res;
+}
 
 #endif // MY_SQUARE_MATRIX_H

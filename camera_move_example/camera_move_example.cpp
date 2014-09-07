@@ -122,6 +122,7 @@ int main(int argc, char *argv[]) {
         tex_mat.AddTexture("../data/penguin.bmp");
         std::vector<unsigned char> tex = my_utils::GenerateRgbTexture(256, 256, 255, 0, 0);
         tex_mat.AddTexture(tex, 256, 256, GL_RGB);
+        MyMaterial lam_mat(vshader.c_str(), fshader.c_str());
 
         /* INITIALIZING OBJECT POSITION */
         std::array<float, 3> default_pos({ 0.0f, 0.0f, -6.0f});
@@ -149,20 +150,20 @@ int main(int argc, char *argv[]) {
                                         exit(0);
                                 case 111: // up arrow
 //                                        MyWorld::RotateCamera_X(ROTATION_INCREMENT);
-                                        MyWorld::RotateCamera_X1(ROTATION_INCREMENT);
+                                        MyWorld::RotateCamera_X1(-ROTATION_INCREMENT);
                                         break;
                                 case 116: //down arrow
 //                                        MyWorld::RotateCamera_X(-ROTATION_INCREMENT);
-                                        MyWorld::RotateCamera_X1(-ROTATION_INCREMENT);
+                                        MyWorld::RotateCamera_X1(ROTATION_INCREMENT);
                                         break;
                                 case 113: //left arrow
 //                                        MyWorld::RotateCamera_Y(-ROTATION_INCREMENT);
-                                        MyWorld::RotateCamera_Y1(-ROTATION_INCREMENT);
+                                        MyWorld::RotateCamera_Y1(ROTATION_INCREMENT);
 //                                        MyWorld::RotateCamera_Axis(0.0f, 1.0f, 0.0f, -ROTATION_INCREMENT);
                                         break;
                                 case 114: //right arrow
 //                                        MyWorld::RotateCamera_Y(ROTATION_INCREMENT);
-                                        MyWorld::RotateCamera_Y1(ROTATION_INCREMENT);
+                                        MyWorld::RotateCamera_Y1(-ROTATION_INCREMENT);
 //                                        MyWorld::RotateCamera_Axis(0.0f, 1.0f, 0.0f, ROTATION_INCREMENT);
                                         break;
                                 case 35: // right square bracket
@@ -176,6 +177,10 @@ int main(int argc, char *argv[]) {
 //                                        MyWorld::MoveCamera_X(MOVE_INCREMENT);
                                         MyWorld::CameraStepSide(-MOVE_INCREMENT);
                                         break;
+                                case 40: // button 'd'
+//                                    MyWorld::MoveCamera_X(-MOVE_INCREMENT);
+                                        MyWorld::CameraStepSide(MOVE_INCREMENT);
+                                    break;
                                 case 25: // button 'w'
 //                                        MyWorld::MoveCamera_Z(MOVE_INCREMENT);
                                         MyWorld::CameraStepForward(MOVE_INCREMENT);
@@ -183,10 +188,6 @@ int main(int argc, char *argv[]) {
                                 case 39: // button 's'
 //                                        MyWorld::MoveCamera_Z(-MOVE_INCREMENT);
                                         MyWorld::CameraStepForward(-MOVE_INCREMENT);
-                                        break;
-                                case 40: // button 'd'
-//                                        MyWorld::MoveCamera_X(-MOVE_INCREMENT);
-                                        MyWorld::CameraStepSide(MOVE_INCREMENT);
                                         break;
                                 case 26: // button 'e'
                                         MyWorld::MoveCamera_Y(MOVE_INCREMENT);
@@ -214,7 +215,7 @@ int main(int argc, char *argv[]) {
                 mesh.draw(def_mat);
                 mesh2.draw(tex_mat);
                 for (unsigned int k = 0; k < 30; ++k)
-                        mesh_arr[k].draw();
+                        mesh_arr[k].draw(lam_mat);
 
                 glXSwapBuffers(dpy, win);
 

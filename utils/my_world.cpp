@@ -52,13 +52,15 @@ void MyWorld::RotateCamera_Y1(float angle_deg)
 
         // recover global Y-axis in world coordinates from transform of a camera
         MyPositionMatrix<float>::data_row y_axis({0.0f, 1.0f, 0.0f, 1.0f});
-        MyPositionMatrix<float>::data_row new_y = result_camera_view * y_axis;
-        new_y[2] = - new_y[2];
+//        MyPositionMatrix<float>::data_row new_y = result_camera_view * y_axis;
+//        MyPositionMatrix<float>::data_row new_y = camera_view * y_axis;
+        MyPositionMatrix<float>::data_row new_y = y_axis * camera_view.get_data();
+        //new_y[2] = - new_y[2];
 
         // putting global Y-axis origin at actual position of a camera
-        new_y[0] -= result_camera_view[0][3];
-        new_y[1] -= result_camera_view[1][3];
-        new_y[2] -= -result_camera_view[2][3];
+//        new_y[0] -= camera_view.get_data()[0][3];
+//        new_y[1] -= camera_view.get_data()[1][3];
+//        new_y[2] -= camera_view.get_data()[2][3];
 
 //        MyPositionMatrix<float>::data_row new_y1 = camera_view.get_data() * y_axis;
 //        new_y1[0] = -new_y1[0];
@@ -84,6 +86,12 @@ void MyWorld::CameraStepForward(float step)
        float x_inc = camera_direction[0] * step;
        float y_inc = camera_direction[1] * step;
        float z_inc = camera_direction[2] * step;
+
+       // default camera orientation is so, that it's
+       // 1) camera's z axis is alligned with worlds' -z axis
+       // 2) camera's x axis is alligned with worlds' -x axis
+       // 3) camera's y axis is alligned with worlds' y axis
+       // camera_direction show's camera's direction in WORLD coordinates, so have to invert x and z to see it's direction in CAMERA coordinates
 
        MoveCamera_X(-x_inc);
        MoveCamera_Y(y_inc);
@@ -111,22 +119,22 @@ void MyWorld::UpdateCameraView()
         result_camera_view = inv;
         MySquareMatrix<float, 4>::data_row axis({0.0f, 0.0f, -1.0f, 1.0f});
         MySquareMatrix<float, 4>::data_row x_axis({1.0f, 0.0f, 0.0f, 1.0f});
-        camera_direction = camera_view.get_data() * axis;
-        camera_direction[1] = -camera_direction[1];
+        camera_direction = axis * inv; //camera_view.get_data();
+//        camera_direction[1] = -camera_direction[1];
 //        camera_direction[2] = camera_direction[2];
 
         camera_position[0] = -camera_view.get_data()[0][3];
         camera_position[1] = camera_view.get_data()[1][3];
         camera_position[2] = -camera_view.get_data()[2][3];
 
-        camera_direction[0] -= camera_view.get_data()[0][3];
-        camera_direction[1] -= -camera_view.get_data()[1][3];
-        camera_direction[2] -= camera_view.get_data()[2][3];
+//        camera_direction[0] -= camera_view.get_data()[0][3];
+//        camera_direction[1] -= -camera_view.get_data()[1][3];
+//        camera_direction[2] -= camera_view.get_data()[2][3];
 
-        camera_side_direction = camera_view.get_data() * x_axis;
-        camera_side_direction[0] -= camera_view.get_data()[0][3];
-        camera_side_direction[1] -= camera_view.get_data()[1][3];
-        camera_side_direction[2] -= camera_view.get_data()[2][3];
+        camera_side_direction = x_axis * inv ; //camera_view.get_data() ;
+        //camera_side_direction[0] -= camera_view.get_data()[0][3];
+        //camera_side_direction[1] -= camera_view.get_data()[1][3];
+        //camera_side_direction[2] -= camera_view.get_data()[2][3];
 
         global_lights[0][0] = camera_position[0];
         global_lights[0][1] = camera_position[1];
@@ -135,10 +143,13 @@ void MyWorld::UpdateCameraView()
         // DBG
 //        std::cout << "direction.x=" << camera_direction[0] << " direction.y="
 //                  << camera_direction[1] << " direction.z=" << camera_direction[2] << std::endl;
-//        std::cout << "glob_pos.x=" << inv[0][3] << " glob_pos.y="
-//                  << inv[1][3] << " glob_pos.z=" << inv[2][3] << std::endl;
+
+//        std::cout << "camera_pos.x=" << camera_position[0] << " camera_pos.y="
+//                  << camera_position[1] << " camera_pos.z=" << camera_position[2] << std::endl;
+
 //        std::cout << "s_direction.x=" << camera_side_direction[0] << " s_direction.y="
 //                  << camera_side_direction[1] << " s_direction.z=" << camera_side_direction[2] << std::endl;
+
         std::cout << "light_position.x=" << global_lights[0][0] << " light_position.y="
                   << global_lights[0][1] << " light_position.z=" << global_lights[0][2] << std::endl;
 }
