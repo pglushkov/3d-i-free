@@ -1,8 +1,10 @@
 3d-i-free
 =========
 
-glx_tst dependencies:
-NOTE: seems like the only easy way to work with glx in virtualbox is MESA, native NVIDIA packages do no good ...
+NOTE: seems like the only easy way to work with glx in virtualbox is MESA, native NVIDIA packages do no good. For that
+reason yet using only MESA-related libs.
+
+DEPENDENCIES: (apt-get)
 	1) libx11-dev
 	2) mesa-common-dev
 	3) libglu1-mesa-dev

@@ -75,7 +75,7 @@ private:
 	static MyPositionMatrix<float> camera_view;
 	static MySquareMatrix<float, 4> result_camera_view;
 	static MySquareMatrix<float, 4>::data_row camera_direction;
-	static MySquareMatrix<float, 4>::data_row camera_side_direction;
+    static MySquareMatrix<float, 4>::data_row camera_right_direction;
 	static MySquareMatrix<float, 4>::data_row camera_position;
 
 	static MyMaterial default_mater;
