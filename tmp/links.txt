@@ -1,0 +1,11 @@
+http://stackoverflow.com/questions/17717600/confusion-between-c-and-opengl-matrix-order-row-major-vs-column-major
+https://www.opengl.org/sdk/docs/man/html/glUniform.xhtml
+http://www.songho.ca/opengl/gl_anglestoaxes.html
+http://3dgep.com/understanding-the-view-matrix/
+
+
+for subman:
+http://open.gl/introduction
+http://duriansoftware.com/joe/An-intro-to-modern-OpenGL.-Chapter-3:-3D-transformation-and-projection.html
+http://en.wikibooks.org/wiki/GLSL_Programming/Applying_Matrix_Transformations
+http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/
