@@ -17,3 +17,16 @@ http://www.songho.ca/opengl/gl_projectionmatrix.html
 from Kirill:
 https://gist.github.com/donkaban/c7fed0f3eb922cab3736
 https://github.com/donkaban/3d-i-free
+
+for Subman: (need to add some comments of what to 'use' and what to 'discard' in these tutorials)
+http://open.gl/introduction
+http://duriansoftware.com/joe/An-intro-to-modern-OpenGL.-Chapter-3:-3D-transformation-and-projection.html
+http://en.wikibooks.org/wiki/GLSL_Programming/Applying_Matrix_Transformations
+http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/
+
+ROTATION-TOTAL-FUCKUP-INVESTIGATION:
+http://stackoverflow.com/questions/17717600/confusion-between-c-and-opengl-matrix-order-row-major-vs-column-major
+https://www.opengl.org/sdk/docs/man/html/glUniform.xhtml
+http://www.songho.ca/opengl/gl_anglestoaxes.html
+http://3dgep.com/understanding-the-view-matrix/
+
