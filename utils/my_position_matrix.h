@@ -243,6 +243,9 @@ public:
 
 	MyProjectionMatrix(const T near, const T far, const T aspect, const T fov)
 	{
+        T near1 = near;
+        T far1 = far;
+
 		T rad = (fov / 360.0f) * 2.0f * M_PI;
 		T scale = 1.0f / tan(rad * 0.5f);
 		//T height = 1.0f;
@@ -252,8 +255,8 @@ public:
 		/* if we presume, that width = 2.0 as in opengl space and height = width / aspect, then we can write: */
 		data[0][0] = scale / aspect;
 		data[1][1] = scale;
-		data[2][2] = (-(far + near)) / (far - near);
-		data[2][3] = (-2.0f*far*near) / (far - near);
+        data[2][2] = (-(far1 + near1)) / (far1 - near1);
+        data[2][3] = (-2.0f*far1*near1) / (far1 - near1);
 		data[3][2] = -1.0f;
 		data[3][3] = 0.0f;
 

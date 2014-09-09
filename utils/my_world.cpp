@@ -74,13 +74,10 @@ void MyWorld::CameraStepForward(float step)
        // 1) camera's z axis is alligned with worlds' -z axis
        // 2) camera's x axis is alligned with worlds' -x axis
        // 3) camera's y axis is alligned with worlds' y axis
-       // camera_direction show's camera's direction in WORLD coordinates, so have to invert x and z to see it's direction in CAMERA coordinates
+       // camera_right_direction show's camera's -X-direction in WORLD coordinates, so have to invert x and z to see it's direction in CAMERA coordinates
 
-       MoveCamera_X(-x_inc);
-       MoveCamera_Y(y_inc);
-       MoveCamera_Z(-z_inc);
-
-//       UpdateCameraView();
+       camera_view.Translate( MyPositionMatrix<float>::translation_vector({x_inc, -y_inc, z_inc}) );
+       UpdateCameraView();
 }
 
 void MyWorld::CameraStepSide(float step)
@@ -96,9 +93,8 @@ void MyWorld::CameraStepSide(float step)
        // 3) camera's y axis is alligned with worlds' y axis
        // camera_right_direction show's camera's -X-direction in WORLD coordinates, so have to invert x and z to see it's direction in CAMERA coordinates
 
-       MoveCamera_X(-x_inc);
-       MoveCamera_Y(y_inc);
-       MoveCamera_Z(-z_inc);
+       camera_view.Translate( MyPositionMatrix<float>::translation_vector({x_inc, -y_inc, z_inc}) );
+       UpdateCameraView();
 }
 
 
@@ -110,10 +106,10 @@ void MyWorld::UpdateCameraView()
         // Same thing with right-direction (which is right if looking out of camera and (1,0,0) in world coordinates).
         MySquareMatrix<float, 4> inv = camera_view.get_data().Invert();
         result_camera_view = inv;
-        MySquareMatrix<float, 4>::data_row axis({0.0f, 0.0f, -1.0f, 1.0f});
-        MySquareMatrix<float, 4>::data_row x_axis({1.0f, 0.0f, 0.0f, 1.0f});
-        camera_direction = axis * inv; //camera_view.get_data();
-        camera_right_direction = x_axis * inv; //camera_view.get_data() ;
+        MySquareMatrix<float, 4>::data_row z_axis({0.0f, 0.0f, 1.0f, 1.0f});
+        MySquareMatrix<float, 4>::data_row x_axis({-1.0f, 0.0f, 0.0f, 1.0f});
+        camera_direction = z_axis * camera_view.get_data();
+        camera_right_direction = x_axis * camera_view.get_data() ;
 
         // camera space is oriented inversly to world in X and Z ...
         camera_position[0] = -camera_view.get_data()[0][3];

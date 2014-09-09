@@ -151,12 +151,12 @@ int main(int argc, char *argv[]) {
                                         mesh.GetObjTransform().Rotate_Y(ROTATION_INCREMENT);
                                         break;
                                 case 35: // right square bracket
-                                        //mesh.GetObjTransform().Rotate_Z(ROTATION_INCREMENT);
-                                        mesh.GetObjTransform().Rotate_Axis(0, 0, 1, -ROTATION_INCREMENT);
+                                        mesh.GetObjTransform().Rotate_Z(ROTATION_INCREMENT);
+                                        //mesh.GetObjTransform().Rotate_Axis(0, 0, 1, -ROTATION_INCREMENT);
                                         break;
                                 case 34: // left square bracket
-                                        //mesh.GetObjTransform().Rotate_Z(-ROTATION_INCREMENT);
-                                        mesh.GetObjTransform().Rotate_Axis(0, 0, 1, ROTATION_INCREMENT);
+                                        mesh.GetObjTransform().Rotate_Z(-ROTATION_INCREMENT);
+                                        //mesh.GetObjTransform().Rotate_Axis(0, 0, 1, ROTATION_INCREMENT);
                                         break;
                                 case 36: //Enter
                                         mesh.GetObjTransform().Reset();

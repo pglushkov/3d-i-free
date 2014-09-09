@@ -113,12 +113,12 @@ void MyMesh::BindUniforms(const MyMaterial& mater)
 
 	GLint rot = glGetUniformLocation(gl_program, "world_view_position");
 	if (rot != -1) {
-		glUniformMatrix4fv(rot, 1, false, &pos_mat.get_data()[0][0]);
+        glUniformMatrix4fv(rot, 1, true, &pos_mat.get_data()[0][0]);
 	}
 
 	GLint proj = glGetUniformLocation(gl_program, "projection");
 	if (proj != -1) {
-		glUniformMatrix4fv(proj, 1, false, &matProj.get_data()[0][0]);
+        glUniformMatrix4fv(proj, 1, true, &matProj.get_data()[0][0]);
 	}
 
 	GLint light = glGetUniformLocation(gl_program, "light_pos");
@@ -128,7 +128,7 @@ void MyMesh::BindUniforms(const MyMaterial& mater)
 
 	GLint camera = glGetUniformLocation(gl_program, "camera_transform");
 	if (camera != -1) {
-	        glUniformMatrix4fv(camera, 1, false, &view.data()[0][0]);
+            glUniformMatrix4fv(camera, 1, true, &view.data()[0][0]);
 	}
 }
 

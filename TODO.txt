@@ -35,4 +35,10 @@
 3) create separate class for the camera!
 
 
-sdafjkhasd
+	8 Sep 2014
+1) ALL FUCKED UP AGAIN ...
+	- define how matrix is passed to the shader depending on 'transpose' flag
+	- define how new basis vectors are located in transform matrix (col or row based) and bind it with glUnifirmMatrix4fv
+	- fix the damn rotation-generation routines ...
+
+
