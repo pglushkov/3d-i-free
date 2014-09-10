@@ -9,14 +9,8 @@
 #include<X11/X.h>
 #include<X11/Xlib.h>
 
-#include <utils/opengl.h>
-
-#include <utils/my_world.h>
-#include <utils/my_mesh.h>
-#include <utils/misc_utils.h>
-#include <utils/my_position_matrix.h>
-
-#include "small_tests.h"
+#include "../utils/opengl.h"
+#include "stuff.h"
 
 #define ROTATION_INCREMENT 3.0f
 #define TRANSLATION_INCREMENT 0.5f
@@ -120,9 +114,6 @@ int main(int argc, char *argv[]) {
         mesh.GetObjTransform().SetPosition(default_pos);
         mesh2.GetObjTransform().SetPosition(default_pos2);
 
-        GLfloat tst_custom_uni[3] = {1.0f, 1.0f, 1.0f};
-        mesh2.AddCustomFpUniform("tst_custom_uniform", FP32_VECTOR, tst_custom_uni, 3);
-
         while(true) {
                 for (int i = 0; i < XPending(dpy); i++)
                 {
@@ -200,7 +191,7 @@ int main(int argc, char *argv[]) {
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                mesh.draw(def_mat);
+                mesh.draw(tex_mat);
                 mesh2.draw(tex_mat);
 
                 glXSwapBuffers(dpy, win);

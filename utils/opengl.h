@@ -12,6 +12,8 @@
 #include <GL/glx.h>
 
 void print_opengl_error(const char* where);
+GLenum get_opengl_last_error();
+bool signal_of_opengl_error();
 
 #endif /* of MY_OPENGL_INCLUDES */
 

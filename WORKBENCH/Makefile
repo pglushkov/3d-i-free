@@ -4,20 +4,13 @@
 I_FREE_3D_DIR = /home/peter/DEVEL/opengl/3d-i-free/
 
 SOURCES = $(wildcard *.cpp)
-SOURCES += ../utils/my_material.cpp
-SOURCES += ../utils/my_geometry.cpp
-SOURCES += ../utils/my_mesh.cpp
-SOURCES += ../utils/opengl.cpp
-SOURCES += ../utils/misc_utils.cpp
-SOURCES += ../utils/my_world.cpp
-SOURCES += ../utils/custom_uniform_holder.cpp
 OBJECTS = $(SOURCES:%.cpp=%.o)
-TARGET = keyboard_rotate
+TARGET = workbench1
 
 COMP_FLAGS = -c -g -Wall -std=c++11
 GL_LDLIBS = -lGL -lGLw
 LD_FLAGS = -g
-CFLAGS = -I$(I_FREE_3D_DIR)
+CFLAGS = -I./
 LD_LIBS = $(GL_LDLIBS) -lfreeimage
 
 CC = g++-4.8

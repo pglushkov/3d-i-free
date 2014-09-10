@@ -98,7 +98,7 @@ void MyMesh::BindShadersAttributes(const MyMaterial& mater)
 
 void MyMesh::BindUniforms(const MyMaterial& mater)
 {
-        GLuint gl_program = mater.GetProgramHandle();
+    GLuint gl_program = mater.GetProgramHandle();
 	// setting necessary uniforms
 
 	float time = MyWorld::GetTimeSinceCreation();
@@ -130,6 +130,9 @@ void MyMesh::BindUniforms(const MyMaterial& mater)
 	if (camera != -1) {
             glUniformMatrix4fv(camera, 1, true, &view.data()[0][0]);
 	}
+
+    // now, all mandatory uniforms are bound, let's bind custom uniforms, specified by user
+    custom_uni.BindAllUniforms(gl_program);
 }
 
 MyMesh::MyMesh(const MyGeometry& igeom) : geom(igeom)

@@ -12,6 +12,8 @@ uniform float time;
 uniform mat4 projection;
 uniform vec3 light_pos;
 
+uniform vec3 tst_custom_uniform;
+
 varying vec4 figureColor;
 varying vec2 plane_coord;
 varying vec3 rnorm;
@@ -22,8 +24,9 @@ void main()
 {
         mat3 direction = mat3(world_view_position[0].xyz, world_view_position[1].xyz, world_view_position[2].xyz);
         gl_Position = vec4(in_position); // this one just draws the thing
-        figureColor = in_def_color;
+        //figureColor = in_def_color;
         //figureColor = in_position;
+        figureColor = vec4(tst_custom_uniform, 1.0);
         plane_coord = in_plane_coord;
 
         //vec4 new_pos = in_position * world_view_position * camera_transform * projection;
