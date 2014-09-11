@@ -47,4 +47,4 @@
 1) Create a workbench example for further debug and Subman:
 	- mostly C with a little C++
 	- must have at least: shader creation, vertex array creation, texturing, uniforms, transforms, all for now ...
-2) Enable core-files and debug CustomUniformHolder
+2) Enable core-files and debug CustomUniformHolder (done)

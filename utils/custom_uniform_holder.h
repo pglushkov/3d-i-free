@@ -73,7 +73,7 @@ FpUniform CreateFpMat4x4Uniform(GLfloat* vals);
 // ATTENTION!!!
 // Before calling on of further two routines, make sure that necessary shader program had been 'enabled' by glUseProgram(...)
 // If not - this routine is plainly useless!
-int BindUniform(const IntUniform& u, const char* name, const GLuint gl_program);
-int BindUniform(const FpUniform& u, const char* name, const GLuint gl_program);
+int BindUniformInt(const IntUniform& u, const char* name, const GLuint gl_program);
+int BindUniformFp(const FpUniform& u, const char* name, const GLuint gl_program);
 
 #endif // CUSTOM_UNIFORM_HOLDER_H

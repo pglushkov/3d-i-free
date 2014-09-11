@@ -99,8 +99,8 @@ void MyMesh::BindShadersAttributes(const MyMaterial& mater)
 void MyMesh::BindUniforms(const MyMaterial& mater)
 {
     GLuint gl_program = mater.GetProgramHandle();
-	// setting necessary uniforms
 
+	// setting necessary uniforms
 	float time = MyWorld::GetTimeSinceCreation();
 	const MyWorld::light_pos_vector& global_light_pos = MyWorld::GetInstance().GetGlobalLightPos(); //non static method!!!
 	MyProjectionMatrix<float>& matProj = MyWorld::GetWorldProjection();
@@ -123,7 +123,8 @@ void MyMesh::BindUniforms(const MyMaterial& mater)
 
 	GLint light = glGetUniformLocation(gl_program, "light_pos");
 	if (light != -1) {
-		glUniform3f(light, global_light_pos[0], global_light_pos[1], global_light_pos[2]);
+        glUniform3f(light, global_light_pos[0], global_light_pos[1], global_light_pos[2]);
+        //glUniform3f(light, 1.0f, 1.0f, 1.0f);
 	}
 
 	GLint camera = glGetUniformLocation(gl_program, "camera_transform");
@@ -132,7 +133,19 @@ void MyMesh::BindUniforms(const MyMaterial& mater)
 	}
 
     // now, all mandatory uniforms are bound, let's bind custom uniforms, specified by user
-    custom_uni.BindAllUniforms(gl_program);
+    //int res = custom_uni.BindSpecialUniform("uniform_my", gl_program);
+    int res = custom_uni.BindAllUniforms(gl_program);
+    if (res) {
+
+        // custom uniforms binding returned error - "we're being fucked" (c)
+        printf(" Custom uniforms binding returned %d ... (prog_id = %d) \n", res, gl_program);
+        throw std::runtime_error("ERROR in my_mesh.BindUniforms() : could not bind one of custom uniforms! Dbg needed!");
+    }
+
+//    GLint tmp = glGetUniformLocation(gl_program, "uniform_my");
+//    if (tmp != -1) {
+//        glUniform3f(tmp, 1.0f, 1.0f, 1.0f);
+//    }
 }
 
 MyMesh::MyMesh(const MyGeometry& igeom) : geom(igeom)

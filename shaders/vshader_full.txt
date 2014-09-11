@@ -8,11 +8,10 @@ attribute vec4 in_def_color;
 uniform mat4 world_view_position;
 uniform mat4 camera_transform;
 uniform float time;
-
 uniform mat4 projection;
 uniform vec3 light_pos;
-
-uniform vec3 tst_custom_uniform;
+uniform float uniform_my[3];
+//uniform vec3 uniform_my;
 
 varying vec4 figureColor;
 varying vec2 plane_coord;
@@ -24,9 +23,8 @@ void main()
 {
         mat3 direction = mat3(world_view_position[0].xyz, world_view_position[1].xyz, world_view_position[2].xyz);
         gl_Position = vec4(in_position); // this one just draws the thing
-        //figureColor = in_def_color;
+        figureColor = in_def_color/10.0 + vec4(uniform_my[0], uniform_my[1], uniform_my[2], 1.0);
         //figureColor = in_position;
-        figureColor = vec4(tst_custom_uniform, 1.0);
         plane_coord = in_plane_coord;
 
         //vec4 new_pos = in_position * world_view_position * camera_transform * projection;

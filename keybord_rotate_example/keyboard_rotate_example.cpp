@@ -80,9 +80,11 @@ int main(int argc, char *argv[]) {
 
         printf(" gl version = %s ...\n", glGetString(GL_VERSION));
         printf(" glsl version = %s ...\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
-        int max_tex_num;
+        int max_tex_num, max_uniforms;
         glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &max_tex_num);
+        glGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &max_uniforms);
         printf(" max number of textures = %d ...\n", max_tex_num);
+        printf(" max number of uniforms = %d ...\n", max_uniforms);
 
         /* GENERATING GEOMETRY */
         MyGeometry geom(geometry_gen::generate_cube(1.0f));
@@ -121,7 +123,7 @@ int main(int argc, char *argv[]) {
         mesh2.GetObjTransform().SetPosition(default_pos2);
 
         GLfloat tst_custom_uni[3] = {1.0f, 1.0f, 1.0f};
-        mesh2.AddCustomFpUniform("tst_custom_uniform", FP32_VECTOR, tst_custom_uni, 3);
+        mesh.AddCustomFpUniform("uniform_my", FP32_VECTOR, tst_custom_uni, 3);
 
         while(true) {
                 for (int i = 0; i < XPending(dpy); i++)

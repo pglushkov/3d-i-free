@@ -73,27 +73,23 @@ int UniformHolder:: BindAllUniforms(const GLuint gl_program)
 {
     int result;
 
-    printf("BindAllUniforms: step1\n");
-
     if (int_uniforms.size()) {
         iuni_holder_type::iterator i1 = int_uniforms.begin();
-        while (i1++ != int_uniforms.end()){
-            result = BindUniform( (*i1).second , (*i1).first.c_str() , gl_program);
+        while (i1 != int_uniforms.end()){
+            result = BindUniformInt( (*i1).second , (*i1).first.c_str() , gl_program);
             if (result) return result;
+            i1++;
         }
     }
-
-    printf("BindAllUniforms: step2\n");
 
     if (fp_uniforms.size()) {
         fpuni_holder_type::iterator i2 = fp_uniforms.begin();
-        while (i2++ != fp_uniforms.end()){
-            result = BindUniform( (*i2).second , (*i2).first.c_str() , gl_program);
+        while (i2 != fp_uniforms.end()){
+            result = BindUniformFp( (*i2).second , (*i2).first.c_str() , gl_program);
             if (result) return result;
+            i2++;
         }
     }
-
-    printf("BindAllUniforms: step3\n");
 
     return 0;
 }
@@ -103,14 +99,22 @@ int UniformHolder:: BindAllUniforms(const GLuint gl_program)
 // If not - this routine is plainly useless!
 int UniformHolder:: BindSpecialUniform(const char* name, const GLuint gl_program)
 {
+    //printf("Entered BIND_SPECIAL_UNIFORM, name = %s \n", name);
+
+    //DBG...
+    //fpuni_holder_type::iterator tmp = fp_uniforms.find(name);
+    //printf("%s : type=%d, size = %d : %f %f %f \n", tmp->first.c_str(), tmp->second.type, tmp->second.vals.size(), tmp->second.vals[0], tmp->second.vals[1], tmp->second.vals[2]);
+
     iuni_holder_type::iterator i1 = int_uniforms.find(name);
     if(i1 != int_uniforms.end()) {
-        return BindUniform( (*i1).second , (*i1).first.c_str() , gl_program);
+        return BindUniformInt( (*i1).second , (*i1).first.c_str() , gl_program);
     }
 
     fpuni_holder_type::iterator i2 = fp_uniforms.find(name);
     if(i2 != fp_uniforms.end()) {
-        return BindUniform( (*i2).second , (*i2).first.c_str() , gl_program);
+        int res =  BindUniformFp( (*i2).second , (*i2).first.c_str() , gl_program);
+        //printf("%s : type=%d, size = %d : %f %f %f \n", i2->first.c_str(), i2->second.type, i2->second.vals.size(), i2->second.vals[0], i2->second.vals[1], i2->second.vals[2]);
+        return res;
     }
 
     // if we got here - then specified uniform was found not in int_uniforms, nor in fp_uniforms, returning error ...
@@ -200,8 +204,10 @@ FpUniform CreateFpMat4x4Uniform(GLfloat* vals)
 // ATTENTION, YO BICHES!
 // Before calling this routine, make sure that necessary shader program had been 'enabled' by glUseProgram(...)
 // If not - this routine is plainly useless!
-int BindUniform(const IntUniform& u, const char* name, const GLuint gl_program)
+int BindUniformInt(const IntUniform& u, const char* name, const GLuint gl_program)
 {
+    printf("Entered BindUniformInt ...\n");
+
     GLint UniformHandle = glGetUniformLocation(gl_program, name );
     if (UniformHandle != -1) {
         if (u.type == INT32_VAL) {
@@ -230,9 +236,15 @@ int BindUniform(const IntUniform& u, const char* name, const GLuint gl_program)
 // ATTENTION, YO BICHES!
 // Before calling this routine, make sure that necessary shader program had been 'enabled' by glUseProgram(...)
 // If not - this routine is plainly useless!
-int BindUniform(const FpUniform& u, const char* name, const GLuint gl_program)
+int BindUniformFp(const FpUniform& u, const char* name, const GLuint gl_program)
 {
-    GLint UniformHandle = glGetUniformLocation(gl_program, name );
+    //DBG
+    //printf("Trying to bind custom uniform : (%s), type %d ... \n", name, u.type);
+    //glUseProgram(gl_program);
+    //print_opengl_error("FUCK YOU");
+
+    GLint UniformHandle = glGetUniformLocation(gl_program, name);
+    //GLint UniformHandle = glGetUniformLocation(gl_program, "uniform_my");
     if (UniformHandle != -1) {
 
         if (u.type == FP32_VAL) {
@@ -257,12 +269,19 @@ int BindUniform(const FpUniform& u, const char* name, const GLuint gl_program)
 
         // check that actual uniform passing to GPU went fine
         if ( signal_of_opengl_error() )
+        {
             return 2;
+        }
 
     } else {
         // could not find specified uniform in specified program
+        //int err = get_opengl_last_error();
+        //printf("Found uniform handle = %d , last_err = %d, prog_id = %d .. fy ... \n", UniformHandle, err, gl_program);
         return 1;
     }
+
+    //DBG
+    //printf("After passing %s : type=%d, size = %d : %f %f %f \n", name, u.type, u.vals.size(), u.vals[0], u.vals[1], u.vals[2]);
 
     return 0;
 }
