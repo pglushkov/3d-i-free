@@ -10,11 +10,11 @@
 enum CUSTOM_UNIFORM_TYPE
 {
     // current type of uniforms are formed based on types of glUniform...() routines (see https://www.opengl.org/sdk/docs/man/html/glUniform.xhtml for reference)
-    // routines of type glUniform<N><T>(...), where N = size, T = type, are not accounted for except if size = 1 (a simple vector that is)
+    // routines of type glUniform<N><T>v(...), where N = size, T = type, are not accounted for except if size = 1 (a simple array that is)
     INT32_VAL = 0,
     FP32_VAL,
-    INT32_VECTOR,
-    FP32_VECTOR,
+    INT32_ARRAY,
+    FP32_ARRAY,
     FP32_MATRIX_2x2,
     FP32_MATRIX_3x3,
     FP32_MATRIX_4x4,

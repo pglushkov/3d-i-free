@@ -1,0 +1,33 @@
+#version 130
+
+// Order of these vertex attributes DOES NOT have to be the same as it is in our TstVertex structure (see 'stuff.h')
+// These attributes are a basic starting point for any 'sane' vertex shader and they only exist in here, cause they only
+// make sense in here, i.e. there are no vertices in a fragment shader - it has no idea what it is, a vertex.
+attribute vec2 in_vertex_polygon_coord;
+attribute vec4 in_vertex_position;
+
+// our intensity uniform
+uniform float in_intensity;
+
+// varyings - these ones do not only persist among shaders, but they are also intepolated, as i've explained you
+// to show how this interpolation works, i've made a varying with a polygon coordinate of a vertex and this coordinate
+// will be used in fragment shader for calculation of the color
+varying vec2 plane_coord;
+varying float intensity;
+
+void main()
+{
+        // the whole point of a vertex shader it to set the GLSL environment variable gl_Position - by this we tell the GPU an actual
+        // position of a vertex, for which current shader is being run
+
+        // There are also dozens of other non-mandatory variables, starting with gl_<HUYHUY>. RTFM for reference.
+
+        // ONE MORE THING!!! GLSL is not a C or CPP or any other thing alike. It seems the same, but it is not, so don't be surprised
+        // to get dozens of compilation errors. I've added shader compilation log output to the program in case compilation failed (see stuff.cpp)
+
+        gl_Position = vec4(in_vertex_position); // this one just draws the thing right where it is
+        plane_coord = in_vertex_polygon_coord; // do not alter this thing as well
+
+        intensity = in_intensity;
+}
+

@@ -1,0 +1,21 @@
+
+
+Hey there!
+
+I guess you'll definatelly check a file with such a pretty name, so here's da message.
+
+You've told me, that you wanted to kick-off with some simple 2d example, so i've assempled one for ya.
+Check the code at ./WORKBENCH/get_started_example. It's a messy c-style code, but i hope it will be
+clear enough to catch some basic concepts and to have some actual code to start playing around with.
+But when you do start changing it - please, form some another folder from it, cause this one is easy
+enough to painlessly add some quick changes, debug some shit, twist some matrix, etc. It's not completely
+finished for now, i'll also add:
+	- camera/projection
+	- texturing
+Or, if you want, you can add these things yoself, plenty of examples are at ./utils and ./camera_rotate_example
+
+I've tried to leave some short comments on actions taking place in the code, but please feel free to ask
+any questions.
+
+As always, eat a dick :)  8======================================================================================Э (yeah, that's me)
+

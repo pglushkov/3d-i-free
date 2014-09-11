@@ -5,7 +5,7 @@ I_FREE_3D_DIR = /home/peter/DEVEL/opengl/3d-i-free/
 
 SOURCES = $(wildcard *.cpp)
 OBJECTS = $(SOURCES:%.cpp=%.o)
-TARGET = workbench1
+TARGET = example
 
 COMP_FLAGS = -c -g -Wall -std=c++11
 GL_LDLIBS = -lGL -lGLw

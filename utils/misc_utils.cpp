@@ -14,6 +14,9 @@ namespace my_utils
 
 std::string ReadTextFromFile(const char* file)
 {
+        //DBG
+        printf("ReadTextFromFile : file to open = (%s)\n", file);
+
         std::ifstream read;
         read.open(file, std::ifstream::in);
         std::vector<char> data;

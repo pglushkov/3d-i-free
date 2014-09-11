@@ -1,0 +1,13 @@
+#version 130
+
+varying vec2 plane_coord;
+varying float intensity;
+
+void main()
+{
+        // the whole point of a fragment shader it to set the GLSL environment variable gl_FragColor - by this we tell the GPU an actual
+        // color of a 'virtual' pixel, for which current shader is being run
+
+        gl_FragColor = vec4(plane_coord[0], plane_coord[1], 0.0, 1.0f) * intensity;
+}
+

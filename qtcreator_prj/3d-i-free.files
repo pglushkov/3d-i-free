@@ -40,8 +40,10 @@
 ../shaders/fshader_lambert.txt
 ../shaders/fshader_circle.txt
 ../shaders/fshader_blur.txt
-../WORKBENCH/stuff.h
-../WORKBENCH/workbench1.cpp
-../WORKBENCH/stuff.cpp
 ../utils/custom_uniform_holder.h
 ../utils/custom_uniform_holder.cpp
+../WORKBENCH/get_started_example/stuff.h
+../WORKBENCH/get_started_example/stuff.cpp
+../WORKBENCH/get_started_example/simple_example.cpp
+../WORKBENCH/get_started_example/vshader_simple.txt
+../WORKBENCH/get_started_example/fshader_simple.txt

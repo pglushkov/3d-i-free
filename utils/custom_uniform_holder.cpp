@@ -15,7 +15,7 @@ void UniformHolder:: AddIntUniform ( CUSTOM_UNIFORM_TYPE type, const char* name,
         case INT32_VAL:
             int_uniforms[name] = CreateIntValUniform(data[0]);
             break;
-        case INT32_VECTOR:
+        case INT32_ARRAY:
             int_uniforms[name] = CreateIntVecUniform(data, size);
             break;
         default:
@@ -33,7 +33,7 @@ void UniformHolder:: AddFpUniform ( CUSTOM_UNIFORM_TYPE type, const char* name, 
         case FP32_VAL:
             fp_uniforms[name] = CreateFpValUniform(data[0]);
             break;
-        case FP32_VECTOR:
+        case FP32_ARRAY:
             fp_uniforms[name] = CreateFpVecUniform(data, size);
             break;
         case FP32_MATRIX_2x2:
@@ -140,7 +140,7 @@ IntUniform CreateIntValUniform(GLint val)
 IntUniform CreateIntVecUniform(GLint* vals, size_t count)
 {
     IntUniform res;
-    res.type = INT32_VECTOR;
+    res.type = INT32_ARRAY;
     res.vals.resize(count);
     res.vals.assign(vals, vals + count);
 
@@ -160,7 +160,7 @@ FpUniform CreateFpValUniform(GLfloat val)
 FpUniform CreateFpVecUniform(GLfloat* vals, size_t count)
 {
     FpUniform res;
-    res.type = FP32_VECTOR;
+    res.type = FP32_ARRAY;
     res.vals.resize(count);
     res.vals.assign(vals, vals + count);
 
@@ -213,7 +213,7 @@ int BindUniformInt(const IntUniform& u, const char* name, const GLuint gl_progra
         if (u.type == INT32_VAL) {
             glUniform1i(UniformHandle, u.vals[0]);
 
-        } else if (u.type == INT32_VECTOR) {
+        } else if (u.type == INT32_ARRAY) {
             glUniform1iv(UniformHandle, u.vals.size(), &u.vals[0]);
 
         } else {
@@ -250,7 +250,7 @@ int BindUniformFp(const FpUniform& u, const char* name, const GLuint gl_program)
         if (u.type == FP32_VAL) {
             glUniform1f(UniformHandle, u.vals[0]);
 
-        } else if (u.type == FP32_VECTOR) {
+        } else if (u.type == FP32_ARRAY) {
             glUniform1fv(UniformHandle, u.vals.size(), &u.vals[0]);
 
         } else if (u.type == FP32_MATRIX_2x2) {

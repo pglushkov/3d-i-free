@@ -9,11 +9,7 @@
 #include<X11/X.h>
 #include<X11/Xlib.h>
 
-#include "../utils/opengl.h"
 #include "stuff.h"
-
-#define ROTATION_INCREMENT 3.0f
-#define TRANSLATION_INCREMENT 0.5f
 
 Display                 *dpy;
 Window                  root;
@@ -28,14 +24,12 @@ XEvent                  xev;
 
 #define WIN_WIDTH 640
 #define WIN_HEIGHT 480
-#define ASPECT_RATIO (float)WIN_WIDTH / (float)WIN_HEIGHT
 
 int main(int argc, char *argv[]) {
 
-        // test_free_image();
-        // test_pos_mat();
-//        test_square_matrix();
-//        return 0;
+        // ===============================================================================================================
+        // ========================= this is a basic code to create x-server window and pass a handle to it's context to GL
+        // ===============================================================================================================
 
         dpy = XOpenDisplay(NULL);
 
@@ -69,53 +63,48 @@ int main(int argc, char *argv[]) {
         glc = glXCreateContext(dpy, vi, NULL, GL_TRUE);
         glXMakeCurrent(dpy, win, glc);
 
+        // ===============================================================================================================
+        // ================= end of x-server related setup code ==========================================================
+        // ===============================================================================================================
+
+
+
+
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
 
+        // SOME DIAG OUTPUT, NEVERMIND...
         printf(" gl version = %s ...\n", glGetString(GL_VERSION));
         printf(" glsl version = %s ...\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
         int max_tex_num;
         glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &max_tex_num);
         printf(" max number of textures = %d ...\n", max_tex_num);
 
-        /* GENERATING GEOMETRY */
-        MyGeometry geom(geometry_gen::generate_cube(1.0f));
-//        MyGeometry geom(geometry_gen::generate_rectangle(1.0f, 1.0f));
-//        MyGeometry geom(geometry_gen::generate_rectangle_two_sides(2.0f, 2.0f));
+        // GENERATING GEOMETRY -  ARRAY OF VERTICES AND ORDER OF THEIR TRAVERSAL
+        float width = 1.0f;
+        float height = 1.0f;
+        std::vector<TstVertex> vertices;
+        std::vector<unsigned short> vertices_order;
+        generate_rectangle(width, height, vertices, vertices_order);
 
-        /* SELECTING SHADERS TO DRAW */
-        /* VERTEX SHADER */
-        //std::string vshader("../shaders/vshader_simple.txt");
-        std::string vshader("../shaders/vshader_full.txt");
-        std::string vshader1("../shaders/vshader_y_spin.txt");
-        std::string vshader2("../shaders/vshader_simple");
-        /* FRAGMENT SHADER */
-        std::string fshader("../shaders/fshader_lambert.txt");
-        std::string fshader1("../shaders/fshader_tex.txt");
-        std::string fshader2("../shaders/fshader_simple.txt");
+        // LOADING GENERATED GEOMETRY DATA TO THE GPU
+        GLuint vertices_buffer_id, vert_order_buffer_id;
+        load_geometry_to_gpu(vertices, vertices_order, vertices_buffer_id, vert_order_buffer_id);
 
-        /* GENERATING A DRAWABLE OBJECT (MESH) */
-        MyMesh mesh(geom);
-        MyMesh mesh2(geom);
-        //mesh.TRACE_GEOM();
+        // CREATING COMPILED SHADER OBJECTS, CREATING GL PROGRAM FROM COMPILED SHADERS, LINKING THE PROGRAM
+        GLuint gl_program;
+        create_shader_program("vshader_simple.txt", "fshader_simple.txt", gl_program);
+        link_shader_program(gl_program);
 
-        /* TEXTURING */
-        /* TEXTURING */
-        MyMaterial def_mat(MyWorld::Default_VShader(), MyWorld::Default_FShader());
-        MyMaterial tex_mat(vshader.c_str(), fshader1.c_str());
-        tex_mat.AddTexture("../data/penguin.bmp");
-        std::vector<unsigned char> tex = my_utils::GenerateRgbTexture(256, 256, 255, 0, 0);
-        tex_mat.AddTexture(tex, 256, 256, GL_RGB);
+        // FOR NOW THIS WILL BE THE ONLY UNIFORM, BY WICH WE'WILL TUNE OUR SHADER PROGRAM
+        float intensity = 0.5f;
 
-        /* INITIALIZING OBJECT POSITION */
-        std::array<float, 3> default_pos({ 0.0f, 0.0f, -6.0f});
-        std::array<float, 3> default_pos2({ 2.0f, 2.5f, -10.0f});
+        // "ADDING" TEXTURES TO THE SHADER PROGRAM
+        // to do ...
 
-        mesh.GetObjTransform().SetPosition(default_pos);
-        mesh2.GetObjTransform().SetPosition(default_pos2);
-
+        // MAIN EXECUTION LOOP - PICKING EVENTS FROM X-SERVER SYSTEM AND REACTING TO THEM
         while(true) {
-                for (int i = 0; i < XPending(dpy); i++)
+                for (int i = 0; i < XPending(dpy); i++) // Have to process all events, cause XPending is a thread-blocking call
                 {
                     XNextEvent(dpy, &xev);
                     switch(xev.type)
@@ -125,6 +114,8 @@ int main(int argc, char *argv[]) {
                             printf("KeyPress: keycode %u state %u\n", xev.xkey.keycode, xev.xkey.state);
                             switch (xev.xkey.keycode)
                             {
+                                // just some common keycodes are processed ...
+
                                 case 9: //ESC
                                         glXMakeCurrent(dpy, None, NULL);
                                         glXDestroyContext(dpy, glc);
@@ -132,53 +123,34 @@ int main(int argc, char *argv[]) {
                                         XCloseDisplay(dpy);
                                         exit(0);
                                 case 111: // up arrow
-                                        mesh.GetObjTransform().Rotate_X(-ROTATION_INCREMENT);
+                                        // increase the intensity
+                                        intensity += 0.05;
                                         break;
                                 case 116: //down arrow
-                                        mesh.GetObjTransform().Rotate_X(ROTATION_INCREMENT);
-                                        //matWorldPos.Translate(std::array<float, 3> ({0.0f, 0.0f, 0.1f}));
+                                        // decrease the intensity
+                                        intensity -= 0.05;
                                         break;
                                 case 113: //left arrow
-                                        mesh.GetObjTransform().Rotate_Y(-ROTATION_INCREMENT);
                                         break;
                                 case 114: //right arrow
-                                        mesh.GetObjTransform().Rotate_Y(ROTATION_INCREMENT);
                                         break;
                                 case 35: // right square bracket
-                                        mesh.GetObjTransform().Rotate_Z(ROTATION_INCREMENT);
-                                        //mesh.GetObjTransform().Rotate_Axis(0, 0, 1, -ROTATION_INCREMENT);
                                         break;
                                 case 34: // left square bracket
-                                        mesh.GetObjTransform().Rotate_Z(-ROTATION_INCREMENT);
-                                        //mesh.GetObjTransform().Rotate_Axis(0, 0, 1, ROTATION_INCREMENT);
                                         break;
                                 case 36: //Enter
-                                        mesh.GetObjTransform().Reset();
-                                        mesh.GetObjTransform().SetPosition(default_pos);
                                         break;
                                 case 38: // button 'a'
-                                        //MyWorld::RotateCamera_Y(-ROTATION_INCREMENT);
-                                        mesh.GetObjTransform().Translate(-TRANSLATION_INCREMENT, 0, 0);
                                         break;
                                 case 25: // button 'w'
-                                        //MyWorld::RotateCamera_X(ROTATION_INCREMENT);
-                                        mesh.GetObjTransform().Translate(0, 0, -TRANSLATION_INCREMENT);
                                         break;
                                 case 39: // button 's'
-                                        //MyWorld::RotateCamera_X(-ROTATION_INCREMENT);
-                                        mesh.GetObjTransform().Translate(0, 0, TRANSLATION_INCREMENT);
                                         break;
                                 case 40: // button 'd'
-                                        //MyWorld::RotateCamera_Y(ROTATION_INCREMENT);
-                                        mesh.GetObjTransform().Translate(TRANSLATION_INCREMENT, 0, 0);
                                         break;
                                 case 26: // button 'e'
-                                        //MyWorld::RotateCamera_X(-ROTATION_INCREMENT);
-                                        mesh.GetObjTransform().Translate(0, TRANSLATION_INCREMENT, 0);
                                         break;
                                 case 24: // button 'q'
-                                        //MyWorld::RotateCamera_Y(ROTATION_INCREMENT);
-                                        mesh.GetObjTransform().Translate(0, -TRANSLATION_INCREMENT, 0);
                                         break;
                                 default:
                                         break;
@@ -191,13 +163,19 @@ int main(int argc, char *argv[]) {
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                mesh.draw(tex_mat);
-                mesh2.draw(tex_mat);
+                /* ACTUAL DRAWING */
+                draw_geometry(gl_program, vertices_buffer_id, vert_order_buffer_id, vertices_order.size(), intensity);
 
+                // SWAPPING CURRENTLY ON-SCREEN AND READY-TO-BE-RENDERED BUFFERS
                 glXSwapBuffers(dpy, win);
 
-        } /* this closes while(true) { */
-} /* this is the } which closes int main(int argc, char *argv[]) { */
+        } // end of main execution loop
+
+        //CLEAN-UP
+        glDeleteProgram(gl_program);
+
+
+} // end of main
 
 
 

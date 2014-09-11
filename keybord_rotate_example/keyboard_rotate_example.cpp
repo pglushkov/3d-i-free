@@ -123,7 +123,7 @@ int main(int argc, char *argv[]) {
         mesh2.GetObjTransform().SetPosition(default_pos2);
 
         GLfloat tst_custom_uni[3] = {1.0f, 1.0f, 1.0f};
-        mesh.AddCustomFpUniform("uniform_my", FP32_VECTOR, tst_custom_uni, 3);
+        mesh.AddCustomFpUniform("uniform_my", FP32_ARRAY, tst_custom_uni, 3);
 
         while(true) {
                 for (int i = 0; i < XPending(dpy); i++)
