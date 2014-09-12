@@ -57,7 +57,7 @@
 2) Debug actual matrix passage to GPU using custom uniforms mechanism
 
 	11 Sep 2014
-1) Add camera/projection to 'get_started_example'
+1) Add projection to 'get_started_example'
 2) Debug actual matrix transfer to GPU
 3) Fix the f'ing rotations !!!
 

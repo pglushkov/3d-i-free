@@ -5,7 +5,7 @@
 #include <vector>
 #include <stdlib.h>
 #include <string>
-
+#include <FreeImage.h>
 
 #pragma pack(4) // making sure that our structure will be alligned in memory by a 4-byte order
 // for now our each vertex is only presented by 2 vectors - it's position and it's coordinate on a polygon (or fragment, or texture, or whatever different tutorials call them)
@@ -34,4 +34,14 @@ void bind_uniforms(GLuint gl_program, float intensity);
 void bind_shaders_attributes(GLuint gl_program);
 
 void draw_geometry(GLuint gl_program, GLuint vert_buffer_id,
-                   GLuint vert_order_buffer_id, size_t vert_order_array_len, float intensity);
+                   GLuint vert_order_buffer_id, size_t vert_order_array_len, float intensity,
+                   GLuint texture_id);
+
+void bind_texture_to_shader_program(GLuint texture_id, GLuint gl_program);
+
+void load_texture_to_gpu(const char* texture_file_name, GLuint& texture_id);
+
+void read_image_from_file(const char* file, std::vector<BYTE>& buffer,
+                unsigned int &width, unsigned int &height, GLuint &gl_flag);
+
+std::string get_file_extension(const std::string& file_name);

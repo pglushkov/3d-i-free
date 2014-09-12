@@ -9,10 +9,9 @@ Check the code at ./WORKBENCH/get_started_example. It's a messy c-style code, bu
 clear enough to catch some basic concepts and to have some actual code to start playing around with.
 But when you do start changing it - please, form some another folder from it, cause this one is easy
 enough to painlessly add some quick changes, debug some shit, twist some matrix, etc. It's not completely
-finished for now, i'll also add:
-	- camera/projection
-	- texturing
-Or, if you want, you can add these things yoself, plenty of examples are at ./utils and ./camera_rotate_example
+finished for now, i also want to add a projection matrix to the code, cause (MUHAHA) Z-axis behaves
+insanely when no projection is used. I don't really want to add a camera to this example. Anyway - without
+it we can just think that camera transform is equal to unity-matrix.
 
 I've tried to leave some short comments on actions taking place in the code, but please feel free to ask
 any questions.

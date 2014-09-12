@@ -3,11 +3,20 @@
 varying vec2 plane_coord;
 varying float intensity;
 
+// pay attention that we pass ID of used texturing unit just as uniform and ofcourse using same name for this uniform in a C++ GL-client code
+uniform sampler2D my_cool_texture;
+
 void main()
 {
         // the whole point of a fragment shader it to set the GLSL environment variable gl_FragColor - by this we tell the GPU an actual
         // color of a 'virtual' pixel, for which current shader is being run
 
-        gl_FragColor = vec4(plane_coord[0], plane_coord[1], 0.0, 1.0f) * intensity;
+        // painting our texture by putting coordinate of a painted point into RED and GREEN channels of gl_FragColor...
+        // gl_FragColor = vec4(plane_coord[0], plane_coord[1], 0.0, 1.0f) * intensity;
+
+        // lets paint our fragment with a mix of some color and a texture
+        vec4 texture_color = texture2D(my_cool_texture, plane_coord);
+        gl_FragColor = vec4(plane_coord[0], plane_coord[1], 0.0, 1.0f) * intensity + texture_color;
+
 }
 

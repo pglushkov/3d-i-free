@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
 
 
 
-
+        // enabling some global GL features ...
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
 
@@ -92,6 +92,9 @@ int main(int argc, char *argv[]) {
         load_geometry_to_gpu(vertices, vertices_order, vertices_buffer_id, vert_order_buffer_id);
 
         // CREATING COMPILED SHADER OBJECTS, CREATING GL PROGRAM FROM COMPILED SHADERS, LINKING THE PROGRAM
+        // Keep in mind that as an actual shader coder is compiled when this program is run - you can freely modify a shader and than just
+        // this program again - no need to recompile THIS program. Ofcourse its only true as long as you dont add/modify names of some
+        // uniforms and vertex-attributes in the shader code.
         GLuint gl_program;
         create_shader_program("vshader_simple.txt", "fshader_simple.txt", gl_program);
         link_shader_program(gl_program);
@@ -100,7 +103,8 @@ int main(int argc, char *argv[]) {
         float intensity = 0.5f;
 
         // "ADDING" TEXTURES TO THE SHADER PROGRAM
-        // to do ...
+        GLuint texture_id;
+        load_texture_to_gpu("../../data/penguin.png", texture_id);
 
         // MAIN EXECUTION LOOP - PICKING EVENTS FROM X-SERVER SYSTEM AND REACTING TO THEM
         while(true) {
@@ -164,7 +168,7 @@ int main(int argc, char *argv[]) {
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 /* ACTUAL DRAWING */
-                draw_geometry(gl_program, vertices_buffer_id, vert_order_buffer_id, vertices_order.size(), intensity);
+                draw_geometry(gl_program, vertices_buffer_id, vert_order_buffer_id, vertices_order.size(), intensity, texture_id);
 
                 // SWAPPING CURRENTLY ON-SCREEN AND READY-TO-BE-RENDERED BUFFERS
                 glXSwapBuffers(dpy, win);
