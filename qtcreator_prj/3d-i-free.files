@@ -47,3 +47,8 @@
 ../WORKBENCH/get_started_example/simple_example.cpp
 ../WORKBENCH/get_started_example/vshader_simple.txt
 ../WORKBENCH/get_started_example/fshader_simple.txt
+../WORKBENCH/matrix_transfer_tst/stuff.h
+../WORKBENCH/matrix_transfer_tst/stuff.cpp
+../WORKBENCH/matrix_transfer_tst/matrix_to_shader_tst.cpp
+../WORKBENCH/matrix_transfer_tst/vshader_simple.glsl
+../WORKBENCH/matrix_transfer_tst/fshader_simple.glsl

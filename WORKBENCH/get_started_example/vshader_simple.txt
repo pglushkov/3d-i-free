@@ -9,9 +9,9 @@ attribute vec4 in_vertex_position;
 // our intensity uniform
 uniform float in_intensity;
 
-// varyings - these ones do not only persist among shaders, but they are also intepolated, as i've explained you
-// to show how this interpolation works, i've made a varying with a polygon coordinate of a vertex and this coordinate
-// will be used in fragment shader for calculation of the color
+// Varyings - these ones do not only persist among shaders, but they are also intepolated, as i've explained you.
+// To show how this interpolation works, i've made a varying with a polygon coordinate of a vertex and this coordinate
+// will be used in fragment shader in some way, see it's code.
 varying vec2 plane_coord;
 varying float intensity;
 

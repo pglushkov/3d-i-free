@@ -57,8 +57,14 @@
 2) Debug actual matrix passage to GPU using custom uniforms mechanism
 
 	11 Sep 2014
-1) Add projection to 'get_started_example'
-2) Debug actual matrix transfer to GPU
-3) Fix the f'ing rotations !!!
+1) Add projection to 'get_started_example' (yet delayed, need to finish research)
+2) Debug actual matrix transfer to GPU (done, it plainly sucks!)
+3) Fix the f'ing rotations !!! (in progress)
+
+	14 Sep 2014
+1) First find out - why Z axis is 'inverted' when not using projection matrix
+2) Then fix the rotations
+3) Add some explanations on what is actually going on with and without projection to get_started_example
+
 
 

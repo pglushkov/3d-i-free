@@ -6,6 +6,22 @@
 #include <iostream>
 #include <fstream>
 
+//float tst_matrix[16] =
+//    {
+//        -0.5f, 0.5f, 0.0f, 1.0f,
+//        0.5f, 0.5f, 0.0f, 1.0f,
+//        0.5f, -0.5f, 0.0f, 1.0f,
+//        -0.5f, -0.5f, 0.0f, 1.0f,
+//    };
+
+float tst_matrix[16] =
+    {
+        1.0f, 0.0f, 0.0f, 1.0f,
+        0.0f, 1.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f, 1.0f,
+        0.0f, 0.0f, 0.0f, 1.0f,
+    };
+
 void generate_rectangle(float width, float height, std::vector<TstVertex>& vert, std::vector<unsigned short>& order)
 {
         order.resize(6);
@@ -43,6 +59,19 @@ void generate_rectangle(float width, float height, std::vector<TstVertex>& vert,
         vert[3].position[0] = ltx;
         vert[3].position[1] = lty - height;
 
+//        vert[0].position[0] = 0.0f;
+//        vert[0].position[1] = 0.0f;
+//        vert[1].position[0] = 0.0f;
+//        vert[1].position[1] = 0.0f;
+//        vert[2].position[0] = 0.0f;
+//        vert[2].position[1] = 0.0f;
+//        vert[3].position[0] = 0.0f;
+//        vert[3].position[1] = 0.0f;
+
+//        // DBG
+//        for (size_t k = 0; k < 4; ++k)
+//            printf("Rectangle vertex(%d) : [%f,%f] ...\n", k+1, vert[k].position[0], vert[k].position[1]);
+
         // fragment coordinates of generate square are to be: (x,y)
 //        (0,1) --------- (1,1)
 //              |       |
@@ -50,17 +79,10 @@ void generate_rectangle(float width, float height, std::vector<TstVertex>& vert,
 //              |       |
 //        (0,0) --------- (1,0)
 
-        vert[0].frag_coord[0] = 0.0f;
-        vert[0].frag_coord[1] = 1.0f;
-
-        vert[1].frag_coord[0] = 1.0f;
-        vert[1].frag_coord[1] = 1.0f;
-
-        vert[2].frag_coord[0] = 1.0f;
-        vert[2].frag_coord[1] = 0.0f;
-
-        vert[3].frag_coord[0] = 0.0f;
-        vert[3].frag_coord[1] = 0.0f;
+        vert[0].mat_idx = 0;
+        vert[1].mat_idx = 1;
+        vert[2].mat_idx = 2;
+        vert[3].mat_idx = 3;
 
         for (size_t k = 0; k < 4; ++k) {
                 // putting square straight on XY plane by default
@@ -239,7 +261,7 @@ void bind_shaders_attributes(GLuint gl_program)
         // One more time pay attention to specified names of the attributes!
         // If the won't be found in the shader progrom - everything will fuck itself up own ass with a powerdrill!!!
         GLint pos_attr = glGetAttribLocation(gl_program, "in_vertex_position");
-        GLint pc_attr  = glGetAttribLocation(gl_program, "in_vertex_polygon_coord");
+        GLint pc_attr  = glGetAttribLocation(gl_program, "in_mat_idx");
 
 
         if(pos_attr != -1)
@@ -254,19 +276,25 @@ void bind_shaders_attributes(GLuint gl_program)
             );
 
             glEnableVertexAttribArray(pos_attr);
+        } else {
+            printf("attribute %s fuckup ...\n", "in_vertex_position");
+            throw std::runtime_error("ERROR in bind_shader_attributes() : coult not find requested attribute");
         }
 
         if(pc_attr != -1)
         {
-            glVertexAttribPointer(
+            glVertexAttribIPointer(
                 pc_attr,
-                2,                                      // attribute size, 2 floats
-                GL_FLOAT,                               // type of data in values of the attribute
-                GL_FALSE,                               // flag if we want to normalize the values (RTFM on glVertexAttribPointer)
+                1,                                      // attribute size, 1 uints
+                GL_INT,                                 // type of data in values of the attribute
+                //GL_FALSE,                               // flag if we want to normalize the values (RTFM on glVertexAttribPointer)
                 sizeof(TstVertex),                      // size of whole description for one vertex with all it's attribute
                 (const void *)(4 * sizeof(float))       // current attribute offset from the beginning of the vertex
             );
             glEnableVertexAttribArray(pc_attr);
+        } else {
+            printf("attribute %s fuckup ...\n", "in_mat_idx");
+            throw std::runtime_error("ERROR in bind_shader_attributes() : coult not find requested attribute");
         }
 
 }
@@ -279,6 +307,17 @@ void bind_uniforms(GLuint gl_program, float intensity)
     GLint uniform_handle = glGetUniformLocation(gl_program, "in_intensity");
     if (uniform_handle != -1) {
         glUniform1f(uniform_handle, intensity);
+    } else {
+        printf("uniform %s fuck-up ... \n", "in_intensity");
+        throw std::runtime_error("ERROR in bind_uniforms : Could not locate a uniform!");
+    }
+
+    uniform_handle = glGetUniformLocation(gl_program, "tst_matrix");
+    if (uniform_handle != -1) {
+        glUniformMatrix4fv(uniform_handle, 1, true, &tst_matrix[0]);
+    } else {
+        printf("uniform %s fuck-up ... \n", "tst_matrix");
+        throw std::runtime_error("ERROR in bind_uniforms : Could not locate a uniform!");
     }
 
     // uniforms can be easily passed to fragment and geometry shaders as well, it's not a strict vertex-shader privilege
