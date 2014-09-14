@@ -1,6 +1,7 @@
 
 TUTORIALS:
 http://open.gl/
+http://www.songho.ca/opengl/gl_transform.html
 
 LINEAR ALGEBRA:
 http://stackoverflow.com/questions/1148309/inverting-a-4x4-matrix
@@ -21,6 +22,7 @@ https://github.com/donkaban/3d-i-free
 for Subman: (need to add some comments of what to 'use' and what to 'discard' in these tutorials)
 http://open.gl/introduction
 http://duriansoftware.com/joe/An-intro-to-modern-OpenGL.-Chapter-3:-3D-transformation-and-projection.html
+http://www.songho.ca/opengl/gl_transform.html
 http://en.wikibooks.org/wiki/GLSL_Programming/Applying_Matrix_Transformations
 http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/
 
