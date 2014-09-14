@@ -175,19 +175,19 @@ int main(int argc, char *argv[]) {
                                         break;
                                 case 38: // button 'a'
 //                                        MyWorld::MoveCamera_X(MOVE_INCREMENT);
-                                        MyWorld::CameraStepSide(-MOVE_INCREMENT);
+                                        MyWorld::CameraStepSide(MOVE_INCREMENT);
                                         break;
                                 case 40: // button 'd'
 //                                    MyWorld::MoveCamera_X(-MOVE_INCREMENT);
-                                        MyWorld::CameraStepSide(MOVE_INCREMENT);
+                                        MyWorld::CameraStepSide(-MOVE_INCREMENT);
                                     break;
                                 case 25: // button 'w'
 //                                        MyWorld::MoveCamera_Z(MOVE_INCREMENT);
-                                        MyWorld::CameraStepForward(MOVE_INCREMENT);
+                                        MyWorld::CameraStepForward(-MOVE_INCREMENT);
                                         break;
                                 case 39: // button 's'
 //                                        MyWorld::MoveCamera_Z(-MOVE_INCREMENT);
-                                        MyWorld::CameraStepForward(-MOVE_INCREMENT);
+                                        MyWorld::CameraStepForward(MOVE_INCREMENT);
                                         break;
                                 case 26: // button 'e'
                                         MyWorld::MoveCamera_Y(MOVE_INCREMENT);
@@ -212,7 +212,7 @@ int main(int argc, char *argv[]) {
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                mesh.draw(def_mat);
+                mesh.draw(lam_mat);
                 mesh2.draw(tex_mat);
                 for (unsigned int k = 0; k < 30; ++k)
                         mesh_arr[k].draw(lam_mat);

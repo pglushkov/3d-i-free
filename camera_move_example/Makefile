@@ -10,6 +10,7 @@ SOURCES += ../utils/my_mesh.cpp
 SOURCES += ../utils/opengl.cpp
 SOURCES += ../utils/misc_utils.cpp
 SOURCES += ../utils/my_world.cpp
+SOURCES += ../utils/custom_uniform_holder.cpp
 OBJECTS = $(SOURCES:%.cpp=%.o)
 TARGET = camera_move
 

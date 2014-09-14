@@ -23,16 +23,16 @@ void main()
 {
         mat3 direction = mat3(world_view_position[0].xyz, world_view_position[1].xyz, world_view_position[2].xyz);
         gl_Position = vec4(in_position); // this one just draws the thing
-        figureColor = in_def_color/10.0 + vec4(uniform_my[0], uniform_my[1], uniform_my[2], 1.0);
+        figureColor = in_def_color;//10.0 + vec4(uniform_my[0], uniform_my[1], uniform_my[2], 1.0);
         //figureColor = in_position;
         plane_coord = in_plane_coord;
 
         //vec4 new_pos = in_position * world_view_position * camera_transform * projection;
         vec4 new_pos = projection * camera_transform * world_view_position * in_position;
-        vec4 new_pos_orto = in_position * world_view_position;
+        vec4 new_pos_orto = world_view_position * in_position;
 
         gl_Position = new_pos;
-        rnorm = in_norm * direction;
+        rnorm = direction * in_norm;
         light_dir = normalize(light_pos - vec3(new_pos_orto.xyz));
         light_dist = length(light_pos - vec3(new_pos_orto.xyz));
 }

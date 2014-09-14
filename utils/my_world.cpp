@@ -76,7 +76,7 @@ void MyWorld::CameraStepForward(float step)
        // 3) camera's y axis is alligned with worlds' y axis
        // camera_right_direction show's camera's -X-direction in WORLD coordinates, so have to invert x and z to see it's direction in CAMERA coordinates
 
-       camera_view.Translate( MyPositionMatrix<float>::translation_vector({x_inc, -y_inc, z_inc}) );
+       camera_view.Translate( MyPositionMatrix<float>::translation_vector({-x_inc, y_inc, -z_inc}) );
        UpdateCameraView();
 }
 
@@ -93,7 +93,7 @@ void MyWorld::CameraStepSide(float step)
        // 3) camera's y axis is alligned with worlds' y axis
        // camera_right_direction show's camera's -X-direction in WORLD coordinates, so have to invert x and z to see it's direction in CAMERA coordinates
 
-       camera_view.Translate( MyPositionMatrix<float>::translation_vector({x_inc, -y_inc, z_inc}) );
+       camera_view.Translate( MyPositionMatrix<float>::translation_vector({-x_inc, y_inc, -z_inc}) );
        UpdateCameraView();
 }
 
@@ -108,8 +108,8 @@ void MyWorld::UpdateCameraView()
         result_camera_view = inv;
         MySquareMatrix<float, 4>::data_row z_axis({0.0f, 0.0f, 1.0f, 1.0f});
         MySquareMatrix<float, 4>::data_row x_axis({-1.0f, 0.0f, 0.0f, 1.0f});
-        camera_direction = z_axis * camera_view.get_data();
-        camera_right_direction = x_axis * camera_view.get_data() ;
+        camera_direction = z_axis * inv; //camera_view.get_data();
+        camera_right_direction = x_axis * inv; //camera_view.get_data() ;
 
         // camera space is oriented inversly to world in X and Z ...
         camera_position[0] = -camera_view.get_data()[0][3];
@@ -125,8 +125,8 @@ void MyWorld::UpdateCameraView()
         std::cout << "direction.x=" << camera_direction[0] << " direction.y="
                   << camera_direction[1] << " direction.z=" << camera_direction[2] << std::endl;
 
-//        std::cout << "camera_pos.x=" << camera_position[0] << " camera_pos.y="
-//                  << camera_position[1] << " camera_pos.z=" << camera_position[2] << std::endl;
+        std::cout << "camera_pos.x=" << camera_position[0] << " camera_pos.y="
+                  << camera_position[1] << " camera_pos.z=" << camera_position[2] << std::endl;
 
 //        std::cout << "s_direction.x=" << camera_right_direction[0] << " s_direction.y="
 //                  << camera_right_direction[1] << " s_direction.z=" << camera_right_direction[2] << std::endl;
