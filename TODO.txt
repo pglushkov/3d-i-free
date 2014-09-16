@@ -62,9 +62,18 @@
 3) Fix the f'ing rotations !!! (in progress)
 
 	14 Sep 2014
-1) First find out - why Z axis is 'inverted' when not using projection matrix
+1) First find out - why Z axis is 'inverted' when not using projection matrix 
+	REASON: clever guys from StackOverflow say that right-handnessness of OpenGL is just a convention which is only
+	true, when an actual camera (perspective projection) is involved. Until then NDC-coordinate-frame is
+	left-handed! When perspective is involved - space become right-handed.
 2) Then fix the rotations
+	REASON: Thing is - when using a same rotation for row-vector and column-vector, results of rotations are oposite
+	in a sign of a rotation angle!!! That's why when you pass a rotation for a column vector - to get the same
+	result as for a row vector, you must transpose the matrix!
 3) Add some explanations on what is actually going on with and without projection to get_started_example
 
-
-
+	15 Sep 2014
+1) One more time make sure, that transposition of a rotation matrix helps to get same rotation results when using vR and
+Rv
+2) Add comments on using/not-using projection matrix into a get_started_example
+3) Find out how to make aplha-channel active from start of a program

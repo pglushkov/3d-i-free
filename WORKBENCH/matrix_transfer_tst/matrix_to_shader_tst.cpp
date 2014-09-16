@@ -160,6 +160,7 @@ int main(int argc, char *argv[]) {
                                 case 34: // left square bracket
                                         break;
                                 case 36: //Enter
+                                        intensity = 1.0f;
                                         break;
                                 case 38: // button 'a'
                                         break;
@@ -180,6 +181,8 @@ int main(int argc, char *argv[]) {
                         default:
                             break;
                     }
+
+                    printf(" INTENSITY = %f ...\n", intensity);
                 }
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
