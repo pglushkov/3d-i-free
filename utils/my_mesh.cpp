@@ -106,6 +106,8 @@ void MyMesh::BindUniforms(const MyMaterial& mater)
 	MyProjectionMatrix<float>& matProj = MyWorld::GetWorldProjection();
         MySquareMatrix<float, 4>& view = MyWorld::GetWorldCameraView();
 
+    bool DO_TRANSPOSE = false;
+
 	GLint timeUniformHandle = glGetUniformLocation(gl_program, "time");
 	if (timeUniformHandle != -1) {
 		glUniform1f(timeUniformHandle, time);
@@ -113,12 +115,12 @@ void MyMesh::BindUniforms(const MyMaterial& mater)
 
 	GLint rot = glGetUniformLocation(gl_program, "world_view_position");
 	if (rot != -1) {
-        glUniformMatrix4fv(rot, 1, true, &pos_mat.get_data()[0][0]);
+        glUniformMatrix4fv(rot, 1, DO_TRANSPOSE, &pos_mat.get_data()[0][0]);
 	}
 
 	GLint proj = glGetUniformLocation(gl_program, "projection");
 	if (proj != -1) {
-        glUniformMatrix4fv(proj, 1, true, &matProj.get_data()[0][0]);
+        glUniformMatrix4fv(proj, 1, DO_TRANSPOSE, &matProj.get_data()[0][0]);
 	}
 
 	GLint light = glGetUniformLocation(gl_program, "light_pos");
@@ -129,7 +131,7 @@ void MyMesh::BindUniforms(const MyMaterial& mater)
 
 	GLint camera = glGetUniformLocation(gl_program, "camera_transform");
 	if (camera != -1) {
-            glUniformMatrix4fv(camera, 1, true, &view.data()[0][0]);
+            glUniformMatrix4fv(camera, 1, DO_TRANSPOSE, &view.data()[0][0]);
 	}
 
     // now, all mandatory uniforms are bound, let's bind custom uniforms, specified by user

@@ -143,24 +143,24 @@ int main(int argc, char *argv[]) {
                                         XCloseDisplay(dpy);
                                         exit(0);
                                 case 111: // up arrow
-                                        mesh.GetObjTransform().Rotate_X(-ROTATION_INCREMENT);
+                                        mesh.GetObjTransform().Rotate_X(ROTATION_INCREMENT);
                                         break;
                                 case 116: //down arrow
-                                        mesh.GetObjTransform().Rotate_X(ROTATION_INCREMENT);
+                                        mesh.GetObjTransform().Rotate_X(-ROTATION_INCREMENT);
                                         //matWorldPos.Translate(std::array<float, 3> ({0.0f, 0.0f, 0.1f}));
-                                        break;
-                                case 113: //left arrow
-                                        mesh.GetObjTransform().Rotate_Y(-ROTATION_INCREMENT);
                                         break;
                                 case 114: //right arrow
                                         mesh.GetObjTransform().Rotate_Y(ROTATION_INCREMENT);
                                         break;
+                                case 113: //left arrow
+                                        mesh.GetObjTransform().Rotate_Y(-ROTATION_INCREMENT);
+                                        break;                                
                                 case 35: // right square bracket
-                                        mesh.GetObjTransform().Rotate_Z(-ROTATION_INCREMENT);
+                                        mesh.GetObjTransform().Rotate_Z(ROTATION_INCREMENT);
                                         //mesh.GetObjTransform().Rotate_Axis(0, 0, 1, -ROTATION_INCREMENT);
                                         break;
                                 case 34: // left square bracket
-                                        mesh.GetObjTransform().Rotate_Z(ROTATION_INCREMENT);
+                                        mesh.GetObjTransform().Rotate_Z(-ROTATION_INCREMENT);
                                         //mesh.GetObjTransform().Rotate_Axis(0, 0, 1, ROTATION_INCREMENT);
                                         break;
                                 case 36: //Enter

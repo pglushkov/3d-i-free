@@ -106,6 +106,22 @@ int main(int argc, char *argv[]) {
         GLuint texture_id;
         load_texture_to_gpu("../../data/penguin.png", texture_id);
 
+
+        // !!!!! ONE MAJOR THING TO UNDESTAND ABOUT THIS EXAMPLE !!!!!
+        // Current example does not involve Projection Matrix yet. As a result we render directly to NDC (Native-Device-Coordinates) - a cube with
+        // length/height/width of 2 units and centered in (0,0,0), LEFT-HANDED-CORTESIAN-COORDINATES. That is, X-axis points right, Y-axis points up,
+        // Z-axis points INTO the screen! We can fully 'see' this cube, i.e. in a little perverted manner, we can say that in this example our
+        // fictional ortographic camera is located at point (0,0,-1) and looks in +Z direction (into the screen that is). For this reason, the less is
+        // z-coordinate of vertex - the closer it is to us in z-buffer. Another complication - with artographic projection we can get to feel of distance -
+        // all objects are of the same size, no matter how far they are in Z.
+        // If one enables a descent projection camera - the results will be:
+        // - Z-axis will be inverted, it will start to point OUT OF the screen
+        // - Coordinate system will become RIGHT-HANDED-CORTESIAN (as a result of z-invertion)
+        // - Object will be drawn with a perspective
+        // - We will see only half of NDC-cube - cause our 'fictional' camera will now be situated at point (0,0,0) looking towards -Z direction (INTO
+        //      the scree that is)
+
+
         // MAIN EXECUTION LOOP - PICKING EVENTS FROM X-SERVER SYSTEM AND REACTING TO THEM
         while(true) {
                 for (int i = 0; i < XPending(dpy); i++) // Have to process all events, cause XPending is a thread-blocking call

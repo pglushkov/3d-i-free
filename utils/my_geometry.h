@@ -40,6 +40,8 @@ public:
         const void* VerticesData() { return &vertices[0]; }
         const void* OrderData() { return &order[0]; }
 
+        std::vector<MyVertex>& VerticesVector() { return vertices; }
+
         void TRACE() const;
 };
 

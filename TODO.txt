@@ -74,6 +74,15 @@
 
 	15 Sep 2014
 1) One more time make sure, that transposition of a rotation matrix helps to get same rotation results when using vR and
-Rv
-2) Add comments on using/not-using projection matrix into a get_started_example
+Rv (with vR - done, with Rv - still unclear...)
+2) Add comments on using/not-using projection matrix into a get_started_example (done)
 3) Find out how to make aplha-channel active from start of a program
+
+	16 Sep 2014
+
+NOTE: Rotations are fixed and studied for a column-major rotation matrices. keyboard_rotate_example shows this, see the
+code
+
+0) Debug/fix rotation about arbitrary axis
+1) Study/debug/fix camera direction!
+2) Alpha-channel fix

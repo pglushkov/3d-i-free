@@ -27,12 +27,14 @@ void main()
         //figureColor = in_position;
         plane_coord = in_plane_coord;
 
-        //vec4 new_pos = in_position * world_view_position * camera_transform * projection;
-        vec4 new_pos = projection * camera_transform * world_view_position * in_position;
-        vec4 new_pos_orto = world_view_position * in_position;
+        vec4 new_pos = in_position * world_view_position * camera_transform * projection;
+        //vec4 new_pos = projection * camera_transform * world_view_position * in_position;
+        //vec4 new_pos_orto = world_view_position * in_position;
+        vec4 new_pos_orto = in_position * world_view_position;
 
         gl_Position = new_pos;
         rnorm = direction * in_norm;
+        //rnorm =  direction * in_norm;
         light_dir = normalize(light_pos - vec3(new_pos_orto.xyz));
         light_dist = length(light_pos - vec3(new_pos_orto.xyz));
 }

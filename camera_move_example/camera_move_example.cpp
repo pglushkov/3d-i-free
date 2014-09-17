@@ -150,11 +150,11 @@ int main(int argc, char *argv[]) {
                                         exit(0);
                                 case 111: // up arrow
 //                                        MyWorld::RotateCamera_X(ROTATION_INCREMENT);
-                                        MyWorld::RotateCamera_X1(-ROTATION_INCREMENT);
+                                        MyWorld::RotateCamera_X1(ROTATION_INCREMENT);
                                         break;
                                 case 116: //down arrow
 //                                        MyWorld::RotateCamera_X(-ROTATION_INCREMENT);
-                                        MyWorld::RotateCamera_X1(ROTATION_INCREMENT);
+                                        MyWorld::RotateCamera_X1(-ROTATION_INCREMENT);
                                         break;
                                 case 113: //left arrow
 //                                        MyWorld::RotateCamera_Y(-ROTATION_INCREMENT);

@@ -12,9 +12,11 @@
 
 template<typename T> MySquareMatrix<T, 4> CreateOXRotation(float angle)
 {
-        // !!!!!!!!! ATTENTION !!!!!!!!!!!!
-        // GENERATION ROTATION MATRIX FOR ROW-BASED POSITION VECTOR !
-        // I.E. MAKING COLUMN-BASED ROTATION MATRIX !
+    //                  !!!!! ATTENTION !!!!!
+    //  OpenGL matrices are column-major, our Matrix implementaion is row-major. We have to consider this fact
+    //  when we pass our matrix by glUniformMatrixNfv(). This row-column-majorness change results into a
+    //  transposition of our matrix. To account for this fact we intentionally generate transposed versions
+    //  of rotation matrices for right-handed coordinate system.
 
         MySquareMatrix<T, 4> r;
         float rad = my_utils::DegToRad(angle);
@@ -29,9 +31,11 @@ template<typename T> MySquareMatrix<T, 4> CreateOXRotation(float angle)
 
 template<typename T> MySquareMatrix<T, 4> CreateOYRotation(float angle)
 {
-        // !!!!!!!!! ATTENTION !!!!!!!!!!!!
-        // GENERATION ROTATION MATRIX FOR ROW-BASED POSITION VECTOR !
-        // I.E. MAKING COLUMN-BASED ROTATION MATRIX !
+    //                  !!!!! ATTENTION !!!!!
+    //  OpenGL matrices are column-major, our Matrix implementaion is row-major. We have to consider this fact
+    //  when we pass our matrix by glUniformMatrixNfv(). This row-column-majorness change results into a
+    //  transposition of our matrix. To account for this fact we intentionally generate transposed versions
+    //  of rotation matrices for right-handed coordinate system.
 
         MySquareMatrix<T, 4> r;
         float rad = my_utils::DegToRad(angle);
@@ -46,9 +50,11 @@ template<typename T> MySquareMatrix<T, 4> CreateOYRotation(float angle)
 
 template<typename T> MySquareMatrix<T, 4> CreateOZRotation(float angle)
 {
-        // !!!!!!!!! ATTENTION !!!!!!!!!!!!
-        // GENERATION ROTATION MATRIX FOR ROW-BASED POSITION VECTOR !
-        // I.E. MAKING COLUMN-BASED ROTATION MATRIX !
+    //                  !!!!! ATTENTION !!!!!
+    //  OpenGL matrices are column-major, our Matrix implementaion is row-major. We have to consider this fact
+    //  when we pass our matrix by glUniformMatrixNfv(). This row-column-majorness change results into a
+    //  transposition of our matrix. To account for this fact we intentionally generate transposed versions
+    //  of rotation matrices for right-handed coordinate system.
 
         MySquareMatrix<T, 4> r;
         float rad = my_utils::DegToRad(angle);
@@ -63,9 +69,11 @@ template<typename T> MySquareMatrix<T, 4> CreateOZRotation(float angle)
 
 template<typename T> MySquareMatrix<T, 4> CreateAxisRotation(T x, T y, T z, float angle)
 {
-        // !!!!!!!!! ATTENTION !!!!!!!!!!!!
-        // GENERATION ROTATION MATRIX FOR ROW-BASED POSITION VECTOR !
-        // I.E. MAKING COLUMN-BASED ROTATION MATRIX !
+    //                  !!!!! ATTENTION !!!!!
+    //  OpenGL matrices are column-major, our Matrix implementaion is row-major. We have to consider this fact
+    //  when we pass our matrix by glUniformMatrixNfv(). This row-column-majorness change results into a
+    //  transposition of our matrix. To account for this fact we intentionally generate transposed versions
+    //  of rotation matrices for right-handed coordinate system.
 
         float rad = my_utils::DegToRad(angle);
         float COS = cos(rad);
@@ -241,7 +249,7 @@ public:
                 data[3][3] = 0;
         }
 
-	MyProjectionMatrix(const T near, const T far, const T aspect, const T fov)
+    MyProjectionMatrix(const T near, const T far, const T aspect, const T fov)
 	{
         T near1 = near;
         T far1 = far;
