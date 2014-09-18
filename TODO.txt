@@ -86,3 +86,13 @@ code
 0) Debug/fix rotation about arbitrary axis
 1) Study/debug/fix camera direction!
 2) Alpha-channel fix
+
+	18 Sep 2014
+1) Started to work on direct position transformation inside shader
+	- fix color intensity by Z-axis
+	- find out which space is NDC usding transformation generation and application directly in vertex-shader
+	- find out how perspective projection affects NDC
+2) See 16 Sep 2014
+
+
+
