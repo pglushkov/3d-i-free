@@ -21,12 +21,12 @@ Rzc = generate_rotation_z(angle_rad, 'COL');
 
 fprintf('\n\n\n\n*************************************************\n');
 fprintf('\n x-column rotated by %f degrees around z : [%f,%f,%f]\n', angle, Rz*xc);
-fprintf('\n x-column rotated by %f degrees around y : [%f,%f,%f]\n', angle, Ry*xc);
-fprintf('\n z-column rotated by %f degrees around x : [%f,%f,%f]\n', angle, Rx*zc);
+fprintf('\n -z-column rotated by %f degrees around y : [%f,%f,%f]\n', angle, Ry*(-zc));
+fprintf('\n -z-column rotated by %f degrees around x : [%f,%f,%f]\n', angle, Rx*(-zc));
 fprintf('\n');
 fprintf('\n (TWISTED) x-row rotated by %f degrees around z : [%f,%f,%f]\n', angle, x*Rz);
 fprintf('\n (TWISTED) x-row rotated by %f degrees around y : [%f,%f,%f]\n', angle, x*Ry);
-fprintf('\n (TWISTED) z-row rotated by %f degrees around x : [%f,%f,%f]\n', angle, z*Rx);
+fprintf('\n (TWISTED) y-row rotated by %f degrees around x : [%f,%f,%f]\n', angle, y*Rx);
 fprintf('\n');
 fprintf('\n');
 fprintf('\n');

@@ -52,3 +52,8 @@
 ../WORKBENCH/matrix_transfer_tst/matrix_to_shader_tst.cpp
 ../WORKBENCH/matrix_transfer_tst/vshader_simple.glsl
 ../WORKBENCH/matrix_transfer_tst/fshader_simple.glsl
+../WORKBENCH/direct_transform_in_shader/vshader_simple.glsl
+../WORKBENCH/direct_transform_in_shader/fshader_simple.glsl
+../WORKBENCH/direct_transform_in_shader/stuff.h
+../WORKBENCH/direct_transform_in_shader/transform_in_shader.cpp
+../WORKBENCH/direct_transform_in_shader/stuff.cpp

@@ -84,13 +84,21 @@ int main(int argc, char *argv[]) {
         // GENERATING GEOMETRY -  ARRAY OF VERTICES AND ORDER OF THEIR TRAVERSAL
         float width = 1.0f;
         float height = 1.0f;
-        std::vector<TstVertex> vertices;
-        std::vector<unsigned short> vertices_order;
+        std::vector<TstVertex> vertices, vertices1;
+        std::vector<unsigned short> vertices_order, vertices_order1;
         generate_rectangle(width, height, vertices, vertices_order);
+        generate_rectangle(width / 10.0f, height / 10.0f, vertices1, vertices_order1);
 
         for ( TstVertex& v : vertices)
         {
             v.position[2] += 0.0f;
+        }
+
+        for ( TstVertex& v : vertices1)
+        {
+            v.position[0] -= 0.05f;
+            v.position[1] += 0.05f;
+            v.position[2] -= 0.3f;
         }
 
         // DBG
@@ -98,8 +106,9 @@ int main(int argc, char *argv[]) {
             printf("Rectangle vertex(%d) : [%f,%f,%f] ...\n", k+1, vertices[k].position[0], vertices[k].position[1], vertices[k].position[2]);
 
         // LOADING GENERATED GEOMETRY DATA TO THE GPU
-        GLuint vertices_buffer_id, vert_order_buffer_id;
+        GLuint vertices_buffer_id, vert_order_buffer_id, vertices_buffer_id1, vert_order_buffer_id1;
         load_geometry_to_gpu( vertices, vertices_order, vertices_buffer_id, vert_order_buffer_id );
+        load_geometry_to_gpu( vertices1, vertices_order1, vertices_buffer_id1, vert_order_buffer_id1 );
 
         // CREATING COMPILED SHADER OBJECTS, CREATING GL PROGRAM FROM COMPILED SHADERS, LINKING THE PROGRAM
         // Keep in mind that as an actual shader coder is compiled when this program is run - you can freely modify a shader and than just
@@ -200,6 +209,10 @@ int main(int argc, char *argv[]) {
                 draw_geometry(gl_program, vertices_buffer_id, vert_order_buffer_id, vertices_order.size(),
                               angle_x, angle_y, angle_z,
                               offset_x, offset_y, offset_z);
+
+                draw_geometry(gl_program, vertices_buffer_id1, vert_order_buffer_id1, vertices_order1.size(),
+                              0.0f, 0.0f, 0.0f,
+                              0.0f, 0.0f, 0.0f);
 
                 // SWAPPING CURRENTLY ON-SCREEN AND READY-TO-BE-RENDERED BUFFERS
                 glXSwapBuffers(dpy, win);
