@@ -89,9 +89,13 @@ code
 
 	18 Sep 2014
 1) Started to work on direct position transformation inside shader
-	- fix color intensity by Z-axis
-	- find out which space is NDC usding transformation generation and application directly in vertex-shader
-	- find out how perspective projection affects NDC
+	- fix color intensity by Z-axis (done, but not needed when using projection)
+	- find out which space is NDC usding transformation generation and application directly in vertex-shader (Now
+			this one is clearly fucked! It's obvious, that Z-axis points into the screen which makes NDC a
+			left-handed CS. HOWEVER. Rotation transformation that are supposed to work for RH-CS work just
+			the same way for NDC. This is a tricky one...)
+	- find out how perspective projection affects NDC (Is splits it in half and inverts Z-axis, which makes our
+			'rendering space a RH-CS)
 2) See 16 Sep 2014
 
 
